@@ -43,6 +43,9 @@ class RoyaltiesController extends Controller
      */
     public function store(Request $request)
     {
+      $arrayMessages = [
+        'royalties_nao_cadastrado'=> "",
+      ];
       $sheet = Input::file('arquivo');
       $rules = [
         'arquivo' => 'required'//|mimes:application/vnd.ms-excel'
@@ -55,12 +58,20 @@ class RoyaltiesController extends Controller
       if($validator->fails() || $_FILES['arquivo']['type'] != "application/vnd.ms-excel"){
         return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
       }
+      $rowCounter=0;
+      Excel::load($sheet, function ($reader) use($messages,&$arrayMessages,&$rowCounter) {
+        $reader->each(function($row) use($messages,&$arrayMessages,&$rowCounter){
 
-      Excel::load($sheet, function ($reader) use($messages) {
-        $reader->each(function($row) use($messages){
+          $rowCounter++;
           $f = Franqueado::where('franqueadoid',$row->id_franqueado)->first();
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_vencimento);
 
+          if($f == null){
+            $arrayMessages['royalties_nao_cadastrado'][] = array(
+              'linhaExcel'=>$rowCounter,
+              'erro'=>"Franqueado não cadastrado no sistema",
+            );
+          }
           $valor_original = str_replace(',','', $row->valor_original); //remove as virgulas
           $cheques_devolvidos = str_replace(',','', $row->cheques_devolvidos); //remove as virgulas
           if($f != null &&
@@ -79,7 +90,8 @@ class RoyaltiesController extends Controller
           }
         });
       });
-      return redirect::back()->with(['msg'=>'Dados importados com sucesso!','class'=>'success']);
+      // dd($arrayMessages['royalties_nao_cadastrado']);
+      return redirect::back()->with(['msg'=>'Dados importados com sucesso!','class'=>'success','erros'=>$arrayMessages]);
     }
 
     /**
