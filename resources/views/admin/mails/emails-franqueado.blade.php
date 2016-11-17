@@ -522,12 +522,13 @@
 Parabéns pelas vendas!</p> -->
 
 <p data-mce-style="text-align: left;" dir="ltr"><br>
-  <?php $quantidade_vendas = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
+  <?php $quantidade_pos = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
+	->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->where('c.data_aprovacao','<=','2016-10-31')
   ->where('c.data_aprovacao','>=','2016-10-01')
   ->where('c.franqueadoid',$data['id'])
   ->get()->count(); ?>
-O valor de suas comissões, referente às&nbsp;{{ $quantidade_vendas }} POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data['valor'], 2, ',', '.') }}.</p>
+O valor de suas comissões, referente às&nbsp;{{ $quantidade_pos }} POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data['valor'], 2, ',', '.') }}.</p>
 &nbsp;
 
 <p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>

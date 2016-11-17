@@ -240,6 +240,7 @@
                 <div class="form-group col-lg-6">
                   <label for="">FDA:</label>
                   <select class="form-control chosen-select" name="fda" required="">
+                    <option value="">SELECIONE UM FDA</option>
                     @foreach($fdas as $f)
                     <option value="{{$f->id}}">{{strtoupper($f->fdaid)}}</option>
                     @endforeach
@@ -248,6 +249,7 @@
                 <div class="form-group col-lg-6">
                   <label for="">FRANQUEADO:</label>
                   <select class="form-control chosen-select" name="franqueado" required="">
+                    <option value="">SELECIONE UM FRANQUEADO</option>
                     @foreach($franqueados as $fr)
                     <option value="{{$fr->id}}">{{strtoupper($fr->franqueadoid)}}</option>
                     @endforeach

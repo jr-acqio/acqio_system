@@ -131,13 +131,13 @@
             <div class="col-lg-4">
               <h3>Quantidade de Fda: {{ $comissoes->count() }}</h3>
               <p>
-                Valor Total: R$ {{ number_format($comissoes->sum('valor'),2) }}
+                Valor Total: R$ {{ number_format($comissoes->sum('valor'),2,',', '.') }}
               </p>
             </div>
             <div class="col-lg-4">
               <h3>Quantidade de Franqueados: {{ $comissoes_fr->count() }}</h3>
               <p>
-                Valor Total: R$ {{ number_format($comissoes_fr->sum('valor'),2) }}
+                Valor Total: R$ {{ number_format($comissoes_fr->sum('valor'),2,',', '.') }}
               </p>
             </div>
             <div class="col-lg-4 text-right">
@@ -188,7 +188,7 @@
                                 }}
                               </td>
                               <td>{{ $c->totalProdutos }}</td>
-                              <td>R$ {{ number_format($c->valor,2) }}</td>
+                              <td>R$ {{ number_format($c->valor,2,',', '.') }}</td>
                               <td>
                                 <a href="/admin/comissoes/filtrar?tipo=fda&daterange={{$inputs['daterange']}}&cliente={{$c->fdaid}}" class="btn btn-xs btn-default"><b>Detalhes</b></a>
                               </td>
@@ -206,7 +206,9 @@
                             <th>Nome Franqueado</th>
                             <th>Total de Vendas</th>
                             <th>Total de POS</th>
-                            <th>Valor à pagar</th>
+                            <th>Total Comissão</th>
+                            <th>Royalties</th>
+                            <th>Valor Liq. à pagar</th>
                             <th>Ações</th>
                           </tr>
                         </thead>
@@ -228,7 +230,14 @@
                                 }}
                               </td>
                               <td>{{ $c->totalProdutos }}</td>
-                              <td>R$ {{ number_format($c->valor,2) }}</td>
+                              <td>R$ {{ number_format($c->valor,2,',', '.') }}</td>
+                              <td>
+                                <?php $valor = \App\Models\Royalties::where('franqueadoid',$c->id)->get(); ?>
+                                <?php echo 'R$ '.number_format($valor->sum('valor_original') + $valor->sum('cheques_devolvidos'), 2,',','.'); ?>
+                              </td>
+                              <td>
+                                <?php echo number_format($c->valor - ($valor->sum('valor_original') + $valor->sum('cheques_devolvidos')),2,',','.') ?>
+                              </td>
                               <td>
                                 <a href="/admin/comissoes/filtrar?tipo=franqueado&daterange={{$inputs['daterange']}}&cliente={{$c->franqueadoid}}" class="btn btn-xs btn-default"><b>Detalhes</b></a>
                               </td>

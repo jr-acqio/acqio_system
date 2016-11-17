@@ -32,24 +32,29 @@ class MailController extends Controller
       ->orderBy('totalVendas','DESC')
       ->get();
       // dd($comissoes);
+      $count = 0;
       foreach ($comissoes as $key => $value) {
           Mail::send($template_path, ['data'=>$comissoes[$key]], function($message) use ($value){
             // Set the receiver and subject of the mail.
             $fda = Fda::where('id',$value->id)->first();
             // dd($franqueado);
-            // $message->to('stefano.andrei@esfera5.com.br');
+            // $message->to('juniorpaiva95@gmail.com');
             $message->to($fda->email);
             // $message->cc(Fda::where('id',$franqueado->fdaid)->first()->email);
             $message->bcc('stefano.andrei@esfera5.com.br');
+            $message->bcc('leandro.xavier@esfera5.com.br');
+            $message->bcc('juniorpaiva95@gmail.com');
 
             $message->subject('Relatório de Comissões - Outubro');
             // Set the sender
             // dd($message);
             $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');
-            $message->attach(storage_path().'/app/relatorio-comissao/fdas/'.strtoupper($fda->fdaid).'_10-11-2016.pdf');
+            $message->attach(storage_path().'/app/relatorio-comissao/fdas/'.strtoupper($fda->fdaid).'_17-11-2016.pdf');
           });
+          // dd('oi');
+          $count++;
       }
-      return "Sucesso!";
+      return "Sucesso! Total de e-mails enviados : ".$count;
     }
     public function sendMail(){
 
@@ -59,6 +64,7 @@ class MailController extends Controller
       ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
       ->where('c.data_aprovacao','<=','2016-10-31')
       ->where('c.data_aprovacao','>=','2016-10-01')
+      ->where('franqueados.id','=',556)
       ->groupBy('c.franqueadoid')
       // ->groupBy('cp.produtoid')
       ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
@@ -66,25 +72,31 @@ class MailController extends Controller
                 DB::raw('SUM(cp.tx_venda) as valor'),DB::raw('COUNT(cp.id) as totalProdutos'))
       ->orderBy('totalVendas','DESC')
       ->get();
-
+      // dd($comissoes_fr);
       // return view($template_path)->with(['data'=>$comissoes_fr[0]]);
-
+      $count = 0;
       foreach ($comissoes_fr as $key => $value) {
           Mail::send($template_path, ['data'=>$comissoes_fr[$key]], function($message) use ($value){
             // Set the receiver and subject of the mail.
             $franqueado = Franqueado::where('id',$value->id)->first();
             // dd($franqueado);
-            // $message->to('stefano.andrei@esfera5.com.br');
+            // $message->to('juniorpaiva95@gmail.com');
             $message->to($franqueado->email);
             // $message->cc(Fda::where('id',$franqueado->fdaid)->first()->email);
+            $message->cc('financeiro1@acqiofranchising.com.br');
+            $message->cc('fda.pec1@acqiofranchising.com.br');
             $message->bcc('stefano.andrei@esfera5.com.br');
-
+            $message->bcc('leandro.xavier@esfera5.com.br');
+            $message->bcc('juniorpaiva95@gmail.com');
             $message->subject('Relatório de Comissões - Outubro');
             // Set the sender
             // dd($message);
             $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');
-            $message->attach(storage_path().'/app/relatorio-comissao/franqueados/'.strtoupper($franqueado->franqueadoid).'_10-11-2016.pdf');
+            $message->attach(storage_path().'/app/relatorio-comissao/franqueados/'.strtoupper($franqueado->franqueadoid).'_17-11-2016.pdf');
           });
+          $count++;
+          // dd($count);
       }
+      return "Sucesso! Total de e-mails enviados : ".$count;
     }
 }

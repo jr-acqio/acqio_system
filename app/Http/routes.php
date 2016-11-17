@@ -10,7 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-Route::get('/enviar-email','MailController@sendMailFDA');
+Route::get('/enviar-email','MailController@sendMail');
 
 Route::get('/download-pdf-fda',function(){
   $directory = 'relatorio-comissao/fdas';
@@ -18,6 +18,7 @@ Route::get('/download-pdf-fda',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->where('c.data_aprovacao','<=','2016-10-31')
   ->where('c.data_aprovacao','>=','2016-10-01')
+  // ->where('fdas.id','=',1)
   ->groupBy('fdas.id')
   // ->groupBy('c.id')
   ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
@@ -36,7 +37,7 @@ Route::get('/download-pdf-fda',function(){
     // }
 
     $comissoes_fda = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
-    ->join('franqueados as fr','fr.id','=','c.franqueadoid')
+    ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('fdas.fdaid',$value->fdaid)
@@ -46,6 +47,7 @@ Route::get('/download-pdf-fda',function(){
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
+    // dd($comissoes_fda);
     $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$comissoes_fda,'fda'=>\App\Models\Fda::where('fdaid',$value->fdaid)->first()]);
     // return $pdf->stream();
     $pdf->save(storage_path().'/app/relatorio-comissao/fdas'.strtoupper($value->fda).'/'.strtoupper($value->fdaid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
@@ -60,7 +62,7 @@ Route::get('/download-pdf',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->where('c.data_aprovacao','<=','2016-10-31')
   ->where('c.data_aprovacao','>=','2016-10-01')
-  ->where('franqueados.id','1')
+  ->where('franqueados.id','556')
   ->groupBy('c.franqueadoid')
   // ->groupBy('cp.produtoid')
   ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
