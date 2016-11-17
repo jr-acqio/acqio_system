@@ -15,6 +15,20 @@
 
 
 @section('content')
+
+@if(session('erros'))
+  <div class="alert alert-danger">
+    <h4>Erros encontrados:</h4>
+    @foreach(session('erros') as $k => $erros)
+      <ul>
+        @foreach($erros as $y => $erro)
+        <li><b>Linha no Arquivo:</b> {{$erro['linha']}}</li>
+        <li><b>Motivo:</b> {{$erro['motivo']}}</li>
+        @endforeach
+      </ul>
+    @endforeach
+  </div>
+@endif
 <div class="ibox float-e-margins">
   <div class="ibox-title">
     <h5>Importar arquivo de comissões</h5>

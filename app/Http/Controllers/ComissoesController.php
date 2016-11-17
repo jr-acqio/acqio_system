@@ -64,17 +64,15 @@ class ComissoesController extends Controller
         return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
       }
       // dd('oi');
-      // $messages= array(
-      //   'naoregistrado'=> array(
-      //     'contador'=>0,
-      //     'erro'=>''
-      //     )
-      //   );
+      $arrayMessages = [
+        'naocadastrado'=> "",
+      ];
       // dd($messages);
-      Excel::load($sheet, function ($reader) use($messages) {
+      $counter = 1;
+      Excel::load($sheet, function ($reader) use(&$arrayMessages,&$counter) {
 
-        $reader->each(function($row) use($messages){
-
+        $reader->each(function($row) use(&$arrayMessages,&$counter){
+          $counter++;
           $frag_data_aprovacao = explode(" ",$row->datahora_de_finalizacao);
           $data_aprovacao = $frag_data_aprovacao[0];//." ".$frag_data_aprovacao[2].":00";
 
@@ -88,7 +86,19 @@ class ComissoesController extends Controller
           na planilha que não há tags nos produtos do banco de dados.
           */
           // Verificando no if abaixo se a linha corrente já foi inserida no banco
-          // dd($data->format('Y-m-d'),$data_eua);
+          // dd($row,Franqueado::where('franqueadoid',$row->franqueado)->first());
+          if(Fda::where('fdaid',$row->fda)->first() == null){
+            $arrayMessages['naocadastrado'][] = array(
+              'linha'=>$counter,
+              'motivo'=>"Fda não encontrado no sistema",
+            );
+          }
+          if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
+            $arrayMessages['naocadastrado'][] = array(
+              'linha'=>$counter,
+              'motivo'=>"Franqueado não encontrado no sistema",
+            );
+          }
           if(
           Comissoes::join('fdas as fd','fd.id','=','comissoes.fdaid')
           ->leftjoin('franqueados as fr','fr.id','=','comissoes.franqueadoid')
@@ -103,13 +113,8 @@ class ComissoesController extends Controller
           })
           ->first() == null
           ){
-            // Verificando se o franqueado e o fda existem
             if(Fda::where('fdaid',$row->fda)->first() != null
             && count($dispositivos) > 0 && $dispositivos[0] != '-'
-            ||
-            Fda::where('fdaid',$row->fda)->first() != null
-            && count($dispositivos) > 0 && $dispositivos[0] != '-' &&
-            Franqueado::where('franqueadoid',$row->franqueado)->first() != null
             ){
               $c = new Comissoes();
               $c->data_cadastro = $data;
@@ -118,7 +123,9 @@ class ComissoesController extends Controller
               $c->cidade = $row->cidade;
               $c->uf = $row->estado;
               $c->fdaid = Fda::where('fdaid',$row->fda)->first()->id;
-              if($row->franqueado != null || $row->franqueado != ""){
+              if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
+                  $c->franqueadoid = "";
+              }else{
                 $c->franqueadoid = Franqueado::where('franqueadoid',$row->franqueado)->first()->id;
               }
               $c->serial = $row->serial;
@@ -136,10 +143,10 @@ class ComissoesController extends Controller
               }
             }
           }
-          // dd($messages);
         });
       });
-      return redirect::back()->with(['msg'=>'Dados importados com sucesso!','class'=>'success']);
+      // dd('oi');
+      return redirect::back()->with(['msg'=>'Dados importados com sucesso!','class'=>'success','erros'=>$arrayMessages]);
     }
 
     /**
