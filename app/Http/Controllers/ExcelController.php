@@ -19,6 +19,38 @@ use Redirect;
 use Carbon\Carbon;
 class ExcelController extends Controller
 {
+    public function salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload){
+      DB::beginTransaction();
+      try {
+        $resumoUpload['novas'] += 1;
+        $p = new Pagamento();
+        $p->save();
+        PagamentoCartao::create([
+          'pagamento_id'        => $p->id,
+          'data'                => $data,
+          'hora'                => $row->hora,
+          'codigo'              => $codigo,
+          'status'              => $row->status,
+          'nsu_acqio'           => $row->nsu_acqio,
+          'nsu_adquirente'      => $row->nsu_adquirente,
+          'tipo'                => $row->tipo,
+          'bandeira'            => $row->bandeira,
+          'parcelas'            => $row->parcelas,
+          'tipo_parcelamento'   => $row->tipo_de_parcelamento,
+          'moeda'               => $row->moeda,
+          'valor_total'         => $vt,
+          'valor_total_liquido' => $vtl,
+          'faturamento'         => $vf,
+          'origem'              => $row->origem,
+          'loja'                => $row->loja,
+          'documento'           => $row->documento
+        ]);
+        return $resumoUpload['novas'];
+        DB::commit();
+      } catch (Exception $e) {
+        DB::rollback();
+      }
+    }
     public function uploadTransacoes(){
       $sheet = Input::file('arquivo');
       $messages = array();
@@ -33,111 +65,51 @@ class ExcelController extends Controller
           $vf = str_replace(",",".",$row->faturamento);
           $codigo = str_pad($row->codigo_de_autorizacao, 6, '0', STR_PAD_LEFT);
           $data = implode("-",array_reverse(explode("/",$row->data)));
-          if($row->valor_total < 0){
-            //Se houver alguma transação no banco igual com valor positivo irá procurar e alterar para cancelada
-            $cancelar = PagamentoCartao::where('codigo',$codigo)->where('loja',$row->loja)->where('valor_total',abs($row->valor_total))->first();
-            if($cancelar != null)
-              if($cancelar->status != "Cancelada"){
-                $cancelar->status = "Cancelada";
-                $cancelar->save();
-              }
-              $vendaCancelada = Pagamento::join('pagamentos_cartao as pc','pc.pagamento_id','=','pagamentos.id')
-              ->join('pedidos_pagamentos as pp','pp.pagamento_id','=','pc.pagamento_id')
-              ->join('pedidos as p','p.id','=','pp.pedido_id')
-              ->join('clientes as cl','cl.id','=','p.cliente_id')
-              ->where('pc.codigo',$codigo)
-              ->select('p.id as idpedido','p.*','pc.codigo','pc.pagamento_id','pc.data','cl.*')
-              ->first();
-              if($vendaCancelada != null && $vendaCancelada->status != 0){//Se existe uma venda com o codigo da transação e se ela não ja estiver cancelada
-                if(is_null($vendaCancelada->nome)){ $nomeCliente = $vendaCancelada->razao; }else{ $nomeCliente = $vendaCancelada->nome; }
-                $arr = array('codigo'=>$codigo,'data'=>$data,'cliente'=>$nomeCliente,'pedido'=>$vendaCancelada->idpedido);
-                $messages[] = $arr;
-                Pedidos::where('id',$vendaCancelada->idpedido)->update(['status'=>0,'motivo'=>'Cancelada no ato da importação de transações','data_cancel'=>Carbon::now()]);
-              }
-          }else{
-            if(PagamentoCartao::where('codigo',$codigo)->first()){//Se existe alguma transação com códigos iguais
-              // dd('codigo igual');
-              if(PagamentoCartao::where('codigo',$codigo)->where('data',$data)->first() ) {//Se for codigo igual e data igual
-                // dd('codigo e data');
-                if(PagamentoCartao::where('codigo',$codigo)->where('data',$data)->where('status',$row->status)->first() ){//Se for codigo igual, data igual e status igual
-                  //Irei mostrar ao usuario os dados que nao foram duplicados no banco
-                }else{//Se codigo e data for igual e o status diferente irá atualizar o status
-                  if($row->status == "Cancelada"){
-                    //Verificar se algum pedido utiliza o pagamento que foi cancelado
-                    $vendaCancelada = Pagamento::join('pagamentos_cartao as pc','pc.pagamento_id','=','pagamentos.id')
-                    ->join('pedidos_pagamentos as pp','pp.pagamento_id','=','pc.pagamento_id')
-                    ->join('pedidos as p','p.id','=','pp.pedido_id')
-                    ->join('clientes as cl','cl.id','=','p.cliente_id')
-                    ->where('pc.codigo',$codigo)
-                    ->select('p.id as idpedido','p.*','pc.codigo','pc.pagamento_id','pc.data','cl.*')
-                    ->first();
-                    if($vendaCancelada != null && $vendaCancelada->status != 0){//Se existe uma venda com o codigo da transação  e ela não já está cancelada
-                      if(is_null($vendaCancelada->nome)){ $nomeCliente = $vendaCancelada->razao; }else{ $nomeCliente = $vendaCancelada->nome; }
-                      $arr = array('codigo'=>$codigo,'data'=>$data,'cliente'=>$nomeCliente,'pedido'=>$vendaCancelada->idpedido);
-                      $messages[] = $arr;
-                      Pedidos::where('id',$vendaCancelada->idpedido)->update(['status'=>0,'motivo'=>'Cancelada no ato da importação de transações','data_cancel'=>Carbon::now()]);
-                    }
-                    $resumoUpload['canceladas'] += 1;
-                  }//Finish Row status Cancelada
-                  /*
-                  * Se o status for concluido e nao for duplicado mesmo codigo e data então irá contar como uma nova transação concluida
-                  */
-                  if($row->status == "Concluida" && PagamentoCartao::where('codigo',$codigo)->where('data',$data)->first() == null){ $resumoUpload['concluidas'] += 1; }
-                  PagamentoCartao::where('codigo',$codigo)->where('data',$data)->first()->update(['status'=>$row->status]);
+
+          $transacao = PagamentoCartao::where('codigo',$codigo);//;
+          // Se não existir nenhum pagamento com esse código irá salvar
+          if ($transacao->first() == null) {
+            $resumoUpload['novas'] = $this->salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload);
+            // dd('salvou',$resumoUpload);
+          }else {
+            // Verificar se há cancelamento
+            if($row->valor_total < 0){
+                $cancelar = PagamentoCartao::where('codigo',$codigo)->where('loja',$row->loja)->where('valor_total',abs($row->valor_total))->first();
+                // dd($cancelar);
+                if($cancelar != null){
+                  if($cancelar->status != "Cancelada"){
+                    $cancelar->update(['status'=>'Cancelada']);
+                    var_dump('codigo cancelado');
+                  }
                 }
-              }else{//Se o codigo for igual e a data diferente irá salvar
-                $resumoUpload['novas'] += 1;
-                $p = new Pagamento();
-                $p->save();
-                PagamentoCartao::create([
-                  'pagamento_id'        => $p->id,
-                  'data'                => $data,
-                  'hora'                => $row->hora,
-                  'codigo'              => $codigo,
-                  'status'              => $row->status,
-                  'nsu_acqio'           => $row->nsu_acqio,
-                  'nsu_adquirente'      => $row->nsu_adquirente,
-                  'tipo'                => $row->tipo,
-                  'bandeira'            => $row->bandeira,
-                  'parcelas'            => $row->parcelas,
-                  'tipo_parcelamento'   => $row->tipo_de_parcelamento,
-                  'moeda'               => $row->moeda,
-                  'valor_total'         => $vt,
-                  'valor_total_liquido' => $vtl,
-                  'faturamento'         => $vf,
-                  'origem'              => $row->origem,
-                  'loja'                => $row->loja,
-                  'documento'           => $row->documento
-                ]);
+                $vendaCancelada = Pagamento::join('pagamentos_cartao as pc','pc.pagamento_id','=','pagamentos.id')
+                ->join('pedidos_pagamentos as pp','pp.pagamento_id','=','pc.pagamento_id')
+                ->join('pedidos as p','p.id','=','pp.pedido_id')
+                ->join('clientes as cl','cl.id','=','p.cliente_id')
+                ->where('pc.codigo',$codigo)
+                ->select('p.id as idpedido','p.*','pc.codigo','pc.pagamento_id','pc.data','cl.*')
+                ->first();
+                // dd($vendaCancelada);
+                if($vendaCancelada != null && $vendaCancelada->status != 0){//Se existe uma venda com o codigo da transação e se ela não ja estiver cancelada
+                  if(is_null($vendaCancelada->nome)){ $nomeCliente = $vendaCancelada->razao; }else{ $nomeCliente = $vendaCancelada->nome; }
+                  $arr = array('codigo'=>$codigo,'data'=>$data,'cliente'=>$nomeCliente,'pedido'=>$vendaCancelada->idpedido);
+                  $messages[] = $arr;
+                  Pedidos::where('id',$vendaCancelada->idpedido)->update(['status'=>0,'motivo'=>'Cancelada no ato da importação de transações','data_cancel'=>Carbon::now()]);
+                  var_dump('venda cancelado');
+                }
+            }
+            // Se existir pagamento com esse código, verificar se as datas são iguais
+            if($transacao->where('data',$data)->first() == null) {
+              $resumoUpload['novas'] = $this->salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload);
+              // dd('salvou data diferente',$resumoUpload);
+            }else {
+              if($transacao->where('data',$data)->first()->status != $row->status){
+                $transacao->where('data',$data)->first()->update(['status'=>$row->status]);
+                // dd('atualizou status');
               }
             }
-            //Se nada for igual salvo do mesmo jeito
-            if(!PagamentoCartao::where('codigo',$codigo)->where('data',$data)->first()){
-              $resumoUpload['novas'] += 1;
-              $p = new Pagamento();
-              $p->save();
-              PagamentoCartao::create([
-                'pagamento_id'        => $p->id,
-                'data'                => $data,
-                'hora'                => $row->hora,
-                'codigo'              => $codigo,
-                'status'              => $row->status,
-                'nsu_acqio'           => $row->nsu_acqio,
-                'nsu_adquirente'      => $row->nsu_adquirente,
-                'tipo'                => $row->tipo,
-                'bandeira'            => $row->bandeira,
-                'parcelas'            => $row->parcelas,
-                'tipo_parcelamento'   => $row->tipo_de_parcelamento,
-                'moeda'               => $row->moeda,
-                'valor_total'         => $vt,
-                'valor_total_liquido' => $vtl,
-                'faturamento'         => $vf,
-                'origem'              => $row->origem,
-                'loja'                => $row->loja,
-                'documento'           => $row->documento
-              ]);
-            }//Finish IF
           }
+          // Finish My Code
         });
       });
       // dd($resumoUpload);
