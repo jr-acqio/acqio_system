@@ -55,7 +55,7 @@ class ExcelController extends Controller
       $sheet = Input::file('arquivo');
       $messages = array();
       $resumoUpload = array('contador'=>0,'canceladas'=>0,'concluidas'=>0,'novas'=>0);
-      // dd($messages);
+
       Excel::load($sheet, function ($reader) use (&$messages,&$resumoUpload) {
         // Loop through all rows
         $reader->each(function($row) use (&$messages,&$resumoUpload){
@@ -68,18 +68,19 @@ class ExcelController extends Controller
 
           $transacao = PagamentoCartao::where('codigo',$codigo);//;
           // Se não existir nenhum pagamento com esse código irá salvar
-          if ($transacao->first() == null) {
+          if($transacao->first() == null && $row->valor_total > 0) {
+            // Caindo aqui, não existe nenhuma transação com o código testado e o valor não é negativo.
             $resumoUpload['novas'] = $this->salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload);
-            // dd('salvou',$resumoUpload);
+            dd('salvou',$resumoUpload);
           }else {
-            // Verificar se há cancelamento
             if($row->valor_total < 0){
+              // Caindo aqui existe uma transação negativa, ou seja, houve um estorno de transação
                 $cancelar = PagamentoCartao::where('codigo',$codigo)->where('loja',$row->loja)->where('valor_total',abs($row->valor_total))->first();
-                // dd($cancelar);
                 if($cancelar != null){
+                  // Caindo aqui, foi encontrado a transação original no banco, na qual houve o cancelamento.
                   if($cancelar->status != "Cancelada"){
+                    // Caindo aqui o status da transação ainda não tá cancelado então devemos alterar para cancelado.
                     $cancelar->update(['status'=>'Cancelada']);
-                    var_dump('codigo cancelado');
                   }
                 }
                 $vendaCancelada = Pagamento::join('pagamentos_cartao as pc','pc.pagamento_id','=','pagamentos.id')
@@ -89,35 +90,33 @@ class ExcelController extends Controller
                 ->where('pc.codigo',$codigo)
                 ->select('p.id as idpedido','p.*','pc.codigo','pc.pagamento_id','pc.data','cl.*')
                 ->first();
-                // dd($vendaCancelada);
                 if($vendaCancelada != null && $vendaCancelada->status != 0){//Se existe uma venda com o codigo da transação e se ela não ja estiver cancelada
                   if(is_null($vendaCancelada->nome)){ $nomeCliente = $vendaCancelada->razao; }else{ $nomeCliente = $vendaCancelada->nome; }
                   $arr = array('codigo'=>$codigo,'data'=>$data,'cliente'=>$nomeCliente,'pedido'=>$vendaCancelada->idpedido);
                   $messages[] = $arr;
                   Pedidos::where('id',$vendaCancelada->idpedido)->update(['status'=>0,'motivo'=>'Cancelada no ato da importação de transações','data_cancel'=>Carbon::now()]);
-                  var_dump('venda cancelado');
                 }
             }
             // Se existir pagamento com esse código, verificar se as datas são iguais
-            if($transacao->where('data',$data)->first() == null) {
+            elseif($transacao->where('data',$data)->first() == null) {
+              // Se caiu aqui é pq a data não é igual, então poderá salvar no banco
               $resumoUpload['novas'] = $this->salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload);
-              // dd('salvou data diferente',$resumoUpload);
             }else {
+              // Se caiu aqui o código e a data são iguais então verificar o status
               if($transacao->where('data',$data)->first()->status != $row->status){
+                // Caindo aqui, existe uma transação duplicada com status diferente. Então altera-se o status para o atual.
                 $transacao->where('data',$data)->first()->update(['status'=>$row->status]);
-                // dd('atualizou status');
               }
             }
           }
-          // Finish My Code
         });
       });
       // dd($resumoUpload);
-      if(isset($messages[0])){
+      // if(isset($messages[0])){
         return redirect::back()->with(['msg'=>'Upload realizado com sucesso!','class'=>'success','transactions'=>PagamentoCartao::all(),'vendasCanceladas'=>$messages,'resumoUpload'=>$resumoUpload]);
-      }else{
-        return redirect::back()->with(['msg'=>'Upload realizado com sucesso!','class'=>'success','transactions'=>PagamentoCartao::all(),'resumoUpload'=>$resumoUpload]);
-      }
+      // }else{
+      //   return redirect::back()->with(['msg'=>'Upload realizado com sucesso!','class'=>'success','transactions'=>PagamentoCartao::all(),'resumoUpload'=>$resumoUpload]);
+      // }
     }
 
     public function uploadBoleto(){
