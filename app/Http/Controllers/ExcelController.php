@@ -45,11 +45,21 @@ class ExcelController extends Controller
           'loja'                => $row->loja,
           'documento'           => $row->documento
         ]);
-        return $resumoUpload['novas'];
         DB::commit();
       } catch (Exception $e) {
-        DB::rollback();
+        DB::rollBack();
+        $resumoUpload['novas']--;
+        var_dump($e->errorInfo);
+      }catch(ValidationException $e){
+        DB::rollBack();
+        $resumoUpload['novas']--;
+        var_dump($e->errorInfo);
+      }catch ( \Illuminate\Database\QueryException $e) {
+        DB::rollBack();
+        var_dump($e->errorInfo,'<br><p style="color:red;">Verifique se o arquivo inserido está correto.</p>');
+        exit;
       }
+      return $resumoUpload['novas'];
     }
     public function uploadTransacoes(){
       $sheet = Input::file('arquivo');
@@ -71,7 +81,6 @@ class ExcelController extends Controller
           if($transacao->first() == null && $row->valor_total > 0) {
             // Caindo aqui, não existe nenhuma transação com o código testado e o valor não é negativo.
             $resumoUpload['novas'] = $this->salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload);
-            dd('salvou',$resumoUpload);
           }else {
             if($row->valor_total < 0){
               // Caindo aqui existe uma transação negativa, ou seja, houve um estorno de transação
