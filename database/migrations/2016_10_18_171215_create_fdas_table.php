@@ -20,10 +20,11 @@ class CreateFdasTable extends Migration
             $table->string('documento')->nullable();
             $table->text('nome_razao')->nullable();
             $table->string('email')->nullable();
-            $table->text('endereco')->nullable();;
-            $table->string('cep')->nullable();;
-            $table->string('cidade')->nullable();;
-            $table->string('uf',2)->nullable();;
+            $table->text('endereco')->nullable();
+            $table->string('cep')->nullable();
+            $table->string('cidade')->nullable();
+            $table->string('uf',2)->nullable();
+            $table->double('saldo',8,2);
             $table->timestamps();
         });
     }

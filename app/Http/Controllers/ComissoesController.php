@@ -64,11 +64,9 @@ class ComissoesController extends Controller
         return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
       }
       // dd('oi');
-      $arrayMessages = [
-        'naocadastrado'=> "",
-      ];
+      $arrayMessages = array();
       // dd($messages);
-      $counter = 1;
+      $counter = 0;
       Excel::load($sheet, function ($reader) use(&$arrayMessages,&$counter) {
 
         $reader->each(function($row) use(&$arrayMessages,&$counter){
@@ -78,7 +76,6 @@ class ComissoesController extends Controller
 
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_cadastro);
 
-          $data_aprov = DateTime::createFromFormat('d/m/Y', $data_aprovacao);
           // Dividindo os dispositivos em array
           $dispositivos = array_map('trim', explode(',', $row->modelo_pos));
           /*
@@ -88,23 +85,36 @@ class ComissoesController extends Controller
           // Verificando no if abaixo se a linha corrente já foi inserida no banco
           // dd($row,Franqueado::where('franqueadoid',$row->franqueado)->first());
           if(Fda::where('fdaid',$row->fda)->first() == null){
-            $arrayMessages['naocadastrado'][] = array(
-              'linha'=>$counter,
+            $arrayMessages[] = array(
+              'linha'=>$counter+1,
               'motivo'=>"Fda não encontrado no sistema",
             );
           }
           if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
-            $arrayMessages['naocadastrado'][] = array(
-              'linha'=>$counter,
+            $arrayMessages[] = array(
+              'linha'=>$counter+1,
               'motivo'=>"Franqueado não encontrado no sistema",
             );
           }
+          if($dispositivos[0] == '-'){
+            $arrayMessages[] = array(
+              'linha'=>$counter+1,
+              'motivo'=>"Produto não existe",
+            );
+          }
+          $dataehora = array_map('trim', explode('-', $row->datahora_de_finalizacao));
+          $d = $dataehora[0].' '.$dataehora[1].':00';
+          // dd($d);
+          $data_aprov = Carbon::create($d[6].$d[7].$d[8].$d[9], $d[3].$d[4], $d[0].$d[1], $d[11].$d[12], $d[14].$d[15], $d[17].$d[18], 'America/Fortaleza');
+          // dd($data_aprov,$data_aprov->format('Y-m-d H:i:s'),$counter);
+          // dd($data_aprov,Comissoes::where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))->first());
           if(
           Comissoes::join('fdas as fd','fd.id','=','comissoes.fdaid')
           ->leftjoin('franqueados as fr','fr.id','=','comissoes.franqueadoid')
           ->where('data_cadastro',$data->format('Y-m-d'))
           ->where('nome_cliente',$row->nomerazao_social)
           ->where('fd.fdaid',$row->fda)
+          ->where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))
           ->orWhere(function($query) use ($row,$data){
             $query->whereNull('fr.franqueadoid');
             $query->where('nome_cliente',$row->nomerazao_social);
@@ -145,7 +155,6 @@ class ComissoesController extends Controller
           }
         });
       });
-      // dd('oi');
       return redirect::back()->with(['msg'=>'Dados importados com sucesso!','class'=>'success','erros'=>$arrayMessages]);
     }
 

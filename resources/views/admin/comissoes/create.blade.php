@@ -20,11 +20,9 @@
   <div class="alert alert-danger">
     <h4>Erros encontrados:</h4>
     @foreach(session('erros') as $k => $erros)
+      <b>Linha no Arquivo:</b> {{$erros['linha']}}
       <ul>
-        @foreach($erros as $y => $erro)
-        <li><b>Linha no Arquivo:</b> {{$erro['linha']}}</li>
-        <li><b>Motivo:</b> {{$erro['motivo']}}</li>
-        @endforeach
+        <li><b>Motivo:</b> {{$erros['motivo']}}</li>
       </ul>
     @endforeach
   </div>

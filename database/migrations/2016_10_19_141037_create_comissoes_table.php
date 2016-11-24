@@ -15,7 +15,7 @@ class CreateComissoesTable extends Migration
         Schema::create('comissoes', function (Blueprint $table) {
           $table->increments('id');
           $table->date('data_cadastro');
-          $table->date('data_aprovacao');
+          $table->datetime('data_aprovacao');//DateTime
           $table->string('nome_cliente');
           $table->string('cidade');
           $table->string('uf',2);

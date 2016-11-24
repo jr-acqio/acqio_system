@@ -26,6 +26,7 @@ class CreateFranqueadosTable extends Migration
             $table->string('email')->nullable();
             $table->string('cidade');
             $table->string('uf',2);
+            $table->double('valor',8,2);
             $table->timestamps();
         });
     }

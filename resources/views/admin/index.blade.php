@@ -75,7 +75,7 @@
               <div class="ibox-content">
                 <h1 class="no-margins">{{ App\Models\Pedidos::whereDate('created_at','=',\Carbon\Carbon::Now()->format('Y-m-d'))->count() }}</h1>
                 <div class="stat-percent font-bold">
-                  <a href="http://suporteacqio.esy.es/admin/search/search-vendas?cliente=&produto=&codigo=&boleto=&status=&versao_sis=&data_inicio={{\Carbon\Carbon::Now()->format('Y-m-d')}}&data_final={{\Carbon\Carbon::Now()->format('Y-m-d')}}">
+                  <a href="http://acqio.co/admin/search/search-vendas?cliente=&produto=&codigo=&boleto=&status=&versao_sis=&data_inicio={{\Carbon\Carbon::Now()->format('Y-m-d')}}&data_final={{\Carbon\Carbon::Now()->format('Y-m-d')}}">
                   Visualizar <i class="fa fa-search" aria-hidden="true"></i>
                 </a>
                 </div>
