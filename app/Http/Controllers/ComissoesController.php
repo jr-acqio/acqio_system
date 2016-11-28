@@ -83,7 +83,7 @@ class ComissoesController extends Controller
           na planilha que não há tags nos produtos do banco de dados.
           */
           // Verificando no if abaixo se a linha corrente já foi inserida no banco
-          // dd($row,Franqueado::where('franqueadoid',$row->franqueado)->first());
+          // dd($row);
           if(Fda::where('fdaid',$row->fda)->first() == null){
             $arrayMessages[] = array(
               'linha'=>$counter+1,
@@ -103,8 +103,14 @@ class ComissoesController extends Controller
             );
           }
           $dataehora = array_map('trim', explode('-', $row->datahora_de_finalizacao));
-          $d = $dataehora[0].' '.$dataehora[1].':00';
-          // dd($d);
+          // dd($dataehora,$counter,count($dataehora));
+          if(count($dataehora) == 1){
+            $d = $dataehora[0].' '.'00:00:00';
+          }elseif(count($dataehora) == 2){
+            $d = $dataehora[0].' '.$dataehora[1].':00';
+          }else{
+            $d = $dataehora[0].' '.$dataehora[1].':00';
+          }
           $data_aprov = Carbon::create($d[6].$d[7].$d[8].$d[9], $d[3].$d[4], $d[0].$d[1], $d[11].$d[12], $d[14].$d[15], $d[17].$d[18], 'America/Fortaleza');
           // dd($data_aprov,$data_aprov->format('Y-m-d H:i:s'),$counter);
           // dd($data_aprov,Comissoes::where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))->first());
@@ -222,13 +228,14 @@ class ComissoesController extends Controller
       }else{
         if($request->tipo == 'fda'){
           $fda = Fda::where('fdaid',$request->cliente)->first();
+          // dd($final,$inicio);
           $comissoes = Fda::join('comissoes as c','c.fdaid','=','fdas.id')
           ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
           ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
           ->join('produtos as p','p.id','=','cp.produtoid')
           ->where('fdas.fdaid',$request->cliente)
-          ->where('c.data_aprovacao','<=',$final)
-          ->where('c.data_aprovacao','>=',$inicio)
+          ->whereDate('c.data_aprovacao','<=',$final)
+          ->whereDate('c.data_aprovacao','>=',$inicio)
           ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
           ->groupBy('c.id')
           // ->groupBy('cp.produtoid')
@@ -250,8 +257,8 @@ class ComissoesController extends Controller
           ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
           ->join('produtos as p','p.id','=','cp.produtoid')
           ->where('c.franqueadoid',$franqueado->id)
-          ->where('c.data_aprovacao','<=',$final)
-          ->where('c.data_aprovacao','>=',$inicio)
+          ->whereDate('c.data_aprovacao','<=',$final)
+          ->whereDate('c.data_aprovacao','>=',$inicio)
           ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
           ->groupBy('c.id')
           // ->groupBy('cp.produtoid')
@@ -288,8 +295,8 @@ class ComissoesController extends Controller
       // dd($emails);
       $comissoes = Fda::join('comissoes as c','fdas.id','=','c.fdaid')
       ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-      ->where('c.data_aprovacao','<=',$final)
-      ->where('c.data_aprovacao','>=',$inicio)
+      ->whereDate('c.data_aprovacao','<=',$final)
+      ->whereDate('c.data_aprovacao','>=',$inicio)
       ->groupBy('fdas.id')
       // ->groupBy('c.id')
       ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
@@ -309,8 +316,8 @@ class ComissoesController extends Controller
 
       $comissoes_fr = Franqueado::join('comissoes as c','franqueados.id','=','c.franqueadoid')
       ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-      ->where('c.data_aprovacao','<=',$final)
-      ->where('c.data_aprovacao','>=',$inicio)
+      ->whereDate('c.data_aprovacao','<=',$final)
+      ->whereDate('c.data_aprovacao','>=',$inicio)
       ->groupBy('c.franqueadoid')
       // ->groupBy('cp.produtoid')
       ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),

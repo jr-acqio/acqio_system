@@ -181,8 +181,8 @@
                               <td>
                                 {{
                                   \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
-                                  ->where('c.data_aprovacao','<=',$datafinal)
-                                  ->where('c.data_aprovacao','>=',$datainicial)
+                                  ->whereDate('c.data_aprovacao','<=',$datafinal)
+                                  ->whereDate('c.data_aprovacao','>=',$datainicial)
                                   ->where('c.fdaid',$c->id)
                                   ->get()->count()
                                 }}
@@ -223,8 +223,8 @@
                               <td>
                                 {{
                                   \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
-                                  ->where('c.data_aprovacao','<=',$datafinal)
-                                  ->where('c.data_aprovacao','>=',$datainicial)
+                                  ->whereDate('c.data_aprovacao','<=',$datafinal)
+                                  ->whereDate('c.data_aprovacao','>=',$datainicial)
                                   ->where('c.franqueadoid',$c->id)
                                   ->get()->count()
                                 }}

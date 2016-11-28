@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+use App\Events\GerarPagamentosComissao;
+
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -27,6 +29,8 @@ class EventServiceProvider extends ServiceProvider
     public function boot(DispatcherContract $events)
     {
         parent::boot($events);
+
+        \Event::fire(new GerarPagamentosComissao);
 
         //
     }
