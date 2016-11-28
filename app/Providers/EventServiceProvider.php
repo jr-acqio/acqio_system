@@ -15,9 +15,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\GerarPagamentosComissao' => [
-            'App\Listeners\GerarPDF',
-        ],
+      'App\Events\SomeEvent' => [
+          'App\Listeners\EventListener',
+      ],
     ];
 
     /**
@@ -29,8 +29,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot(DispatcherContract $events)
     {
         parent::boot($events);
-
-        \Event::fire(new GerarPagamentosComissao);
 
         //
     }

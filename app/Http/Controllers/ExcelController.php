@@ -141,15 +141,31 @@ class ExcelController extends Controller
           if(PagamentoBoleto::where('numero','like','%'.$numero_boleto.'%')->first() == null){
             if(strlen($numero_boleto) == 11){ $resumoUpload['novasBradesco'] += 1; }
             else{ $resumoUpload['novasBBrasil'] += 1; }
-            $p = new Pagamento();
-            $p->save();
-            PagamentoBoleto::create([
-              'pagamento_id' => $p->id,
-              'numero'  =>  $numero_boleto,
-              'valor'   =>  $row->valor,
-              'situacao'=>  $row->situacao,
-              'data'    =>  $data
-            ]);
+            DB::beginTransaction();
+            try {
+              $p = new Pagamento();
+              $p->save();
+              PagamentoBoleto::create([
+                'pagamento_id' => $p->id,
+                'numero'  =>  $numero_boleto,
+                'valor'   =>  $row->valor,
+                'situacao'=>  $row->situacao,
+                'data'    =>  $data
+              ]);
+              DB::commit();
+            } catch (Exception $e) {
+              DB::rollBack();
+              $resumoUpload['novasBradesco']--;
+              var_dump($e->errorInfo);
+            }catch(ValidationException $e){
+              DB::rollBack();
+              $resumoUpload['novasBradesco']--;
+              var_dump($e->errorInfo);
+            }catch ( \Illuminate\Database\QueryException $e) {
+              DB::rollBack();
+              var_dump($e->errorInfo,'<br><p style="color:red;">Verifique se o arquivo inserido está correto.</p>');
+              exit;
+            }
           }
         });
       });

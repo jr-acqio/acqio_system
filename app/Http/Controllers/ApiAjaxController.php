@@ -7,6 +7,8 @@ use App\Http\Requests;
 use App\Models\PagamentoCartao;
 use App\Models\PagamentoBoleto;
 use App\Models\Pagamento;
+use App\Models\Fda;
+use App\Models\Franqueado;
 use Response;
 class ApiAjaxController extends Controller
 {
@@ -54,6 +56,12 @@ class ApiAjaxController extends Controller
             }
           }
       }//Finish Function
+    }
+
+    // Franqueados referentes ao fda escolhido na checagem de pagamento
+    public function getFranqueados($fda){
+      $franqueados = Franqueado::where('fdaid',$fda)->get();
+      return response()->json($franqueados->toJson());
     }
 
     public function getDetailsProduct($idproduto){

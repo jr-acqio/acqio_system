@@ -16,9 +16,9 @@ Route::get('/download-pdf-fda',function(){
   $directory = 'relatorio-comissao/fdas';
   $comissoes = \App\Models\Fda::join('comissoes as c','fdas.id','=','c.fdaid')
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->where('c.data_aprovacao','<=','2016-10-31')
-  ->where('c.data_aprovacao','>=','2016-10-01')
-  // ->where('fdas.id','=',1)
+  ->whereDate('c.data_aprovacao','<=','2016-10-31')
+  ->whereDate('c.data_aprovacao','>=','2016-10-01')
+  ->where('fdas.id','=',6)
   ->groupBy('fdas.id')
   // ->groupBy('c.id')
   ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
@@ -41,8 +41,8 @@ Route::get('/download-pdf-fda',function(){
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('fdas.fdaid',$value->fdaid)
-    ->where('c.data_aprovacao','<=','2016-10-31')
-    ->where('c.data_aprovacao','>=','2016-10-01')
+    ->whereDate('c.data_aprovacao','<=','2016-10-31')
+    ->whereDate('c.data_aprovacao','>=','2016-10-01')
     ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
@@ -60,9 +60,9 @@ Route::get('/download-pdf',function(){
 
   $comissoes_fr = \App\Models\Franqueado::join('comissoes as c','franqueados.id','=','c.franqueadoid')
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->where('c.data_aprovacao','<=','2016-10-31')
-  ->where('c.data_aprovacao','>=','2016-10-01')
-  ->where('franqueados.id','556')
+  ->whereDate('c.data_aprovacao','<=','2016-10-31')
+  ->whereDate('c.data_aprovacao','>=','2016-10-01')
+  ->where('franqueados.id',86)
   ->groupBy('c.franqueadoid')
   // ->groupBy('cp.produtoid')
   ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
@@ -85,8 +85,8 @@ Route::get('/download-pdf',function(){
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('c.franqueadoid',$value->id)
-    ->where('c.data_aprovacao','<=','2016-10-31')
-    ->where('c.data_aprovacao','>=','2016-10-01')
+    ->whereDate('c.data_aprovacao','<=','2016-10-31')
+    ->whereDate('c.data_aprovacao','>=','2016-10-01')
     ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
     ->groupBy('c.id')
     ->get();
@@ -108,6 +108,8 @@ Route::group(['prefix'=> 'api'],function(){
   Route::get('ajax/codigo/{codigo}/data/{data}','ApiAjaxController@getCheckCodigo');
   Route::get('ajax/boleto/{num}','ApiAjaxController@getCheckBoleto');
 
+  // Route for Franqueados relationship with Fda
+  Route::get('/ajax/fda/{fda}','ApiAjaxController@getFranqueados');
   //Route Edit Products
   Route::get('ajax/produto-details/{idproduto}','ApiAjaxController@getDetailsProduct');
   Route::post('ajax/editProduct/{idproduto}','ApiAjaxController@postEditProduct');

@@ -250,9 +250,9 @@
                   <label for="">FRANQUEADO:</label>
                   <select class="form-control chosen-select" name="franqueado" required="">
                     <option value="">SELECIONE UM FRANQUEADO</option>
-                    @foreach($franqueados as $fr)
+                    {{--@foreach($franqueados as $fr)
                     <option value="{{$fr->id}}">{{strtoupper($fr->franqueadoid)}}</option>
-                    @endforeach
+                    @endforeach  --}}
                   </select>
                 </div>
               </div>
@@ -379,7 +379,7 @@
 
   <!-- Chosen -->
   <script src="{{ asset('admin/js/plugins/chosen/chosen.jquery.js') }}"></script>
-
+  <script src="{{ asset('admin/js/main.js') }}" charset="utf-8"></script>
   <script type="text/javascript">
   function configChosen(){
     var config = {
