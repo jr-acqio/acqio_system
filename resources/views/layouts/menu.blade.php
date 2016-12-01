@@ -73,8 +73,8 @@
       <li class="{{ Request::is('admin/royalties*') ? 'active' : null }}">
         <a href="#"><i class="fa fa-money" aria-hidden="true"></i> <span class="nav-label">Royalties</span><span class="fa arrow"></span></a>
         <ul class="nav nav-second-level collapse">
-            <li class="{{ Request::is('admin/royalties/create') ? 'active' : null }}"><a href="{{ route('admin.royalties.create') }}">Importar Royalties</a></li>
-            <li class="{{ Request::is('admin/royalties/list*') ? 'active' : null }}"><a href="{{ url('/admin/royalties/list') }}">Visualizar Royalties</a></li>
+            <li class="{{ Request::is('admin/royalties/create') ? 'active' : null }}"><a href="{{ route('admin.royalties.create') }}">Importar Royalties <i class="fa fa-upload" aria-hidden="true"></i></a></li>
+            <li class="{{ Request::is('admin/royalties') ? 'active' : null }}"><a href="{{ url('/admin/royalties/') }}">Visualizar Royalties <i class="fa fa-eye" aria-hidden="true"></i></a></li>
         </ul>
       </li>
     </ul>

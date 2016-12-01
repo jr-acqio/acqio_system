@@ -90,7 +90,7 @@ class ComissoesController extends Controller
               'motivo'=>"Fda não encontrado no sistema",
             );
           }
-          if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
+          if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null && $row->franqueado != ""){
             $arrayMessages[] = array(
               'linha'=>$counter+1,
               'motivo'=>"Franqueado não encontrado no sistema",
@@ -129,6 +129,12 @@ class ComissoesController extends Controller
           })
           ->first() == null
           ){
+            if($row->franqueado == "" && Fda::where('fdaid',$row->fda)->first() != null){
+              $arrayMessages[] = array(
+                'linha'=>$counter+1,
+                'motivo'=>"Coluna Franqueado em branco, será considerado Franquia Piloto",
+              );
+            }
             if(Fda::where('fdaid',$row->fda)->first() != null
             && count($dispositivos) > 0 && $dispositivos[0] != '-'
             ){
@@ -139,9 +145,7 @@ class ComissoesController extends Controller
               $c->cidade = $row->cidade;
               $c->uf = $row->estado;
               $c->fdaid = Fda::where('fdaid',$row->fda)->first()->id;
-              if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
-                  $c->franqueadoid = "";
-              }else{
+              if(Franqueado::where('franqueadoid',$row->franqueado)->first() != null){
                 $c->franqueadoid = Franqueado::where('franqueadoid',$row->franqueado)->first()->id;
               }
               $c->serial = $row->serial;

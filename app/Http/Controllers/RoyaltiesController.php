@@ -22,7 +22,11 @@ class RoyaltiesController extends Controller
      */
     public function index()
     {
-        //
+        $royalties = Royalties::join('franqueados as fr','fr.id','=','royalties.franqueadoid')
+        ->select('royalties.*','fr.nome_razao','fr.franqueadoid')
+        ->orderBy('royalties.cliente','DESC')->get();
+        // dd($royalties->first());
+        return view('admin.royalties.list')->with(['royalties'=>$royalties]);
     }
 
     /**
@@ -136,6 +140,8 @@ class RoyaltiesController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $r = Royalties::findOrFail($id);
+      $r->delete();
+      return redirect('admin/royalties')->with(['msg'=>'Desconto de Royalties removido com sucesso!','class'=>'success','royalties'=>Royalties::all()]);
     }
 }

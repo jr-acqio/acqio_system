@@ -18,7 +18,7 @@ Route::get('/download-pdf-fda',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->whereDate('c.data_aprovacao','<=','2016-10-31')
   ->whereDate('c.data_aprovacao','>=','2016-10-01')
-  ->where('fdas.id','=',6)
+  ->where('fdas.id','=',50)
   ->groupBy('fdas.id')
   // ->groupBy('c.id')
   ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
@@ -62,7 +62,7 @@ Route::get('/download-pdf',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->whereDate('c.data_aprovacao','<=','2016-10-31')
   ->whereDate('c.data_aprovacao','>=','2016-10-01')
-  ->where('franqueados.id',86)
+  ->where('franqueados.id',450)
   ->groupBy('c.franqueadoid')
   // ->groupBy('cp.produtoid')
   ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
@@ -164,7 +164,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'],function(){
     Route::get('comissoes/list/download','ComissoesController@downloadExcel');
     // Route::get('comissoes/list/email')
     Route::resource('comissoes','ComissoesController',['except'=>['update','edit','show']]);
-    Route::resource('royalties','RoyaltiesController',['only'=>['create','store']]);
+    Route::resource('royalties','RoyaltiesController',['only'=>['create','store','index','destroy']]);
 
   // Obter Transações
   Route::get('/getTransactions',['as' => 'get-transactions', 'uses' => 'QueryController@getTransactions']);
