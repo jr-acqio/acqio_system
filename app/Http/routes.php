@@ -1,21 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
-Route::get('oi',function(){
-  dispatch(
-      new App\Jobs\Teste()
-  );
-  return "Vamos";
-});
 Route::get('/enviar-email','MailController@sendMail');
 
 Route::get('/download-pdf-fda',function(){
@@ -40,13 +24,11 @@ Route::get('/download-pdf-fda',function(){
   ->whereDate('c.data_aprovacao','>=','2016-11-01')
   // ->where('fdas.id','=',1)
   ->groupBy('fdas.id')
-  // ->groupBy('c.id')
   ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
             'fdas.fdaid','fdas.id',
             DB::raw('SUM(cp.tx_instalacao) as valor'),DB::raw('COUNT(cp.id) as totalProdutos'))
   ->orderBy('totalVendas','DESC')
   ->get();
-
   foreach ($comissoes as $key => $value) {
     $comissoes_fda = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
     ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
@@ -59,30 +41,13 @@ Route::get('/download-pdf-fda',function(){
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
-    // Criar o pdf
 
-
-
-    $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$comissoes_fda,'fda'=>\App\Models\Fda::where('fdaid',$value->fdaid)->first()]);
-    $pdf->save(storage_path().'/app/'.$folder.'/'.strtoupper($value->fda).'/'.strtoupper($value->fdaid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
-
-
-    // dd($comissoes_fda,$folder,$value);
-
-    // return $pdf->stream();
-    // dd(
-    //   DB::select("
-    //   SELECT fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas, SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal FROM comissoes
-    //   JOIN fdas ON comissoes.fdaid = fdas.id
-    //   JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_instalacao) as valor_total FROM comissoes_produto GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id GROUP BY fdas.id")
-    // );
+    dispatch(
+      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes_fda,$value,$type = 1)
+    );
   }
-  // dd($comissoes);
 
-  return "Sucesso!";
-});
-Route::get('/download-pdf',function(){
-  // $files = Storage::files('relatorio-comissao/fdas');
+  // Comissões Franqueado
   $directory = 'relatorio-comissao/franqueados';
   $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
 
@@ -102,15 +67,14 @@ Route::get('/download-pdf',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->whereDate('c.data_aprovacao','<=','2016-11-30')
   ->whereDate('c.data_aprovacao','>=','2016-11-01')
-  // ->where('franqueados.id',450)
+  // ->where('franqueados.id',1)
   ->groupBy('c.franqueadoid')
-  // ->groupBy('cp.produtoid')
   ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
             'franqueados.franqueadoid','franqueados.id',
             DB::raw('SUM(cp.tx_venda) as valor'),DB::raw('COUNT(cp.id) as totalProdutos'))
   ->orderBy('totalVendas','DESC')
   ->get();
-  // dd($comissoes_fr);
+  // dd($comissoes_fr,$folder);
   foreach ($comissoes_fr as $key => $value) {
 
     $comissoes = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
@@ -123,19 +87,23 @@ Route::get('/download-pdf',function(){
     ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
     ->groupBy('c.id')
     ->get();
-    // dd($comissoes);
-    // $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$comissoes_fda,'fda'=>$value->fdaid]);
-    $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fr'=>$comissoes,'franqueado'=>\App\Models\Franqueado::where('franqueadoid',$value->franqueadoid)->first()]);
-    // return $pdf->stream();
-    // dd($value);
-    $pdf->save(storage_path().'/app/'.$folder.'/'.strtoupper($value->franqueadoid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
-    // dd('oi');
-    // dd(storage_path());
-    // $pdf->download($value->fdaid.'.pdf');
-    // $pdf->download($value->fdaid.'/relatorio-comissao_01/10/2016_a_31/10/2016.pdf');
+
+    dispatch(
+      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
+    );
   }
-  return 'Sucesso';
+    // dd(
+    //   DB::select("
+    //   SELECT fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas, SUM(total_produtos) as totalProdutos,
+    //   SUM(vttotal.valor_total) as valorTotal FROM comissoes
+    //   JOIN fdas ON comissoes.fdaid = fdas.id
+    //   JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_instalacao) as valor_total
+    //   FROM comissoes_produto GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id
+    //   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id GROUP BY fdas.id")
+    // );
+  return "Sucesso!";
 });
+
 //ajax
 Route::get('/login','AuthController@index');
 Route::group(['prefix'=> 'api'],function(){
