@@ -65,7 +65,7 @@ class RoyaltiesController extends Controller
       $rowCounter=0;
       Excel::load($sheet, function ($reader) use($messages,&$arrayMessages,&$rowCounter) {
         $reader->each(function($row) use($messages,&$arrayMessages,&$rowCounter){
-
+          // dd($row,Franqueado::where('franqueadoid',$row->id_franqueado)->first());
           $rowCounter++;
           $f = Franqueado::where('franqueadoid',$row->id_franqueado)->first();
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_vencimento);
@@ -78,15 +78,18 @@ class RoyaltiesController extends Controller
           }
           $valor_original = str_replace(',','', $row->valor_original); //remove as virgulas
           $cheques_devolvidos = str_replace(',','', $row->cheques_devolvidos); //remove as virgulas
+          // dd($cheques_devolvidos,Royalties::where('data_vencimento',$data->format('Y-m-d'))->where('cliente',$row->cliente_fornecedor)
+          // ->where('franquia_loc',$row->franquia_loc)->where('valor_original',$valor_original)
+          // ->where('cheques_devolvidos',$cheques_devolvidos)->first());
           if($f != null &&
             Royalties::where('data_vencimento',$data->format('Y-m-d'))->where('cliente',$row->cliente_fornecedor)
-            ->where('franquia_loc',$row->franquia)->where('valor_original',$valor_original)
+            ->where('franquia_loc',$row->franquia_loc)->where('valor_original',$valor_original)
             ->where('cheques_devolvidos',$cheques_devolvidos)->first() == null
           ){
             $r = new Royalties;
             $r->data_vencimento = $data;
             $r->cliente = $row->cliente_fornecedor;
-            $r->franquia_loc = $row->franquia;
+            $r->franquia_loc = $row->franquia_loc;
             $r->valor_original = $valor_original;
             $r->cheques_devolvidos = $cheques_devolvidos;
             $r->franqueadoid = $f->id;

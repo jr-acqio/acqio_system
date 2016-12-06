@@ -10,15 +10,35 @@
 | and give it the controller to call when that URI is requested.
 |
 */
+Route::get('oi',function(){
+  dispatch(
+      new App\Jobs\Teste()
+  );
+  return "Vamos";
+});
 Route::get('/enviar-email','MailController@sendMail');
 
 Route::get('/download-pdf-fda',function(){
+  // Criar diretório do mês e ano referente as comissões no diretório : storage/relatorio-comissao/fdas/mês_Ano
   $directory = 'relatorio-comissao/fdas';
+  $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
+
+  $monthNum = \Carbon\Carbon::now()->format('m');
+  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+  $monthName = $dateObj->format('F');
+  // dd($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'));
+
+  $folder = $directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y');
+
+  if(!in_array($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'), $directories)){
+    // Caindo aqui não existe o diretório então irei criar.
+    Storage::makeDirectory($folder);
+  }
   $comissoes = \App\Models\Fda::join('comissoes as c','fdas.id','=','c.fdaid')
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->whereDate('c.data_aprovacao','<=','2016-10-31')
-  ->whereDate('c.data_aprovacao','>=','2016-10-01')
-  ->where('fdas.id','=',50)
+  ->whereDate('c.data_aprovacao','<=','2016-11-30')
+  ->whereDate('c.data_aprovacao','>=','2016-11-01')
+  // ->where('fdas.id','=',1)
   ->groupBy('fdas.id')
   // ->groupBy('c.id')
   ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
@@ -26,43 +46,63 @@ Route::get('/download-pdf-fda',function(){
             DB::raw('SUM(cp.tx_instalacao) as valor'),DB::raw('COUNT(cp.id) as totalProdutos'))
   ->orderBy('totalVendas','DESC')
   ->get();
-  // dd($comissoes);
-  foreach ($comissoes as $key => $value) {
-    $directories = Storage::directories($directory);
-    // dd($value);
-    // if(in_array($directory.$value->fdaid, $directories)){
-    //   // dd('sim');
-    // }else{
-    //   Storage::makeDirectory($directory.'/'.$value->franqueadoid);
-    // }
 
+  foreach ($comissoes as $key => $value) {
     $comissoes_fda = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
     ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('fdas.fdaid',$value->fdaid)
-    ->whereDate('c.data_aprovacao','<=','2016-10-31')
-    ->whereDate('c.data_aprovacao','>=','2016-10-01')
+    ->whereDate('c.data_aprovacao','<=','2016-11-30')
+    ->whereDate('c.data_aprovacao','>=','2016-11-01')
     ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
-    // dd($comissoes_fda);
+    // Criar o pdf
+
+
+
     $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$comissoes_fda,'fda'=>\App\Models\Fda::where('fdaid',$value->fdaid)->first()]);
+    $pdf->save(storage_path().'/app/'.$folder.'/'.strtoupper($value->fda).'/'.strtoupper($value->fdaid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
+
+
+    // dd($comissoes_fda,$folder,$value);
+
     // return $pdf->stream();
-    $pdf->save(storage_path().'/app/relatorio-comissao/fdas'.strtoupper($value->fda).'/'.strtoupper($value->fdaid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
+    // dd(
+    //   DB::select("
+    //   SELECT fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas, SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal FROM comissoes
+    //   JOIN fdas ON comissoes.fdaid = fdas.id
+    //   JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_instalacao) as valor_total FROM comissoes_produto GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id GROUP BY fdas.id")
+    // );
   }
+  // dd($comissoes);
+
   return "Sucesso!";
 });
 Route::get('/download-pdf',function(){
   // $files = Storage::files('relatorio-comissao/fdas');
   $directory = 'relatorio-comissao/franqueados';
+  $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
+
+  $monthNum = \Carbon\Carbon::now()->format('m');
+  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
+  $monthName = $dateObj->format('F');
+  // dd($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'));
+
+  $folder = $directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y');
+
+  if(!in_array($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'), $directories)){
+    // Caindo aqui não existe o diretório então irei criar.
+    Storage::makeDirectory($folder);
+  }
 
   $comissoes_fr = \App\Models\Franqueado::join('comissoes as c','franqueados.id','=','c.franqueadoid')
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->whereDate('c.data_aprovacao','<=','2016-10-31')
-  ->whereDate('c.data_aprovacao','>=','2016-10-01')
-  ->where('franqueados.id',450)
+  ->whereDate('c.data_aprovacao','<=','2016-11-30')
+  ->whereDate('c.data_aprovacao','>=','2016-11-01')
+  // ->where('franqueados.id',450)
   ->groupBy('c.franqueadoid')
   // ->groupBy('cp.produtoid')
   ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
@@ -72,21 +112,14 @@ Route::get('/download-pdf',function(){
   ->get();
   // dd($comissoes_fr);
   foreach ($comissoes_fr as $key => $value) {
-    $directories = Storage::directories($directory);
-    // dd($value);
-    // if(in_array($directory.$value->fdaid, $directories)){
-    //   // dd('sim');
-    // }else{
-    //   Storage::makeDirectory($directory.'/'.$value->franqueadoid);
-    // }
 
     $comissoes = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
     ->join('fdas as f','f.id','=','c.fdaid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('c.franqueadoid',$value->id)
-    ->whereDate('c.data_aprovacao','<=','2016-10-31')
-    ->whereDate('c.data_aprovacao','>=','2016-10-01')
+    ->whereDate('c.data_aprovacao','<=','2016-11-30')
+    ->whereDate('c.data_aprovacao','>=','2016-11-01')
     ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
     ->groupBy('c.id')
     ->get();
@@ -94,8 +127,9 @@ Route::get('/download-pdf',function(){
     // $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$comissoes_fda,'fda'=>$value->fdaid]);
     $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fr'=>$comissoes,'franqueado'=>\App\Models\Franqueado::where('franqueadoid',$value->franqueadoid)->first()]);
     // return $pdf->stream();
-
-    $pdf->save(storage_path().'/app/relatorio-comissao/franqueados'.strtoupper($value->franqueado).'/'.strtoupper($value->franqueadoid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
+    // dd($value);
+    $pdf->save(storage_path().'/app/'.$folder.'/'.strtoupper($value->franqueadoid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
+    // dd('oi');
     // dd(storage_path());
     // $pdf->download($value->fdaid.'.pdf');
     // $pdf->download($value->fdaid.'/relatorio-comissao_01/10/2016_a_31/10/2016.pdf');

@@ -46,16 +46,41 @@ class FranqueadoController extends Controller
       Excel::load($sheet, function ($reader) {
         $reader->each(function($row){
           // dd($row);
+          $updateIdFranqueado = Franqueado::where('email',$row->e_mail)->where('franqueadoid','!=',$row->franqueado)->first();
+          if($updateIdFranqueado != null){
+            // Se já existir o email cadastrado com o id diferente da linha atual no arquivo csv irá atualizar o franqueadoid
+            $updateIdFranqueado->franqueadoid = $row->franqueado;
+            $updateIdFranqueado->nome_razao = $row->nomerazao_social;
+            $updateIdFranqueado->documento = $row->cpfcnpj;
+            $updateIdFranqueado->cidade = $row->cidade;
+            $updateIdFranqueado->uf = $row->uf;
+            $updateIdFranqueado->save();
+            // dd($updateIdFranqueado,$row);
+          }
           if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
-            Franqueado::create([
-              'fdaid'  => \App\Models\Fda::where('fdaid',$row->fda)->first()->id,
-              'franqueadoid' =>  $row->franqueado,
-              'nome_razao' =>  $row->nomerazao_social,
-              'documento'  =>  $row->cpfcnpj,
-              'email' =>  $row->e_mail,
-              'cidade'  =>  $row->cidade,
-              'uf'  =>  $row->uf
-            ]);
+            DB::beginTransaction();
+            try {
+              Franqueado::create([
+                'fdaid'  => \App\Models\Fda::where('fdaid',$row->fda)->first()->id,
+                'franqueadoid' =>  $row->franqueado,
+                'nome_razao' =>  $row->nomerazao_social,
+                'documento'  =>  $row->cpfcnpj,
+                'email' =>  $row->e_mail,
+                'cidade'  =>  $row->cidade,
+                'uf'  =>  $row->uf
+              ]);
+              DB::commit();
+            } catch (\Illuminate\Database\QueryException $e) {
+              DB::rollBack();
+              return $e->errorInfo();
+            }catch(\ErrorException $e){
+              DB::rollBack();
+              dd($e,$row->fda);
+              exit;
+            }catch(ValidationException $e){
+              DB::rollBack();
+              return $e->errorInfo();
+            }
           }
         });
       });
