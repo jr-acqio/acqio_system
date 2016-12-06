@@ -157,7 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         //My Adc
-        Collective\Bus\BusServiceProvider::class,
+        // Collective\Bus\BusServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,

@@ -41,7 +41,6 @@ return array(
     'Doctrine\\Common\\Annotations\\' => array($vendorDir . '/doctrine/annotations/lib/Doctrine/Common/Annotations'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/common/lib/Doctrine/Common'),
     'Collective\\Html\\' => array($vendorDir . '/laravelcollective/html/src'),
-    'Collective\\Bus\\' => array($vendorDir . '/laravelcollective/bus/src'),
     'ClassPreloader\\' => array($vendorDir . '/classpreloader/classpreloader/src'),
     'Carbon\\' => array($vendorDir . '/nesbot/carbon/src/Carbon'),
     'Barryvdh\\DomPDF\\' => array($vendorDir . '/barryvdh/laravel-dompdf/src'),
