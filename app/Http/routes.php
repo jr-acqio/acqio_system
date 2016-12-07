@@ -1,5 +1,5 @@
 <?php
-
+use Vinkla\Pusher\Facades\Pusher;
 Route::get('/enviar-email','MailController@sendMail');
 
 Route::get('/download-pdf-fda',function(){
@@ -22,7 +22,7 @@ Route::get('/download-pdf-fda',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->whereDate('c.data_aprovacao','<=','2016-11-30')
   ->whereDate('c.data_aprovacao','>=','2016-11-01')
-  // ->where('fdas.id','=',1)
+  ->where('fdas.id','=',1)
   ->groupBy('fdas.id')
   ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
             'fdas.fdaid','fdas.id',
@@ -67,7 +67,7 @@ Route::get('/download-pdf-fda',function(){
   ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
   ->whereDate('c.data_aprovacao','<=','2016-11-30')
   ->whereDate('c.data_aprovacao','>=','2016-11-01')
-  // ->where('franqueados.id',1)
+  ->where('franqueados.id',1)
   ->groupBy('c.franqueadoid')
   ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
             'franqueados.franqueadoid','franqueados.id',
@@ -88,9 +88,9 @@ Route::get('/download-pdf-fda',function(){
     ->groupBy('c.id')
     ->get();
 
-    dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
-    );
+    // dispatch(
+    //   new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
+    // );
   }
     // dd(
     //   DB::select("
@@ -101,7 +101,11 @@ Route::get('/download-pdf-fda',function(){
     //   FROM comissoes_produto GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id
     //   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id GROUP BY fdas.id")
     // );
-  return "Sucesso!";
+
+    Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));
+    // We're done here - how easy was that, it just works!
+    Pusher::getSettings();
+  return redirect('/admin/dashboard')->with(['msg'=>'Estamos processando a geração dos pdfs de comissão, avisaremos ao término','class'=>'info']);
 });
 
 //ajax

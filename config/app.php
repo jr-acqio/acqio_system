@@ -161,6 +161,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Vinkla\Pusher\PusherServiceProvider::class,
     ],
 
     /*
