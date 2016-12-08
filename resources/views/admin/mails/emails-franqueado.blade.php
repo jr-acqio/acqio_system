@@ -515,20 +515,23 @@
                     <tbody><tr>
 
                         <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
-                          <?php $primeiro_nome = explode(" ",$data['nome_razao']); ?>
-                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;{{ $primeiro_nome[0] }}, tudo bem?</p>
+                          <?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
+                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;<b>{{ $primeiro_nome[0] }}</b>, tudo bem?</p>
 
 <!-- <p data-mce-style="text-align: left;" dir="ltr"><br>
 Parabéns pelas vendas!</p> -->
 
 <p data-mce-style="text-align: left;" dir="ltr"><br>
-  <?php $quantidade_pos = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
-	->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->where('c.data_aprovacao','<=','2016-10-31')
-  ->where('c.data_aprovacao','>=','2016-10-01')
-  ->where('c.franqueadoid',$data['id'])
-  ->get()->count(); ?>
-O valor de suas comissões, referente às&nbsp;{{ $quantidade_pos }} POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data['valor'], 2, ',', '.') }}.</p>
+<b>O valor de suas comissões, referente às&nbsp;{{ $data->totalProdutos }}
+POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}
+@if($data->totalRoyalties > 0)
+	porém, utilizamos esse saldo para abater um valor de R$ {{ number_format($data->totalRoyalties,2,',','.') }} em royalties vencidos,
+	@if($data->valorFinal < 0)
+		ficando ainda um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} em aberto.
+	@else
+		ficando ainda um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} para recebimento.
+	@endif
+@endif</b></p>
 &nbsp;
 
 <p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>

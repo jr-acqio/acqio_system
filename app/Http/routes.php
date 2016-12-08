@@ -76,7 +76,6 @@ Route::get('/download-pdf-fda',function(){
   ->get();
   // dd($comissoes_fr,$folder);
   foreach ($comissoes_fr as $key => $value) {
-
     $comissoes = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
     ->join('fdas as f','f.id','=','c.fdaid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
@@ -88,9 +87,9 @@ Route::get('/download-pdf-fda',function(){
     ->groupBy('c.id')
     ->get();
 
-    // dispatch(
-    //   new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
-    // );
+    dispatch(
+      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
+    );
   }
     // dd(
     //   DB::select("

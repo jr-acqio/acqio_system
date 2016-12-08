@@ -506,19 +506,15 @@
                     <tbody><tr>
 
                         <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
-                          <?php $primeiro_nome = explode(" ",$data['nome_razao']); ?>
+                          <?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
                             <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;{{ $primeiro_nome[0] }}, tudo bem?</p>
 
 <!-- <p data-mce-style="text-align: left;" dir="ltr"><br>
 Parabéns pelas vendas!</p> -->
 
 <p data-mce-style="text-align: left;" dir="ltr"><br>
-  <?php $quantidade_vendas = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
-  ->where('c.data_aprovacao','<=','2016-10-31')
-  ->where('c.data_aprovacao','>=','2016-10-01')
-  ->where('c.fdaid',$data['id'])
-  ->get()->count(); ?>
-O valor de Taxa de Instalação, referente às&nbsp;{{ $quantidade_vendas }} POS instaladas no mês de Outubro&nbsp;é de de&nbsp;R$ {{ number_format($data['valor'], 2, ',', '.') }}.</p>
+
+O valor de Taxa de Instalação, referente às&nbsp;{{ $data->totalProdutos }} POS instaladas no mês de Outubro&nbsp;é de de&nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.</p>
 &nbsp;
 
 <p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>
