@@ -159,9 +159,9 @@
 <script src="{{ asset('admin/js/plugins/chartJs/Chart.min.js') }}"></script>
 
 <!-- Pusher -->
-<!-- <script src="https://js.pusher.com/3.2/pusher.min.js"></script> -->
+<script src="https://js.pusher.com/3.2/pusher.min.js"></script>
 
-<!-- <script>
+<script>
   // Enable pusher logging - don't include this in production
   Pusher.logToConsole = true;
   var pusher = new Pusher('9a576fa0ecb173a49936', {
@@ -170,13 +170,13 @@
 
   var channel = pusher.subscribe('my-channel');
   channel.bind('generate_pdfs', function(data) {
-    alert(data.message);
+    // alert(data.message);
     $('#message').html('<b>'+data.message+'</b>');
     $('#message').removeClass('alert-danger').removeClass('alert-info').removeClass('alert-warning');
     $('#message').addClass('alert-'+data.class);
     $('#message').fadeIn('slow');
   });
-</script> -->
+</script>
 
 <script>
 $(document).ready(function() {
