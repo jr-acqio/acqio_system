@@ -23,7 +23,7 @@ Route::get('/teste',function(){
   GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id
   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto
   GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
-  WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30" and comissoes.franqueadoid = 1
+  WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30"
   GROUP BY fdas.id'
   );
   // dd($comissoes);
@@ -88,9 +88,9 @@ Route::get('/teste',function(){
     ->get();
     // dd($comissoes,$value);
 
-    // dispatch(
-    //   new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
-    // );
+    dispatch(
+      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
+    );
   }
     // Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));
   return redirect('/admin/dashboard')->with(['msg'=>'Estamos processando a geração dos pdfs de comissão, avisaremos ao término','class'=>'info']);

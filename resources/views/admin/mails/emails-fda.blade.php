@@ -507,7 +507,7 @@
 
                         <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
                           <?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
-                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;{{ $primeiro_nome[0] }}, tudo bem?</p>
+                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;{{-- $primeiro_nome[0] --}}, tudo bem?</p>
 
 <!-- <p data-mce-style="text-align: left;" dir="ltr"><br>
 Parabéns pelas vendas!</p> -->

@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -33,7 +34,7 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $e)
     {
-        parent::report($e);
+      parent::report($e);
     }
 
     /**
@@ -45,6 +46,10 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-        return parent::render($request, $e);
+      if ($e instanceof TokenMismatchException){
+          //redirect to a form. Here is an example of how I handle mine
+          return redirect($request->fullUrl())->with(['msg'=>"Opps! Não é possível submeter um formulário por um longo tempo. Por favor, tente novamente!",'class'=>'info']);
+      }
+      return parent::render($request, $e);
     }
 }

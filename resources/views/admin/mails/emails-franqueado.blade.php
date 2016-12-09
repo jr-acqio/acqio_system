@@ -516,20 +516,20 @@
 
                         <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
                           <?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
-                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;<b>{{ $primeiro_nome[0] }}</b>, tudo bem?</p>
+                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;<b>{{-- $primeiro_nome[0] --}}</b>, tudo bem?</p>
 
 <!-- <p data-mce-style="text-align: left;" dir="ltr"><br>
 Parabéns pelas vendas!</p> -->
 
 <p data-mce-style="text-align: left;" dir="ltr"><br>
 <b>O valor de suas comissões, referente às&nbsp;{{ $data->totalProdutos }}
-POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}
+POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.
 @if($data->totalRoyalties > 0)
-	porém, utilizamos esse saldo para abater um valor de R$ {{ number_format($data->totalRoyalties,2,',','.') }} em royalties vencidos,
+	Deste saldo será abatido R$ {{ number_format($data->totalRoyalties,2,',','.') }} referente à royalties vencidos,
 	@if($data->valorFinal < 0)
-		ficando ainda um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} em aberto.
+		totalizando um valor de R$ {{ number_format(abs($data->valorFinal),2,',','.') }} em aberto.
 	@else
-		ficando ainda um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} para recebimento.
+		totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.
 	@endif
 @endif</b></p>
 &nbsp;
