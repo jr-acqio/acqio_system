@@ -159,9 +159,9 @@
 <script src="{{ asset('admin/js/plugins/chartJs/Chart.min.js') }}"></script>
 
 <!-- Pusher -->
-<script src="https://js.pusher.com/3.2/pusher.min.js"></script>
+<!-- <script src="https://js.pusher.com/3.2/pusher.min.js"></script> -->
 
-<script>
+<!-- <script>
   // Enable pusher logging - don't include this in production
   Pusher.logToConsole = true;
   var pusher = new Pusher('9a576fa0ecb173a49936', {
@@ -176,7 +176,7 @@
     $('#message').addClass('alert-'+data.class);
     $('#message').fadeIn('slow');
   });
-</script>
+</script> -->
 
 <script>
 $(document).ready(function() {

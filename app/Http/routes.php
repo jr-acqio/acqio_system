@@ -2,111 +2,18 @@
 use Vinkla\Pusher\Facades\Pusher;
 Route::get('/enviar-email','MailController@sendMail');
 
-Route::get('/download-pdf-fda',function(){
-  // Criar diretório do mês e ano referente as comissões no diretório : storage/relatorio-comissao/fdas/mês_Ano
-  $directory = 'relatorio-comissao/fdas';
-  $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
-
-  $monthNum = \Carbon\Carbon::now()->format('m');
-  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
-  $monthName = $dateObj->format('F');
-  // dd($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'));
-
-  $folder = $directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y');
-
-  if(!in_array($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'), $directories)){
-    // Caindo aqui não existe o diretório então irei criar.
-    Storage::makeDirectory($folder);
-  }
-  $comissoes = \App\Models\Fda::join('comissoes as c','fdas.id','=','c.fdaid')
-  ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->whereDate('c.data_aprovacao','<=','2016-11-30')
-  ->whereDate('c.data_aprovacao','>=','2016-11-01')
-  ->where('fdas.id','=',1)
-  ->groupBy('fdas.id')
-  ->select('fdas.nome_razao',DB::raw('COUNT(*) as totalVendas'),
-            'fdas.fdaid','fdas.id',
-            DB::raw('SUM(cp.tx_instalacao) as valor'),DB::raw('COUNT(cp.id) as totalProdutos'))
-  ->orderBy('totalVendas','DESC')
-  ->get();
-  foreach ($comissoes as $key => $value) {
-    $comissoes_fda = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
-    ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
-    ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-    ->join('produtos as p','p.id','=','cp.produtoid')
-    ->where('fdas.fdaid',$value->fdaid)
-    ->whereDate('c.data_aprovacao','<=','2016-11-30')
-    ->whereDate('c.data_aprovacao','>=','2016-11-01')
-    ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
-    ->groupBy('c.id')
-    ->orderBy('fr.franqueadoid')
-    ->get();
-
-    dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes_fda,$value,$type = 1)
-    );
-  }
-
-  // Comissões Franqueado
-  $directory = 'relatorio-comissao/franqueados';
-  $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
-
-  $monthNum = \Carbon\Carbon::now()->format('m');
-  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
-  $monthName = $dateObj->format('F');
-  // dd($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'));
-
-  $folder = $directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y');
-
-  if(!in_array($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'), $directories)){
-    // Caindo aqui não existe o diretório então irei criar.
-    Storage::makeDirectory($folder);
-  }
-
-  $comissoes_fr = \App\Models\Franqueado::join('comissoes as c','franqueados.id','=','c.franqueadoid')
-  ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-  ->whereDate('c.data_aprovacao','<=','2016-11-30')
-  ->whereDate('c.data_aprovacao','>=','2016-11-01')
-  ->where('franqueados.id',1)
-  ->groupBy('c.franqueadoid')
-  ->select('franqueados.nome_razao',DB::raw('COUNT(c.id) as totalVendas'),
-            'franqueados.franqueadoid','franqueados.id',
-            DB::raw('SUM(cp.tx_venda) as valor'),DB::raw('COUNT(cp.id) as totalProdutos'))
-  ->orderBy('totalVendas','DESC')
-  ->get();
-  // dd($comissoes_fr,$folder);
-  foreach ($comissoes_fr as $key => $value) {
-    $comissoes = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
-    ->join('fdas as f','f.id','=','c.fdaid')
-    ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
-    ->join('produtos as p','p.id','=','cp.produtoid')
-    ->where('c.franqueadoid',$value->id)
-    ->whereDate('c.data_aprovacao','<=','2016-11-30')
-    ->whereDate('c.data_aprovacao','>=','2016-11-01')
-    ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
-    ->groupBy('c.id')
-    ->get();
-
-    dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
-    );
-  }
-    // dd(
-    //   DB::select("
-    //   SELECT fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas, SUM(total_produtos) as totalProdutos,
-    //   SUM(vttotal.valor_total) as valorTotal FROM comissoes
-    //   JOIN fdas ON comissoes.fdaid = fdas.id
-    //   JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_instalacao) as valor_total
-    //   FROM comissoes_produto GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id
-    //   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id GROUP BY fdas.id")
-    // );
-
-    Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));
-    // We're done here - how easy was that, it just works!
-    Pusher::getSettings();
-  return redirect('/admin/dashboard')->with(['msg'=>'Estamos processando a geração dos pdfs de comissão, avisaremos ao término','class'=>'info']);
+// Route::get('/download-pdf-fda',function(){
+//   // Criar diretório do mês e ano referente as comissões no diretório : storage/relatorio-comissao/fdas/mês_Ano
+//
+// });
+Route::get('/teste',function(){
+  \App\User::create([
+    'name'=>"Jose",
+    'email'=>'junr@hotmail.com',
+    'password'=> Hash::make('123456')
+  ]);
 });
-
+Route::get('/baixar-pdfs','ComissoesController@gerarPdfs');
 //ajax
 Route::get('/login','AuthController@index');
 Route::group(['prefix'=> 'api'],function(){

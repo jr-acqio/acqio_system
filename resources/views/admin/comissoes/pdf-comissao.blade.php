@@ -30,8 +30,8 @@
         </div>
         <div class="col-sm-6 text-right">
           <p>
-            <span><strong>Data inicial:</strong> 01/10/2016</span><br/>
-            <span><strong>Data final:</strong> 31/10/2016</span>
+            <span><strong>Data inicial:</strong> 01/11/2016</span><br/>
+            <span><strong>Data final:</strong> 30/11/2016</span>
           </p>
         </div>
       </div>
@@ -101,38 +101,47 @@
         </table>
       </div><!-- /table-responsive -->
 
-      <div class="col-lg-12">
+      <div class="col-lg-6">
+        @if(isset($fda))
+          Total de Vendas: {{ $comissoes_fda->sum('totalProdutos') }}<br>
+          Total de POS: {{ $comissoes_fda->count() }}
+        @else
+          Total de Vendas: {{ $comissoes_fr->sum('totalProdutos') }}<br>
+          Total de POS: {{ $comissoes_fr->count() }}
+        @endif
+      </div>
+      <div class="col-lg-6">
         <table class="table invoice-total text-right">
           <tbody>
             <tr>
               <td><strong>Total de Comissões:</strong></td>
-              <td>R$ {{ number_format($sum,2) }}</td>
+              <td>R$ {{ number_format($sum,2,',', '.') }}</td>
             </tr>
-            @if(isset($franqueado) && \App\Models\Royalties::where('franqueadoid',$franqueado->id)->get()->count() > 0)
-            <?php $royalties = \App\Models\Royalties::where('franqueadoid',$franqueado->id)->get(); ?>
-            <?php $somaRoyaltie = 0; ?>
-            <?php $somaRoyaltieCheque = 0; ?>
-              @foreach($royalties as $r)
-                <?php $somaRoyaltie+= $r->valor_original; ?>
-                <?php $somaRoyaltieCheque += $r->cheques_devolvidos; ?>
-              @endforeach
-              <tr>
-                <td><strong>Royalties vencidos:</strong></td>
-                <td>- R$ {{ number_format($somaRoyaltie ,2) }}</td>
-              </tr>
-              <tr>
-                <td><strong>Cheques devolvidos:</strong></td>
-                <td>- R$ {{ number_format($somaRoyaltieCheque ,2) }}</td>
-              </tr>
+            @if(isset($franqueado))
+              @if(!is_null($franqueado->totalRoyalties))
+                <tr>
+                  <td><strong>Royalties vencidos:</strong></td>
+                  <td>- R$ {{ number_format($franqueado->totalRoyalties ,2,',', '.') }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Cheques devolvidos:</strong></td>
+                  <td>- R$ {{ number_format($franqueado->totalChequesDevolvidos ,2,',', '.') }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Valor final:</strong></td>
+                  <td>R$ {{ number_format($franqueado->valorFinal,2,',', '.') }}</td>
+                </tr>
+              @else
+                <tr>
+                  <td><strong>Valor final:</strong></td>
+                  <td>R$ {{ number_format($franqueado->valorTotal,2,',', '.') }}</td>
+                </tr>
+              @endif
+            @else
               <tr>
                 <td><strong>Valor final:</strong></td>
-                <td>R$ {{ number_format($sum-$somaRoyaltie-$somaRoyaltieCheque,2) }}</td>
+                <td>R$ {{ number_format($fda->valorTotal,2,',', '.') }}</td>
               </tr>
-            @else
-            <tr>
-              <td><strong>Valor final:</strong></td>
-              <td>R$ {{ number_format($sum,2) }}</td>
-            </tr>
             @endif
           </tbody>
         </table>

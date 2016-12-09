@@ -38,11 +38,11 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
     {
       // Criar o pdf
       if($this->type == 1){
-        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$this->comissoes,'fda'=>\App\Models\Fda::where('fdaid',$this->cliente->fdaid)->first()]);
-        $pdf->save(storage_path().'/app/'.$this->folder.'/'.strtoupper($this->cliente->fda).'/'.strtoupper($this->cliente->fdaid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
+        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$this->comissoes,'fda'=>$this->cliente]);
+        $pdf->save(storage_path().'/app/'.$this->folder.'/'.strtoupper($this->cliente->fdaid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
       }
       else if($this->type == 2){
-        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fr'=>$this->comissoes,'franqueado'=>\App\Models\Franqueado::where('franqueadoid',$this->cliente->franqueadoid)->first()]);
+        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fr'=>$this->comissoes,'franqueado'=>$this->cliente]);
         $pdf->save(storage_path().'/app/'.$this->folder.'/'.strtoupper($this->cliente->franqueadoid).'_'.\Carbon\Carbon::now()->format('d-m-Y').'.pdf');
       }
     }
