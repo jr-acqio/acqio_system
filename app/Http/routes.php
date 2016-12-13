@@ -42,6 +42,7 @@ Route::get('/teste',function(){
     dispatch(
       new \App\Jobs\GeradorPdfComissoes($folder,$comissoes_fda,$value,$type = 1)
     );
+    dd($comissoes_fda,'oi');
   }
   // Comissões Franqueado
   $directory = 'relatorio-comissao/franqueados';
@@ -86,7 +87,8 @@ Route::get('/teste',function(){
     ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
     ->groupBy('c.id')
     ->get();
-    // dd($comissoes,$value);
+    // $f = \App\Models\Franqueado::where('id',$value->id)->first();
+    // dd($f->hasRoyalties()->sum('valor_original','cheques_devolvidos'));
 
     dispatch(
       new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)

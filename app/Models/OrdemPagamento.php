@@ -6,5 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrdemPagamento extends Model
 {
-    //
+  protected $table = 'ordens_pagamento';
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array
+   */
+  protected $fillable = [
+      'relatorio_pdf', 'mes_ref', 'valor','status'
+  ];
 }

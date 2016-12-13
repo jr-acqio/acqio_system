@@ -20,6 +20,10 @@ class Franqueado extends Model
     ];
 
     public function fda(){
-      return $this->belongsTo('App\Models\Fda','fdaid');
+      return $this->hasOne('App\Models\Fda','id','fdaid');
+    }
+
+    public function hasRoyalties(){
+      return $this->hasMany('App\Models\Royalties','id');
     }
 }

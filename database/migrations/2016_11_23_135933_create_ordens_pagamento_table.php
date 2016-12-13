@@ -16,6 +16,7 @@ class CreateOrdensPagamentoTable extends Migration
             $table->increments('id');
 
             $table->string('relatorio_pdf');
+            $table->string('comprovante_pdf')->nullabe();
             $table->integer('mes_ref');
             $table->double('valor',8,2);
             $table->integer('status')->default(0);
