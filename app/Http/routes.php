@@ -6,15 +6,16 @@ Route::get('/teste',function(){
   $directory = 'relatorio-comissao/fdas';
   $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
 
-  $monthNum = \Carbon\Carbon::now()->format('m');
-  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
-  $monthName = $dateObj->format('F');
+  $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
+  $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
-  $folder = $directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y');
-
-  if(!in_array($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'), $directories)){
-    // Caindo aqui não existe o diretório então irei criar.
-    Storage::makeDirectory($folder);
+  if(!in_array($folder_year,$directories)){
+    // Caindo aqui não existe o diretório do ano, ou seja, a pasta referente ao ano.
+    Storage::makeDirectory($directory.'/'.\Carbon\Carbon::now()->format('Y'));
+  }
+  //Verificar agora se existe a pasta referente ao mês do ano corrente.
+  if(!in_array($folder_month,Storage::directories($folder_year))){
+    Storage::makeDirectory($folder_month);
   }
   $comissoes = DB::select('SELECT fdas.id, fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas,
   SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal FROM comissoes
@@ -32,32 +33,32 @@ Route::get('/teste',function(){
     ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
-    ->where('fdas.fdaid',$value->fdaid)
+    ->where('fdas.fdaid','PE.RECIFE')//$value->fdaid)
     ->whereDate('c.data_aprovacao','<=','2016-11-30')
     ->whereDate('c.data_aprovacao','>=','2016-11-01')
     ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
+    dd($comissoes_fda);
     dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes_fda,$value,$type = 1)
+      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
     );
-    dd($comissoes_fda,'oi');
+    // dd($comissoes_fda,'oi');
   }
   // Comissões Franqueado
   $directory = 'relatorio-comissao/franqueados';
   $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
+  $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
+  $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
-  $monthNum = \Carbon\Carbon::now()->format('m');
-  $dateObj   = DateTime::createFromFormat('!m', $monthNum);
-  $monthName = $dateObj->format('F');
-  // dd($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'));
-
-  $folder = $directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y');
-
-  if(!in_array($directory.'/'.$monthName.'_'.\Carbon\Carbon::now()->format('Y'), $directories)){
-    // Caindo aqui não existe o diretório então irei criar.
-    Storage::makeDirectory($folder);
+  if(!in_array($folder_year,$directories)){
+    // Caindo aqui não existe o diretório do ano, ou seja, a pasta referente ao ano.
+    Storage::makeDirectory($directory.'/'.\Carbon\Carbon::now()->format('Y'));
+  }
+  //Verificar agora se existe a pasta referente ao mês do ano corrente.
+  if(!in_array($folder_month,Storage::directories($folder_year))){
+    Storage::makeDirectory($folder_month);
   }
 
   $comissoes_fr = DB::select('SELECT franqueados.id, franqueados.franqueadoid, franqueados.nome_razao, COUNT(*) as totalVendas,
@@ -89,12 +90,11 @@ Route::get('/teste',function(){
     ->get();
     // $f = \App\Models\Franqueado::where('id',$value->id)->first();
     // dd($f->hasRoyalties()->sum('valor_original','cheques_devolvidos'));
-
     dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder,$comissoes,$value,$type = 2)
+      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes,$value,$type = 2)
     );
   }
-    // Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));
+  // Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));
   return redirect('/admin/dashboard')->with(['msg'=>'Estamos processando a geração dos pdfs de comissão, avisaremos ao término','class'=>'info']);
 });
 Route::get('/baixar-pdfs','ComissoesController@gerarPdfs');

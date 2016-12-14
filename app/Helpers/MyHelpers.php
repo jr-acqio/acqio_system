@@ -1,7 +1,7 @@
 <?php
 if (! function_exists('mes_extenso')) {
     /**
-     * Get the evaluated view contents for the given view.
+     * Obtém um inteiro representando o mês e retorna o mês equivalente em string.
      *
      * @param  integer  $mes
      * @return string $mes
