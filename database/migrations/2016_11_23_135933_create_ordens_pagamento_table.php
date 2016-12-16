@@ -22,6 +22,20 @@ class CreateOrdensPagamentoTable extends Migration
             $table->integer('status')->default(0);
             $table->timestamps();
         });
+
+        Schema::create('comissoes_ordens_pagamento', function (Blueprint $table) {
+            
+            $table->integer('idcomissao')->unsigned();
+            $table->integer('idordempagamento')->unsigned();
+
+            $table->primary(['idcomissao','idordempagamento']);
+            $table->foreign('idcomissao')->references('id')->on('comissoes')
+            ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('idordempagamento')->references('id')->on('ordens_pagamento')
+            ->onDelete('cascade')->onUpdate('cascade');
+
+            // $table->timestamps();
+        });
     }
 
     /**
@@ -32,5 +46,6 @@ class CreateOrdensPagamentoTable extends Migration
     public function down()
     {
         Schema::drop('ordens_pagamento');
+        Schema::drop('comissoes_ordens_pagamento');
     }
 }

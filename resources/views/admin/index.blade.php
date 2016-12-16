@@ -57,8 +57,8 @@
         <h1 class="no-margins">{{ App\Models\Pedidos::whereDate('created_at','=',\Carbon\Carbon::Now()->format('Y-m-d'))->count() }}</h1>
         <div class="stat-percent font-bold">
           <a href="http://acqio.co/admin/search/search-vendas?cliente=&produto=&codigo=&boleto=&status=&versao_sis=&data_inicio={{\Carbon\Carbon::Now()->format('Y-m-d')}}&data_final={{\Carbon\Carbon::Now()->format('Y-m-d')}}">
-          Visualizar <i class="fa fa-search" aria-hidden="true"></i>
-        </a>
+            Visualizar <i class="fa fa-search" aria-hidden="true"></i>
+          </a>
         </div>
         <small>Hoje</small>
       </div>
@@ -109,21 +109,32 @@
       </div>
     </div>
   </div>
+
+  <div class="col-lg-3">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <p>Disparar emails para franqueados e fdas.</p>
+      </div>
+      <div class="ibox-content">
+        <a href="{{ url('/teste')}}" class="btn btn-primary">Enviar <i class="fa fa-envelope"></i></a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Row Charts  -->
 <div class="row">
   <div class="col-lg-12">
-      <div class="ibox float-e-margins">
-          <div class="ibox-title">
-              <h5>Comparativo de Vendas - <span style="background:rgba(220,220,220,0.5)">Boletos</span> x <span style="background: rgba(26,179,148,0.5);">Cartão</span:</h5>
-          </div>
-          <div class="ibox-content">
-              <div>
-                  <canvas id="barChart" height="70" style="height: 100px;"></canvas>
-              </div>
-          </div>
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Comparativo de Vendas - <span style="background:rgba(220,220,220,0.5)">Boletos</span> x <span style="background: rgba(26,179,148,0.5);">Cartão</span:</h5>
       </div>
+      <div class="ibox-content">
+        <div>
+          <canvas id="barChart" height="70" style="height: 100px;"></canvas>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 <!-- End Row Chart -->
@@ -179,10 +190,10 @@
 </script>
 
 <script>
-$(document).ready(function() {
-  $(function () {
-    var barData = {
-      labels: [
+  $(document).ready(function() {
+    $(function () {
+      var barData = {
+        labels: [
         "Janeiro",
         "Feverereiro",
         "Março",
@@ -195,8 +206,8 @@ $(document).ready(function() {
         "Outubro",
         "Novembro",
         "Dezembro"
-      ],
-      datasets: [
+        ],
+        datasets: [
         {
           label: "Boletos",
           fillColor: "rgba(220,220,220,0.5)",
@@ -204,58 +215,58 @@ $(document).ready(function() {
           highlightFill: "rgba(220,220,220,0.75)",
           highlightStroke: "rgba(220,220,220,1)",
           data: [
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','0')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','1')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','2')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','3')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','4')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','5')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','6')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','7')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','8')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','9')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','10')->count() }},
-            {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','11')->count() }},
-            ]
-          },
-          {
-            label: "Cartão",
-            fillColor: "rgba(26,179,148,0.5)",
-            strokeColor: "rgba(26,179,148,0.8)",
-            highlightFill: "rgba(26,179,148,0.75)",
-            highlightStroke: "rgba(26,179,148,1)",
-            data: [
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','1')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','2')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','3')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','4')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','5')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','6')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','7')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','8')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','9')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','10')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','11')->count() }},
-            {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','12')->whereYear('data','=','2016')->count() }},
-            ]
-          }
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','0')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','1')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','2')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','3')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','4')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','5')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','6')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','7')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','8')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','9')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','10')->count() }},
+          {{ App\Models\PagamentoBoleto::join('pagamentos','pagamentos.id','=','pagamentos_boleto.pagamento_id')->whereMonth('created_at','=','11')->count() }},
           ]
-        };
-
-        var barOptions = {
-          scaleBeginAtZero: true,
-          scaleShowGridLines: true,
-          scaleGridLineColor: "rgba(0,0,0,.05)",
-          scaleGridLineWidth: 1,
-          barShowStroke: true,
-          barStrokeWidth: 2,
-          barValueSpacing: 5,
-          barDatasetSpacing: 1,
-          responsive: true
+        },
+        {
+          label: "Cartão",
+          fillColor: "rgba(26,179,148,0.5)",
+          strokeColor: "rgba(26,179,148,0.8)",
+          highlightFill: "rgba(26,179,148,0.75)",
+          highlightStroke: "rgba(26,179,148,1)",
+          data: [
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','1')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','2')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','3')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','4')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','5')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','6')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','7')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','8')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','9')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','10')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','11')->count() }},
+          {{ App\Models\PagamentoCartao::join('pagamentos','pagamentos.id','=','pagamentos_cartao.pagamento_id')->whereMonth('data','=','12')->whereYear('data','=','2016')->count() }},
+          ]
         }
-        var ctx = document.getElementById("barChart").getContext("2d");
-        var myNewChart = new Chart(ctx).Bar(barData, barOptions);
-      });
+        ]
+      };
+
+      var barOptions = {
+        scaleBeginAtZero: true,
+        scaleShowGridLines: true,
+        scaleGridLineColor: "rgba(0,0,0,.05)",
+        scaleGridLineWidth: 1,
+        barShowStroke: true,
+        barStrokeWidth: 2,
+        barValueSpacing: 5,
+        barDatasetSpacing: 1,
+        responsive: true
+      }
+      var ctx = document.getElementById("barChart").getContext("2d");
+      var myNewChart = new Chart(ctx).Bar(barData, barOptions);
     });
-  </script>
+});
+</script>
 @endpush

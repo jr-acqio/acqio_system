@@ -16,7 +16,6 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
     public $comissoes;
     public $cliente;
     public $type; //Type = 1 Fda, Type = 2 Franqueado
-
     private $month;
     /**
      * Create a new job instance.
@@ -51,9 +50,12 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $order_payment->mes_ref = \Carbon\Carbon::now()->subMonth()->format('m');
         $order_payment->valor = $this->comissoes->sum('tx_instalacao');
         $order_payment->save();
+        // dd($order_payment);
         foreach ($this->comissoes as $key => $value) {
-          // dd($this->comissoes[$key]);
-          DB::select('UPDATE comissoes SET order_id = '.$order_payment->id.' WHERE comissoes.id = '.$this->comissoes[$key]->comissaoid);
+          $comissao_order_payment = new \App\Models\ComissaoOrdemPagamento;
+          $comissao_order_payment->idcomissao = $this->comissoes[$key]->comissaoid;
+          $comissao_order_payment->idordempagamento = $order_payment->id;
+          $comissao_order_payment->save();
         }
 
       }
