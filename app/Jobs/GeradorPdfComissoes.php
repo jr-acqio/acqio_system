@@ -70,7 +70,10 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $order_payment->valor = $this->comissoes->sum('tx_venda');
         $order_payment->save();
         foreach ($this->comissoes as $key => $value) {
-          DB::select('UPDATE comissoes SET order_id = '.$order_payment->id.' WHERE comissoes.id = '.$this->comissoes[$key]->comissaoid);
+          $comissao_order_payment = new \App\Models\ComissaoOrdemPagamento;
+          $comissao_order_payment->idcomissao = $this->comissoes[$key]->comissaoid;
+          $comissao_order_payment->idordempagamento = $order_payment->id;
+          $comissao_order_payment->save(); 
         }
       }
     }

@@ -68,6 +68,7 @@
             <li class="{{ Request::is('admin/comissoes/create') ? 'active' : null }}"><a href="{{ route('admin.comissoes.create') }}">Importar Comissões</a></li>
             <li class="{{ Request::is('admin/comissoes') ? 'active' : null }}"><a href="{{ route('admin.comissoes.index') }}">Consultar Comissões</a></li>
             <li class="{{ Request::is('admin/comissoes/list*') ? 'active' : null }}"><a href="{{ url('/admin/comissoes/list') }}">Listar Comissão</a></li>
+            <li class=""><a href="#">Ordens de Pagamento</a></li>
         </ul>
       </li>
       <li class="{{ Request::is('admin/royalties*') ? 'active' : null }}">

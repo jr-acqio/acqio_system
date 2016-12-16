@@ -25,6 +25,7 @@ Route::get('/teste',function(){
   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto
   GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
   WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30"
+  -- and comissoes.fdaid = 1
   GROUP BY fdas.id'
   );
   // dd($comissoes);
@@ -33,7 +34,7 @@ Route::get('/teste',function(){
     ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
-    ->where('fdas.fdaid','PE.RECIFE')//$value->fdaid)
+    ->where('fdas.fdaid',$value->fdaid)
     ->whereDate('c.data_aprovacao','<=','2016-11-30')
     ->whereDate('c.data_aprovacao','>=','2016-11-01')
     ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
