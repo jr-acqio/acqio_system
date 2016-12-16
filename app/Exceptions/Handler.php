@@ -46,10 +46,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
-      if ($e instanceof TokenMismatchException){
-          //redirect to a form. Here is an example of how I handle mine
-          return redirect($request->fullUrl())->with(['msg'=>"Opps! Não é possível submeter um formulário por um longo tempo. Por favor, tente novamente!",'class'=>'info']);
-      }
+        if ($e instanceof TokenMismatchException){
+              //redirect to a form. Here is an example of how I handle mine
+            return redirect($request->fullUrl())->with(['msg'=>"Opps! Não é possível submeter um formulário por um longo tempo. Por favor, tente novamente!",'class'=>'info']);
+        }
+        if ($e instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
+        {
+            return \Response::make(['error'=>'not_found','error_message'=>'Please check the URL you submitted'], 404);
+        }
       return parent::render($request, $e);
     }
 }

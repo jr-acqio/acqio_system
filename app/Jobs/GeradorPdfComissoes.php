@@ -46,9 +46,9 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         //Após salvar no storage devemos criar as ordens de pagamento e setar as comissoes que estão relacionadas a um pagamento.
 
         $order_payment = new \App\Models\OrdemPagamento;
-        $order_payment->relatorio_pdf = '/app/'.$this->folder.'/'.strtoupper($this->cliente->fdaid).'_'.$this->month.'.pdf';
+        $order_payment->relatorio_pdf = 'app/'.$this->folder.'/'.strtoupper($this->cliente->fdaid).'_'.$this->month.'.pdf';
         $order_payment->mes_ref = \Carbon\Carbon::now()->subMonth()->format('m');
-        $order_payment->valor = $this->comissoes->sum('tx_instalacao');
+        $order_payment->valor = $this->comissoes->sum('totalInstalacao');
         $order_payment->save();
         // dd($order_payment);
         foreach ($this->comissoes as $key => $value) {
@@ -65,7 +65,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         //Após salvar no storage devemos criar as ordens de pagamento e setar as comissões e royalties que estão relacionadas a um pagamento.
 
         $order_payment = new \App\Models\OrdemPagamento;
-        $order_payment->relatorio_pdf = '/app/'.$this->folder.'/'.strtoupper($this->cliente->franqueadoid).'_'.$this->month.'.pdf';
+        $order_payment->relatorio_pdf = 'app/'.$this->folder.'/'.strtoupper($this->cliente->franqueadoid).'_'.$this->month.'.pdf';
         $order_payment->mes_ref = \Carbon\Carbon::now()->subMonth()->format('m');
         $order_payment->valor = $this->comissoes->sum('tx_venda');
         $order_payment->save();

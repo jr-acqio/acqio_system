@@ -15,4 +15,9 @@ class OrdemPagamento extends Model
   protected $fillable = [
       'relatorio_pdf', 'mes_ref', 'valor','status'
   ];
+
+
+  public function comissoes(){
+  	return $this->belongsToMany('App\Models\Comissoes','comissoes_ordens_pagamento','idordempagamento','idcomissao');
+  }
 }

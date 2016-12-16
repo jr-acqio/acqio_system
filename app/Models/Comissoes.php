@@ -8,6 +8,8 @@ class Comissoes extends Model
 {
     protected $table = 'comissoes';
 
+    //Primary Key da Tabela.
+    protected $primaryKey = 'id';
     public $timestamps = false;
 
 
@@ -27,5 +29,9 @@ class Comissoes extends Model
     public function produtos(){
       // Parametros, tabela pivot, coluna do model corrente, coluna do model que deseja obter os dados;
       return $this->belongsToMany('App\Models\Produto','comissoes_produto','comissaoid','produtoid');
+    }
+
+    public function orders(){
+      return $this->belongsToMany('App\Models\OrdemPagamento','comissoes_ordens_pagamento', 'idcomissao', 'idordempagamento');
     }
 }

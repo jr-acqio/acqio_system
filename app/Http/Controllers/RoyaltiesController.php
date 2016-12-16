@@ -78,13 +78,10 @@ class RoyaltiesController extends Controller
           }
           $valor_original = str_replace(',','', $row->valor_original); //remove as virgulas
           $cheques_devolvidos = str_replace(',','', $row->cheques_devolvidos); //remove as virgulas
-          // dd($cheques_devolvidos,Royalties::where('data_vencimento',$data->format('Y-m-d'))->where('cliente',$row->cliente_fornecedor)
-          // ->where('franquia_loc',$row->franquia_loc)->where('valor_original',$valor_original)
-          // ->where('cheques_devolvidos',$cheques_devolvidos)->first());
           if($f != null &&
             Royalties::where('data_vencimento',$data->format('Y-m-d'))->where('cliente',$row->cliente_fornecedor)
-            ->where('franquia_loc',$row->franquia_loc)->where('valor_original',$valor_original)
-            ->where('cheques_devolvidos',$cheques_devolvidos)->first() == null
+            ->where('franquia_loc',$row->franquia_loc)->where('valor_original',number_format((float)$valor_original, 2, '.', ''))
+            ->where('cheques_devolvidos',number_format((float)$cheques_devolvidos, 2, '.', ''))->first() == null
           ){
             $r = new Royalties;
             $r->data_vencimento = $data;

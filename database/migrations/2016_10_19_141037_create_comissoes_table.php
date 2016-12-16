@@ -23,7 +23,7 @@ class CreateComissoesTable extends Migration
           $table->integer('fdaid')->unsigned();
           $table->foreign('fdaid')->references('id')->on('fdas')->onDelete('cascade');
 
-          $table->integer('franqueadoid')->unsigned()->nullabe();
+          $table->integer('franqueadoid')->unsigned()->nullable();
           $table->foreign('franqueadoid')->references('id')->on('franqueados')->onDelete('cascade');
 
           $table->string('serial');

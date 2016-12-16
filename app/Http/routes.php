@@ -25,7 +25,7 @@ Route::get('/teste',function(){
   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto
   GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
   WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30"
-  -- and comissoes.fdaid = 1
+  -- and comissoes.fdaid = 43
   GROUP BY fdas.id'
   );
   // dd($comissoes);
@@ -41,7 +41,7 @@ Route::get('/teste',function(){
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
-    // dd($comissoes_fda);
+    // dd($comissoes_fda->sum('totalInstalacao'));
     dispatch(
       new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
     );
@@ -162,6 +162,22 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'],function(){
     // Route::get('comissoes/list/email')
     Route::resource('comissoes','ComissoesController',['except'=>['update','edit','show']]);
     Route::resource('royalties','RoyaltiesController',['only'=>['create','store','index','destroy']]);
+    Route::resource('orders','OrdensPagamento');
+    //Acessar os pdfs 
+    Route::get('/orders/{id}/{filename}', function ($id,$filename)
+    {
+        $path = storage_path().'/'.\App\Models\OrdemPagamento::where('id',$id)->first()->relatorio_pdf;
+        // dd($path, !File::exists($path));
+        if(!File::exists($path)) abort(404);
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+        // dd($file);
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+
+        return $response;
+    });
 
   // Obter Transações
   Route::get('/getTransactions',['as' => 'get-transactions', 'uses' => 'QueryController@getTransactions']);
