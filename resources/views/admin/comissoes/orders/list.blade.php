@@ -82,12 +82,16 @@
                           @foreach($orders as $order)
                             <tr>
                               <td>{{ $order->id }}</td>
-                              <td><a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}"><i class="fa fa-file-pdf-o"></i> Relatório</a></td>
+                              <td>
+                                <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename($order->relatorio_pdf)}}</a>
+                                 <i class="fa fa-file-pdf-o"></i>
+                                </td>
                               <td>{{ $order->comissoes()->count() }}</td>
                               <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
                               <td>@if($order->status == 0) Processando @else Finalizado @endif</td>
                               <td>
-                                <a href="#" class="btn btn-primary btn-xs"><i class="fa fa-upload" aria-hidden="true"></i></a>
+                                <a href="#" class="btn btn-success btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                                <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
 
                               </td>
                             </tr>

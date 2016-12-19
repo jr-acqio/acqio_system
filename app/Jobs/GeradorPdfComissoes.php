@@ -67,7 +67,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $order_payment = new \App\Models\OrdemPagamento;
         $order_payment->relatorio_pdf = 'app/'.$this->folder.'/'.strtoupper($this->cliente->franqueadoid).'_'.$this->month.'.pdf';
         $order_payment->mes_ref = \Carbon\Carbon::now()->subMonth()->format('m');
-        $order_payment->valor = $this->comissoes->sum('tx_venda');
+        $order_payment->valor = $this->comissoes->sum('totalVenda');
         $order_payment->save();
         foreach ($this->comissoes as $key => $value) {
           $comissao_order_payment = new \App\Models\ComissaoOrdemPagamento;
