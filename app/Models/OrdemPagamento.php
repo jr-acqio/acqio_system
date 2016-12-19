@@ -20,4 +20,12 @@ class OrdemPagamento extends Model
   public function comissoes(){
   	return $this->belongsToMany('App\Models\Comissoes','comissoes_ordens_pagamento','idordempagamento','idcomissao');
   }
+
+  public function fda(){
+    return $this->belongsTo('App\Models\Fda','fdaid','id');
+  }
+
+  public function franqueado(){
+   return $this->belongsTo('App\Models\Franqueado','franqueadoid','id'); 
+  }
 }

@@ -15,8 +15,9 @@ class OrdensPagamento extends Controller
      */
     public function index()
     {
-        $orders = OrdemPagamento::all();
-        return view('admin.comissoes.orders.list')->with(['orders'=>$orders]);
+        $orders_fda = OrdemPagamento::whereNotNull('fdaid')->get();
+        $orders_franqueado = OrdemPagamento::whereNotNull('franqueadoid')->get();
+        return view('admin.comissoes.orders.list')->with(['orders_fda'=>$orders_fda,'orders_franqueado'=>$orders_franqueado]);
     }
 
     /**

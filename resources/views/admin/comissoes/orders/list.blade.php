@@ -71,6 +71,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>Fda</th>
                             <th>Relatório PDF</th>
                             <th>Total de Vendas</th>
                             <th>Valor à pagar</th>
@@ -79,20 +80,20 @@
                           </tr>
                         </thead>
                         <tbody>
-                          @foreach($orders as $order)
+                          @foreach($orders_fda as $order)
                             <tr>
                               <td>{{ $order->id }}</td>
+                              <td>{{ $order->fda->fdaid }}</td>
                               <td>
-                                <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename($order->relatorio_pdf)}}</a>
-                                 <i class="fa fa-file-pdf-o"></i>
-                                </td>
+                                <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
+                                 <!-- <i class="fa fa-file-pdf-o"></i> -->
+                              </td>
                               <td>{{ $order->comissoes()->count() }}</td>
                               <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
                               <td>@if($order->status == 0) Processando @else Finalizado @endif</td>
                               <td>
-                                <a href="#" class="btn btn-success btn-xs"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                                <a href="#" class="btn btn-danger btn-xs"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
-
+                                <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                                <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
                               </td>
                             </tr>
                           @endforeach
@@ -104,10 +105,9 @@
                       <table class="table table-striped">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th>Identificador Franqueado</th>
-                            <th>Nome Franqueado</th>
                             <th>Total de Vendas</th>
-                            <th>Total de POS</th>
                             <th>Total Comissão</th>
                             <th>Royalties</th>
                             <th>Valor Liq. à pagar</th>
@@ -115,7 +115,24 @@
                           </tr>
                         </thead>
                         <tbody>
-          
+                          @foreach($orders_franqueado as $order)
+                            <tr>
+                              <td>{{ $order->id }}</td>
+                              <td>{{ $order->franqueado->franqueadoid }}</td>
+                              <td>
+                                <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
+                                 <!-- <i class="fa fa-file-pdf-o"></i> -->
+                              </td>   
+                              <td>{{ $order->comissoes()->count() }}</td>
+                              <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
+                              <td></td>
+                              <td></td>
+                              <td>
+                                <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                                <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+                              </td>
+                            </tr>
+                          @endforeach
                         </tbody>
                       </table>
                     </div>
@@ -161,6 +178,10 @@
 <script src="{{ asset('admin/js/plugins/fullcalendar/moment.min.js') }}"></script>
 
 <script src="{{ asset('admin/js/plugins/daterangepicker/daterangepicker.js') }}" charset="utf-8"></script>
-
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
+  }); 
+</script>
 
 @endpush

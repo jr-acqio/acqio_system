@@ -14,6 +14,14 @@ class CreateOrdensPagamentoTable extends Migration
     {
         Schema::create('ordens_pagamento', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('fdaid')->unsigned()->nullable();
+            $table->integer('franqueadoid')->unsigned()->nullable();
+
+            $table->foreign('fdaid')->references('id')->on('fdas')
+            ->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('franqueadoid')->references('id')->on('franqueados')
+            ->onDelete('cascade')->onUpdate('cascade');
+
 
             $table->string('relatorio_pdf');
             $table->string('comprovante_pdf')->nullabe();

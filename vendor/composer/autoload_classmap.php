@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AlterPedidosTable' => $baseDir . '/database/migrations/2016_11_08_172453_alter_pedidos_table.php',
-    'AlterTableComissoes' => $baseDir . '/database/migrations/2016_11_23_155332_alter_table_comissoes.php',
     'Cpdf' => $vendorDir . '/dompdf/dompdf/lib/Cpdf.php',
     'CreateClientesTable' => $baseDir . '/database/migrations/2016_08_25_121128_create_clientes_table.php',
     'CreateComissoesProdutoTable' => $baseDir . '/database/migrations/2016_10_19_141402_create_comissoes_produto_table.php',

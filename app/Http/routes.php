@@ -41,11 +41,11 @@ Route::get('/teste',function(){
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
-    // dd($comissoes_fda->sum('totalInstalacao'));
+    
     dispatch(
       new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
     );
-    // dd($comissoes_fda,'oi');
+    
   }
   // Comissões Franqueado
   $directory = 'relatorio-comissao/franqueados';
@@ -91,9 +91,9 @@ Route::get('/teste',function(){
     ->get();
     // $f = \App\Models\Franqueado::where('id',$value->id)->first();
     // dd($f->hasRoyalties()->sum('valor_original','cheques_devolvidos'));
-    // dispatch(
-    //   new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes,$value,$type = 2)
-    // );
+    dispatch(
+      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes,$value,$type = 2)
+    );
   }
   // Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));
   return redirect('/admin/dashboard')->with(['msg'=>'Estamos processando a geração dos pdfs de comissão, avisaremos ao término','class'=>'info']);
