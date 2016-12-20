@@ -222,6 +222,13 @@
               <h4 class="modal-title">Formulário de Cancelamento</h4>
             </div>
             <div class="modal-body">
+              <div class="form-group">
+                <label for="">Estornar transação ?</label>
+                <select class="form-control" name="estorno">
+                  <option value="nao">Não</option>
+                  <option value="sim">Sim</option>
+                </select>
+              </div>
               <div class="form-group"><label>Motivo do Cancelamento</label>
                 <textarea name="motivo" required class="form-control" rows="5" cols="40"></textarea>
               </div>

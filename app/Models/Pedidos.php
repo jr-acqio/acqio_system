@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pedidos extends Model
 {
+    protected $fillable = ['status', 'data_cancel', 'motivo'];
     protected $table = 'pedidos';
 
     public function produtos(){
@@ -13,5 +14,8 @@ class Pedidos extends Model
     }
     public function cliente(){
       return $this->belongsTo('App\Models\Cliente');
+    }
+    public function pagamentos(){
+    	return $this->hasMany('App\Models\PedidosPagamentos','pedido_id');
     }
 }

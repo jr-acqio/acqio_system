@@ -36,7 +36,21 @@ class ChecagemController extends Controller
       return view('admin.checagem-de-pagamento')->with(['produtos'=>$produtos,'pedidos'=>Pedidos::all(),'fdas'=>$fdas,'franqueados'=>$franqueados]);
     }
     public function postCancelar(Request $request){
-      Pedidos::where('id',$request->pedidoid)->update(['status'=>'0','motivo'=>$request->motivo,'data_cancel'=>Carbon::now()]);
+      $pedido = Pedidos::where('id',$request->pedidoid)->first();
+      if($request->estorno == "sim"){
+        foreach ($pedido->pagamentos as $key => $pagamento) {
+          //Se for pagamento de cartão irá entrar no if
+          if(Pagamento::leftjoin('pagamentos_cartao','pagamentos_cartao.pagamento_id','=','pagamentos.id')->where('pagamentos.id',$pagamento->pagamento_id)->first() != null){
+            PagamentoCartao::where('pagamento_id',$pagamento->pagamento_id)->update(['status'=>'Cancelada']);
+          }
+          // elseif () {
+          //   # code...
+          // }
+          
+        }
+      }
+      // return response()->json($pedido->toSql());
+      $pedido->update(['status'=>'0','motivo'=>$request->motivo,'data_cancel'=>Carbon::now()]);
       return response()->json(1);
     }
     public function getView($pedido){
