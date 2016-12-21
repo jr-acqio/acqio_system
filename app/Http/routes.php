@@ -42,9 +42,9 @@ Route::get('/teste',function(){
     ->orderBy('fr.franqueadoid')
     ->get();
     
-    dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
-    );
+    // dispatch(
+    //   new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
+    // );
     
   }
   // Comissões Franqueado
@@ -64,8 +64,8 @@ Route::get('/teste',function(){
 
   $comissoes_fr = DB::select('SELECT franqueados.id, franqueados.franqueadoid, franqueados.nome_razao, COUNT(*) as totalVendas,
   SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal,
-  total_royalties as totalRoyalties,total_chequesdevolvidos as totalChequesDevolvidos,
-  SUM(vttotal.valor_total) - total_royalties - total_chequesdevolvidos as valorFinal
+  COALESCE(total_royalties,0) as totalRoyalties,COALESCE(total_chequesdevolvidos,0) as totalChequesDevolvidos,
+  SUM(vttotal.valor_total) - COALESCE(total_royalties,0) - COALESCE(total_chequesdevolvidos,0) as valorFinal
   FROM comissoes
   JOIN franqueados ON comissoes.franqueadoid = franqueados.id
   JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_venda) as valor_total FROM comissoes_produto
@@ -77,7 +77,7 @@ Route::get('/teste',function(){
   GROUP BY rid) as rttotal ON rttotal.rid = comissoes.franqueadoid
   WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30"
   GROUP BY franqueados.id');
-  // dd($comissoes_fr);
+  dd($comissoes_fr);
   foreach ($comissoes_fr as $key => $value) {
     $comissoes = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
     ->join('fdas as f','f.id','=','c.fdaid')

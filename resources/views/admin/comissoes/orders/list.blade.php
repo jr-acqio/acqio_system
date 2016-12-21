@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title','Filtrar Comissões')
+@section('title','Ordens de Pagamento - Comissões')
 @push('links')
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://admin.acqio.com.br/favicon.png" rel="shortcut icon" type="image/x-icon"/>
@@ -12,18 +12,6 @@
 
 <!-- DataTables -->
 <link href="{{ asset('admin/css/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
-
-<!-- Chosen Style -->
-<link href="{{ asset('admin/css/plugins/chosen/chosen.css') }}" rel="stylesheet">
-
-<!-- DatePicker -->
-<link rel="stylesheet" href="{{ asset('admin/css/plugins/colorpicker/bootstrap-colorpicker.min.css') }} " media="screen" title="no title">
-<!-- DatePicker Style -->
-<!-- <link rel="stylesheet" href="{{ asset('admin/css/plugins/datapicker/datepicker3.css') }}" media="screen" title="no title"> -->
-<link href="{{ asset('admin/css/plugins/daterangepicker/daterangepicker-bs3.css') }}" rel="stylesheet">
-
-<link href="{{ asset('admin/css/plugins/select2/select2.min.css') }} " rel="stylesheet">
-
 
 @endpush
 
@@ -66,8 +54,8 @@
                 <div class="panel-body">
 
                   <div class="tab-content">
-                    <div class="tab-pane active" id="tab-1">
-                      <table class="table table-striped">
+                    <div class="tab-pane active table-responsive" id="tab-1">
+                      <table class="table table-striped table-hover">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -81,107 +69,100 @@
                         </thead>
                         <tbody>
                           @foreach($orders_fda as $order)
-                            <tr>
-                              <td>{{ $order->id }}</td>
-                              <td>{{ $order->fda->fdaid }}</td>
-                              <td>
-                                <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
-                                 <!-- <i class="fa fa-file-pdf-o"></i> -->
-                              </td>
-                              <td>{{ $order->comissoes()->count() }}</td>
-                              <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
-                              <td>@if($order->status == 0) Processando @else Finalizado @endif</td>
-                              <td>
-                                <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                                <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
-                              </td>
-                            </tr>
+                          <tr>
+                            <td>{{ $order->id }}</td>
+                            <td>{{ strtoupper($order->fda->fdaid) }}</td>
+                            <td>
+                              <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
+                              <!-- <i class="fa fa-file-pdf-o"></i> -->
+                            </td>
+                            <td>{{ $order->comissoes()->count() }}</td>
+                            <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
+                            <td>@if($order->status == 0) Processando @else Finalizado @endif</td>
+                            <td>
+                              <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                              <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+                            </td>
+                          </tr>
                           @endforeach
                         </tbody>
                       </table>
 
                     </div>
-                    <div class="tab-pane" id="tab-2">
+                    <div class="tab-pane table-responsive" id="tab-2">
                       <table class="table table-striped">
                         <thead>
                           <tr>
                             <th>#</th>
                             <th>Identificador Franqueado</th>
+                            <th>Relatório PDF</th>
                             <th>Total de Vendas</th>
-                            <th>Total Comissão</th>
-                            <th>Royalties</th>
+                            <!-- <th>Total Comissão</th> -->
+                            <!-- <th>Royalties</th> -->
                             <th>Valor Liq. à pagar</th>
                             <th>Ações</th>
                           </tr>
                         </thead>
                         <tbody>
                           @foreach($orders_franqueado as $order)
-                            <tr>
-                              <td>{{ $order->id }}</td>
-                              <td>{{ $order->franqueado->franqueadoid }}</td>
-                              <td>
-                                <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
-                                 <!-- <i class="fa fa-file-pdf-o"></i> -->
-                              </td>   
-                              <td>{{ $order->comissoes()->count() }}</td>
-                              <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
-                              <td></td>
-                              <td></td>
-                              <td>
-                                <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                                <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
-                              </td>
-                            </tr>
+                          <tr>
+                            <td>{{ $order->id }}</td>
+                            <td>{{ strtoupper($order->franqueado->franqueadoid) }}</td>
+                            <td>
+                              <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
+                              <!-- <i class="fa fa-file-pdf-o"></i> -->
+                            </td>   
+                            <td>{{ $order->comissoes()->count() }}</td>
+                            <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
+                            <td>
+                              <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                              <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+                            </td>
+                          </tr>
                           @endforeach
                         </tbody>
                       </table>
                     </div>
+                  </div>
+
                 </div>
 
               </div>
-
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
 
-<!-- </div> -->
+  <!-- </div> -->
 
 
 
-@endsection
+  @endsection
 
 
-@push('scripts')
-<!-- Mainly scripts -->
-<script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
-<script src="{{ asset('admin/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+  @push('scripts')
+  <!-- Mainly scripts -->
+  <script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
+  <!-- <script src="{{ asset('admin/js/bootstrap.min.js') }}"></script> -->
+  <script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
 
-<!-- Custom and plugin javascript -->
-<script src="{{ asset('admin/js/inspinia.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/pace/pace.min.js') }}"></script>
+  <!-- Custom and plugin javascript -->
+  <script src="{{ asset('admin/js/inspinia.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/pace/pace.min.js') }}"></script>
 
-<!-- jQuery UI -->
-<script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <!-- jQuery UI -->
+  <script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
-<!-- Chosen -->
-<script src="{{ asset('admin/js/plugins/chosen/chosen.jquery.js') }}"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
-<!-- Date range use moment.js same as full calendar plugin -->
-<script src="{{ asset('admin/js/plugins/fullcalendar/moment.min.js') }}"></script>
-
-<script src="{{ asset('admin/js/plugins/daterangepicker/daterangepicker.js') }}" charset="utf-8"></script>
-<script type="text/javascript">
-  $(document).ready(function(){
-    $('[data-toggle="tooltip"]').tooltip();
-  }); 
-</script>
-
-@endpush
+  <script type="text/javascript">
+    $(document).ready(function(){
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+  @endpush

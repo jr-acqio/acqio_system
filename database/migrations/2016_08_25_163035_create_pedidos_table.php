@@ -22,7 +22,7 @@ class CreatePedidosTable extends Migration
             $table->string('tipovenda');
             $table->string('id_acqio');
             $table->string('status',1)->default(1);
-            $table->string('motivo')->nullable();
+            $table->text('motivo')->nullable();
             $table->datetime('data_cancel')->nullable();
             $table->string('versao_sis',2);
             $table->timestamps();
