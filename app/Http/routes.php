@@ -6,6 +6,10 @@ Route::get('/teste',function(){
   $directory = 'relatorio-comissao/fdas';
   $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
 
+  $params = array('data_inicial' => \Carbon\Carbon::now()->subMonth()->format('Y-m-').'01',
+                  'data_final' => \Carbon\Carbon::now()->subMonth()->format('Y-m-').date("t", mktime(0,0,0,\Carbon\Carbon::now()->subMonth()->format('m'),'01',\Carbon\Carbon::now()->format('Y'))));
+
+
   $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
   $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
@@ -24,8 +28,7 @@ Route::get('/teste',function(){
   GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id
   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto
   GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
-  WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30"
-  -- and comissoes.fdaid = 43
+  WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'"
   GROUP BY fdas.id'
   );
   // dd($comissoes);
@@ -35,16 +38,16 @@ Route::get('/teste',function(){
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('fdas.fdaid',$value->fdaid)
-    ->whereDate('c.data_aprovacao','<=','2016-11-30')
-    ->whereDate('c.data_aprovacao','>=','2016-11-01')
+    ->whereDate('c.data_aprovacao','<=',$params['data_final'])
+    ->whereDate('c.data_aprovacao','>=',$params['data_inicial'])
     ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
     
-    // dispatch(
-    //   new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
-    // );
+    dispatch(
+      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
+    );
     
   }
   // Comissões Franqueado
@@ -75,17 +78,17 @@ Route::get('/teste',function(){
   LEFT JOIN (SELECT royalties.franqueadoid as rid, SUM(royalties.valor_original) as total_royalties,
   SUM(royalties.cheques_devolvidos) as total_chequesdevolvidos FROM royalties WHERE royalties.descontado != "s"
   GROUP BY rid) as rttotal ON rttotal.rid = comissoes.franqueadoid
-  WHERE date(comissoes.data_aprovacao) >= "2016-11-01" and date(comissoes.data_aprovacao) <= "2016-11-30"
+  WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'"
   GROUP BY franqueados.id');
-  dd($comissoes_fr);
+  // dd($comissoes_fr);
   foreach ($comissoes_fr as $key => $value) {
     $comissoes = \App\Models\Franqueado::join('comissoes as c','c.franqueadoid','=','franqueados.id')
     ->join('fdas as f','f.id','=','c.fdaid')
     ->join('comissoes_produto as cp','cp.comissaoid','=','c.id')
     ->join('produtos as p','p.id','=','cp.produtoid')
     ->where('c.franqueadoid',$value->id)
-    ->whereDate('c.data_aprovacao','<=','2016-11-30')
-    ->whereDate('c.data_aprovacao','>=','2016-11-01')
+    ->whereDate('c.data_aprovacao','<=',$params['data_final'])
+    ->whereDate('c.data_aprovacao','>=',$params['data_inicial'])
     ->select('f.fdaid','f.nome_razao','c.*','franqueados.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(cp.produtoid) as totalProdutos'))
     ->groupBy('c.id')
     ->get();

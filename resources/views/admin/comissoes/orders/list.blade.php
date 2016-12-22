@@ -100,6 +100,7 @@
                             <!-- <th>Total Comissão</th> -->
                             <!-- <th>Royalties</th> -->
                             <th>Valor Liq. à pagar</th>
+                            <th>Status</th>
                             <th>Ações</th>
                           </tr>
                         </thead>
@@ -113,7 +114,8 @@
                               <!-- <i class="fa fa-file-pdf-o"></i> -->
                             </td>   
                             <td>{{ $order->comissoes()->count() }}</td>
-                            <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
+                            <td style="@if($order->valor < 0) color:red @endif">R$ {{ number_format($order->valor,2,',','.') }}</td>
+                            <td>@if($order->status == 0) Processando @else Finalizado @endif
                             <td>
                               <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
                               <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
@@ -121,6 +123,15 @@
                           </tr>
                           @endforeach
                         </tbody>
+                        <tfoot>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tfoot>
                       </table>
                     </div>
                   </div>
