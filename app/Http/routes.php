@@ -136,8 +136,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'],function(){
         'getSearchTransacoes' => 'search.transacoes',
         'getSearchClientes'    => 'search.cliente',
         'getFilterComissions' =>  'filter.comissions',
-        'getSearchFda'=>  'search.fda',
-        'getSearchFranqueado'=>  'search.franqueado',
     ));
     // Route::controller('comissoes','ComissoesController',
     //   array(

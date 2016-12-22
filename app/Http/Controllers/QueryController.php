@@ -15,6 +15,7 @@ use App\Models\Pagamento;
 use App\Models\Comissoes;
 use Response;
 use DB;
+use Redirect;
 use Illuminate\Support\Facades\Input;
 class QueryController extends Controller
 {
@@ -121,32 +122,6 @@ class QueryController extends Controller
             })->orderBy('nome','ASC')->paginate(16);
 
     return view('admin.clientes.index')->with(['clientes'=>$result]);
-  }
-
-  //Comissões
-  public function getSearchFda(Request $request){
-    $fda = $request->input('search');
-    // dd($cliente);
-    $result = Fda::where('documento', 'like', '%'.$fda.'%')
-            ->orWhere(function ($query) use ($fda) {
-                $query->where('nome_razao','like','%'.$fda.'%')
-                ->orWhere('fdaid','like','%'.$fda.'%');
-              })
-            ->orderBy('nome_razao','ASC')->paginate(16);
-
-    return view('admin.clientes.fda.cadastrados')->with(['clientes'=>$result]);
-  }
-  public function getSearchFranqueado(Request $request){
-    $franqueado = $request->input('search');
-    // dd($cliente);
-    $result = Franqueado::where('documento', 'like', '%'.$franqueado.'%')
-            ->orWhere(function ($query) use ($franqueado) {
-                $query->where('nome_razao','like','%'.$franqueado.'%')
-                ->orWhere('franqueadoid','like','%'.$franqueado.'%');
-              })
-            ->orderBy('nome_razao','ASC')->paginate(16);
-
-    return view('admin.clientes.franqueado.cadastrados')->with(['clientes'=>$result]);
   }
 
 }

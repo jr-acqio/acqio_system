@@ -36,14 +36,16 @@
             <div class="col-lg-12">
               <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                  <!-- <h2>
-                    2,160 results found for: <span class="text-navy">“Admin Theme”</span>
-                  </h2> -->
+                  @if(isset($clientes))
+                  <h2>
+                    {{$clientes->total() }} resultados encontrados para: <span class="text-navy">“{{request('search')}}”</span>
+                  </h2>
+                  @endif
 
                   <div class="search-form">
-                    <form action="{{ url::route('search.fda') }}" method="get">
+                    <form method="get">
                       <div class="input-group">
-                        <input type="text" placeholder="PESQUISE PELO NOME OU DOCUMENTO" name="search" class="form-control input-lg">
+                        <input type="text" placeholder="PESQUISE PELO NOME OU DOCUMENTO" name="search" class="form-control input-lg" value="{{request('search')}}">
                         <div class="input-group-btn">
                           <button class="btn btn-lg btn-primary" type="submit">
                             Buscar

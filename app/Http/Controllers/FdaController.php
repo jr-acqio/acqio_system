@@ -19,9 +19,22 @@ class FdaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.clientes.fda.cadastrados');
+      if(request('search')){
+        $fda = $request->input('search');
+    // dd($cliente);
+        $result = Fda::where('documento', 'like', '%'.$fda.'%')
+        ->orWhere(function ($query) use ($fda) {
+          $query->where('nome_razao','like','%'.$fda.'%')
+          ->orWhere('fdaid','like','%'.$fda.'%');
+        })
+        ->orWhere('email','like','%'.$fda.'%')
+        ->orderBy('nome_razao','ASC')->paginate(16);
+
+        return view('admin.clientes.fda.cadastrados')->with(['clientes'=>$result]);
+      }
+      return view('admin.clientes.fda.cadastrados');
     }
 
     /**

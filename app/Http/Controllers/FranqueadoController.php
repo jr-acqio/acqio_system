@@ -19,9 +19,21 @@ class FranqueadoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('admin.clientes.franqueado.cadastrados');
+      if(isset($request->search)){
+        $franqueado = $request->input('search');
+        $result = Franqueado::where('documento', 'like', '%'.$franqueado.'%')
+                ->orWhere(function ($query) use ($franqueado) {
+                    $query->where('nome_razao','like','%'.$franqueado.'%')
+                    ->orWhere('franqueadoid','like','%'.$franqueado.'%');
+                    
+                  })->orWhere('email','like','%'.$franqueado.'%')
+                ->orderBy('nome_razao','ASC')->paginate(16);
+        // dd('oi');
+        return view('admin.clientes.franqueado.cadastrados')->with(['clientes'=>$result]);
+      }
+      return view('admin.clientes.franqueado.cadastrados');
     }
 
     /**
