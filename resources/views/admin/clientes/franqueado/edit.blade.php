@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-Edit - {{$fda->fdaid}}
+Edit - {{$franqueado->franqueadoid}}
 @endsection
 @push('links')
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,16 +20,16 @@ Edit - {{$fda->fdaid}}
 @section('content')
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-12">
-    <h2>Fdas</h2>
+    <h2>Franqueados</h2>
     <ol class="breadcrumb">
       <li>
         <a href="/">Home</a>
       </li>
       <li>
-        <a href="{{ route('admin.fda.index') }}">Fda</a>
+        <a href="{{ route('admin.franqueado.index') }}">Franqueado</a>
       </li>
       <li class="active">
-        <strong>Edit Fda</strong>
+        <strong>Edit Franqueado</strong>
       </li>
     </ol>
   </div>
@@ -39,61 +39,70 @@ Edit - {{$fda->fdaid}}
   <div class="col-lg-12">
     <div class="ibox float-e-margins">
       <div class="ibox-title">
-        <h3>Editar Fda - {{ $fda->fdaid }}</h3>
+        <h3>Editar Franqueado - {{ $franqueado->franqueadoid }}</h3>
       </div>
       <div class="ibox-content">
-        {{ Form::model($fda, ['route' => ['admin.fda.update', $fda->id], 'method'=>'PUT']) }}
+        {{ Form::model($franqueado, ['route' => ['admin.franqueado.update', $franqueado->id], 'method'=>'PUT']) }}
           <div class="row">
-            <div class="form-group col-lg-8">
+            <div class="form-group col-lg-4">
               {{ Form::label('t_pessoa', 'Tipo:') }}<br>
-              <input type="radio" required name="t_pessoa" value="PF" @if(pessoa_fisica($fda->documento)) checked @endif>Pessoa Fisica
-              <input type="radio" required name="t_pessoa" value="PJ" @if(!pessoa_fisica($fda->documento)) checked @endif>Pessoa Jurídica
+              <input type="radio" required name="t_pessoa" value="PF" @if(pessoa_fisica($franqueado->documento)) checked @endif>Pessoa Fisica
+              <input type="radio" required name="t_pessoa" value="PJ" @if(!pessoa_fisica($franqueado->documento)) checked @endif>Pessoa Jurídica
+            </div>
+            <div class="form-group col-lg-4">
+              <label for="">FDA:</label>
+              <select class="form-control chosen-select" name="fdaid" required="">
+                <option value="">ALTERAR FDA</option>
+                @foreach($fdas as $f)
+                <option value="{{$f->id}}" @if($f->id == $franqueado->fdaid) selected @endif>{{strtoupper($f->fdaid)}}</option>
+                @endforeach
+              </select>
             </div>
             <div class="form-group col-lg-2">
                 {{ Form::label('created_at', 'Criado em:') }}
-                <p>{{ $fda->created_at }}</p>
+                <p>{{ date('d/m/Y H:i:s',strtotime($franqueado->created_at)) }}</p>
               </div>
               <div class="form-group col-lg-2">
                 {{ Form::label('updated_at', 'Última atualização:') }}  
-                <p>{{ $fda->updated_at }}</p>
+                <p>{{ date('d/m/Y H:i:s',strtotime($franqueado->updated_at)) }}</p>
               </div>
           </div>
           <div class="row">
               <div class="form-group col-lg-6">
-                {{ Form::label('fdaid', 'FDA ID') }}  
-                {{ Form::text('fdaid', $fda->fdaid, ['class' => 'form-control', 'required'=> 'true']) }}
+                {{ Form::label('franqueadoid', 'franqueado ID') }}  
+                {{ Form::text('franqueadoid', $franqueado->franqueadoid, ['class' => 'form-control', 'required'=> 'true']) }}
               </div>
               <div class="form-group col-lg-6">
                 {{ Form::label('documento', 'Documento') }}  
-                {{ Form::text('documento', $fda->documento, ['class' => 'form-control', 'required'=> 'true']) }}
+                {{ Form::text('documento', $franqueado->documento, ['class' => 'form-control', 'required'=> 'true']) }}
               </div>
           </div>
           <div class="row">
             <div class="form-group col-lg-6">
               {{ Form::label('email', 'E-Mail Address') }}
-              {{ Form::text('email', $fda->email, ['class' => 'form-control', 'required'=> 'true']) }}
+              {{ Form::text('email', $franqueado->email, ['class' => 'form-control', 'required'=> 'true']) }}
             </div>
             <div class="form-group col-lg-6">
               {{ Form::label('nome_razao', 'Nome ou Razão Social') }}
-              {{ Form::text('nome_razao', $fda->nome_razao, ['class' => 'form-control', 'required'=> 'true']) }}
+              {{ Form::text('nome_razao', $franqueado->nome_razao, ['class' => 'form-control', 'required'=> 'true']) }}
             </div>
           </div>
           <div class="row">
             <div class="form-group col-lg-4">
               {{ Form::label('endereco', 'Endereço') }}
-              {{ Form::text('endereco', $fda->endereco, ['class' => 'form-control', 'required'=> 'true']) }}
+              {{ Form::text('endereco', $franqueado->endereco, ['class' => 'form-control']) }}
             </div>
             <div class="form-group col-lg-2">
               {{ Form::label('cep', 'CEP') }}
-              {{ Form::text('cep', $fda->cep, ['class' => 'form-control', 'required'=> 'true']) }}
+              {{ Form::text('cep', $franqueado->cep, ['class' => 'form-control']) }}
             </div>
             <div class="form-group col-lg-4">
               {{ Form::label('cidade', 'Cidade') }}
-              {{ Form::text('cidade', $fda->cidade, ['class' => 'form-control', 'required'=> 'true']) }}
+              {{ Form::text('cidade', $franqueado->cidade, ['class' => 'form-control', 'required'=> 'true']) }}
             </div>
             <div class="form-group col-lg-2">
               {{ Form::label('uf', 'UF') }}
-              {{ Form::text('uf', $fda->uf, ['class' => 'form-control', 'required'=> 'true']) }}
+              {{ Form::text('uf', $franqueado->uf, ['class' => 'form-control', 'required'=> 'true']) }}
             </div>
           </div>
 

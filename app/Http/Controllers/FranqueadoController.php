@@ -7,6 +7,7 @@ use App\Http\Requests;
 use Excel;
 use Illuminate\Support\Facades\Input;
 use App\Models\Franqueado;
+use App\Models\Fda;
 use File;
 use DB;
 use Redirect;
@@ -117,7 +118,10 @@ class FranqueadoController extends Controller
      */
     public function edit($id)
     {
-        //
+      $franqueado = Franqueado::find($id);
+      $fdas = Fda::orderBy('fdaid','ASC')->get();
+      
+      return view('admin.clientes.franqueado.edit')->with(['franqueado'=>$franqueado,'fdas'=>$fdas]);
     }
 
     /**
@@ -129,9 +133,18 @@ class FranqueadoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        $franqueado = Franqueado::find($id);
+        $franqueado->fdaid = $request->fdaid;
+        $franqueado->franqueadoid = $request->franqueadoid;
+        $franqueado->nome_razao = $request->nome_razao;
+        $franqueado->documento = $request->documento;
+        $franqueado->email = $request->email;
+        $franqueado->cidade = $request->cidade;
+        $franqueado->uf = $request->uf;
+        $franqueado->save();
 
+        return redirect('admin/franqueado/'.$id.'/edit')->with(['msg'=>'Alterações realizadas com sucesso!','class'=>'success','franqueado'=>$franqueado,'fdas'=>Fda::orderBy('fdaid','ASC')->get()]);
+    }
     /**
      * Remove the specified resource from storage.
      *

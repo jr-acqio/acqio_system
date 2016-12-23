@@ -51,11 +51,11 @@ Edit - {{$fda->fdaid}}
             </div>
             <div class="form-group col-lg-2">
                 {{ Form::label('created_at', 'Criado em:') }}
-                <p>{{ $fda->created_at }}</p>
+                <p>{{ date('d/m/Y H:i:s',strtotime($fda->created_at)) }}</p>
               </div>
               <div class="form-group col-lg-2">
                 {{ Form::label('updated_at', 'Última atualização:') }}  
-                <p>{{ $fda->updated_at }}</p>
+                <p>{{ date('d/m/Y H:i:s',strtotime($fda->updated_at)) }}</p>
               </div>
           </div>
           <div class="row">
