@@ -23,6 +23,8 @@ class CreateFranqueadosTable extends Migration
             $table->text('nome_razao')->nullable();
             $table->string('documento')->nullable();
             $table->string('email')->nullable();
+            $table->text('endereco')->nullable();
+            $table->string('cep')->nullable();
             $table->string('cidade');
             $table->string('uf',2);
             $table->timestamps();
