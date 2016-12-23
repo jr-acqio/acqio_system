@@ -53,7 +53,7 @@ class CreateOrdensPagamentoTable extends Migration
      */
     public function down()
     {
-        Schema::drop('ordens_pagamento');
         Schema::drop('comissoes_ordens_pagamento');
+        Schema::drop('ordens_pagamento');
     }
 }
