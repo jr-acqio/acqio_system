@@ -21,7 +21,7 @@ class FdaController extends Controller
      */
     public function index(Request $request)
     {
-      if(request('search')){
+      if(isset($request->search)){
         $fda = $request->input('search');
     // dd($cliente);
         $result = Fda::where('documento', 'like', '%'.$fda.'%')
@@ -31,7 +31,6 @@ class FdaController extends Controller
         })
         ->orWhere('email','like','%'.$fda.'%')
         ->orderBy('nome_razao','ASC')->paginate(16);
-
         return view('admin.clientes.fda.cadastrados')->with(['clientes'=>$result]);
       }
       return view('admin.clientes.fda.cadastrados');

@@ -51,6 +51,6 @@ if (! function_exists('mes_extenso')) {
         		break;
         }
 
-        return $mes_extenso;
+        return strtoupper($mes_extenso);
     }
 }
