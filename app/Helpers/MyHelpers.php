@@ -54,3 +54,18 @@ if (! function_exists('mes_extenso')) {
         return strtoupper($mes_extenso);
     }
 }
+
+if (! function_exists('pessoa_fisica')) {
+    /**
+     * Obtém string representando o documento (CPF OU CNPJ) e retorna 1 inteiro representando boolean
+     *
+     * @param  string  $documento
+     * @return integer (1 for TRUE, 0 for FALSE)
+     */
+    function pessoa_fisica($doc){
+        if (strlen($doc) == 14) {
+            return 1;
+        }
+        return 0;
+    }
+}

@@ -1,6 +1,8 @@
 @extends('layouts.master')
 
-@section('title','Ordens de Pagamento - Comissões')
+@section('title')
+Edit - {{$fda->fdaid}}
+@endsection
 @push('links')
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://admin.acqio.com.br/favicon.png" rel="shortcut icon" type="image/x-icon"/>
@@ -16,164 +18,134 @@
 @endpush
 
 @section('content')
-
-<div class="row wrapper border-bottom white-bg page-heading" style="margin: 1px 1px;">
+<div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-12">
-    <h2>Ordens de Pagamento - Comissões</h2>
+    <h2>Fdas</h2>
     <ol class="breadcrumb">
       <li>
-        <a href="{{ url('/admin/dashboard') }}">Home</a>
+        <a href="/">Home</a>
       </li>
       <li>
-        <a href="{{ url('/admin/orders') }}">Orders</a>
+        <a href="{{ route('admin.fda.index') }}">Fda</a>
       </li>
       <li class="active">
-        <strong>Ordens de Pagamento</strong>
+        <strong>Edit Fda</strong>
       </li>
     </ol>
   </div>
 </div>
-
-
+<br>
 <div class="row">
   <div class="col-lg-12">
-    <div class="animated fadeInUp">
-      <div class="ibox">
-        <div class="ibox-content">
-          <div class="row m-t-sm">
-            <div class="col-lg-12">
-              <div class="panel blank-panel">
-                <div class="panel-heading">
-                  <div class="panel-options">
-                    <ul class="nav nav-tabs">
-                      <li class="active"><a href="#tab-1" data-toggle="tab">Pagamentos Fda</a></li>
-                      <li class=""><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado</a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="panel-body">
-
-                  <div class="tab-content">
-                    <div class="tab-pane active table-responsive" id="tab-1">
-                      <table class="table table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Fda</th>
-                            <th>Relatório PDF</th>
-                            <th>Total de Vendas</th>
-                            <th>Valor à pagar</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @foreach($orders_fda as $order)
-                          <tr>
-                            <td>{{ $order->id }}</td>
-                            <td>{{ strtoupper($order->fda->fdaid) }}</td>
-                            <td>
-                              <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
-                              <!-- <i class="fa fa-file-pdf-o"></i> -->
-                            </td>
-                            <td>{{ $order->comissoes()->count() }}</td>
-                            <td>R$ {{ number_format($order->valor,2,',','.') }}</td>
-                            <td>@if($order->status == 0) Processando @else Finalizado @endif</td>
-                            <td>
-                              <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                              <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
-                            </td>
-                          </tr>
-                          @endforeach
-                        </tbody>
-                      </table>
-
-                    </div>
-                    <div class="tab-pane table-responsive" id="tab-2">
-                      <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Identificador Franqueado</th>
-                            <th>Relatório PDF</th>
-                            <th>Total de Vendas</th>
-                            <!-- <th>Total Comissão</th> -->
-                            <!-- <th>Royalties</th> -->
-                            <th>Valor Liq. à pagar</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @foreach($orders_franqueado as $order)
-                          <tr>
-                            <td>{{ $order->id }}</td>
-                            <td>{{ strtoupper($order->franqueado->franqueadoid) }}</td>
-                            <td>
-                              <a target="_blank" href="{{ url('/admin/orders/'.$order->id.'/'.basename($order->relatorio_pdf)) }}">{{basename(strtoupper($order->relatorio_pdf))}}</a>
-                              <!-- <i class="fa fa-file-pdf-o"></i> -->
-                            </td>   
-                            <td>{{ $order->comissoes()->count() }}</td>
-                            <td style="@if($order->valor < 0) color:red @endif">R$ {{ number_format($order->valor,2,',','.') }}</td>
-                            <td>@if($order->status == 0) Processando @else Finalizado @endif
-                            <td>
-                              <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-                              <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
-                            </td>
-                          </tr>
-                          @endforeach
-                        </tbody>
-                        <tfoot>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                        </tfoot>
-                      </table>
-                    </div>
-                  </div>
-
-                </div>
-
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h3>Editar Fda - {{ $fda->fdaid }}</h3>
+      </div>
+      <div class="ibox-content">
+        {{ Form::model($fda, ['route' => ['admin.fda.update', $fda->id], 'method'=>'PUT']) }}
+          <div class="row">
+            <div class="form-group col-lg-8">
+              {{ Form::label('t_pessoa', 'Tipo:') }}<br>
+              <input type="radio" required name="t_pessoa" value="PF" @if(pessoa_fisica($fda->documento)) checked @endif>Pessoa Fisica
+              <input type="radio" required name="t_pessoa" value="PJ" @if(!pessoa_fisica($fda->documento)) checked @endif>Pessoa Jurídica
+            </div>
+            <div class="form-group col-lg-2">
+                {{ Form::label('created_at', 'Criado em:') }}
+                <p>{{ $fda->created_at }}</p>
               </div>
+              <div class="form-group col-lg-2">
+                {{ Form::label('updated_at', 'Última atualização:') }}  
+                <p>{{ $fda->updated_at }}</p>
+              </div>
+          </div>
+          <div class="row">
+              <div class="form-group col-lg-6">
+                {{ Form::label('fdaid', 'FDA ID') }}  
+                {{ Form::text('fdaid', $fda->fdaid, ['class' => 'form-control', 'required'=> 'true']) }}
+              </div>
+              <div class="form-group col-lg-6">
+                {{ Form::label('documento', 'Documento') }}  
+                {{ Form::text('documento', $fda->documento, ['class' => 'form-control', 'required'=> 'true']) }}
+              </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-lg-6">
+              {{ Form::label('email', 'E-Mail Address') }}
+              {{ Form::text('email', $fda->email, ['class' => 'form-control', 'required'=> 'true']) }}
+            </div>
+            <div class="form-group col-lg-6">
+              {{ Form::label('nome_razao', 'Nome ou Razão Social') }}
+              {{ Form::text('nome_razao', $fda->nome_razao, ['class' => 'form-control', 'required'=> 'true']) }}
             </div>
           </div>
-        </div>
+          <div class="row">
+            <div class="form-group col-lg-4">
+              {{ Form::label('endereco', 'Endereço') }}
+              {{ Form::text('endereco', $fda->endereco, ['class' => 'form-control', 'required'=> 'true']) }}
+            </div>
+            <div class="form-group col-lg-2">
+              {{ Form::label('cep', 'CEP') }}
+              {{ Form::text('cep', $fda->cep, ['class' => 'form-control', 'required'=> 'true']) }}
+            </div>
+            <div class="form-group col-lg-4">
+              {{ Form::label('cidade', 'Cidade') }}
+              {{ Form::text('cidade', $fda->cidade, ['class' => 'form-control', 'required'=> 'true']) }}
+            </div>
+            <div class="form-group col-lg-2">
+              {{ Form::label('uf', 'UF') }}
+              {{ Form::text('uf', $fda->uf, ['class' => 'form-control', 'required'=> 'true']) }}
+            </div>
+          </div>
+
+
+          <div class="row">
+            <div class="form-group col-lg-12">
+              {{ Form::submit('Salvar Alterações', ['class'=>'btn btn-primary']) }}
+            </div>
+          </div>
+        {{ Form::close() }}
       </div>
     </div>
   </div>
+</div>
+@endsection
 
 
-  <!-- </div> -->
+@push('scripts')
+<!-- Mainly scripts -->
+<script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
+<!-- <script src="{{ asset('admin/js/bootstrap.min.js') }}"></script> -->
+<script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+<script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
 
+<!-- Custom and plugin javascript -->
+<script src="{{ asset('admin/js/inspinia.js') }}"></script>
+<script src="{{ asset('admin/js/plugins/pace/pace.min.js') }}"></script>
 
+<!-- jQuery UI -->
+<script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
-  @endsection
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
+<!-- Masked Input -->
+<script src="{{ asset('admin/js/jquery.maskedinput.js') }}" charset="utf-8"></script>
 
-  @push('scripts')
-  <!-- Mainly scripts -->
-  <script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
-  <!-- <script src="{{ asset('admin/js/bootstrap.min.js') }}"></script> -->
-  <script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip();
 
-  <!-- Custom and plugin javascript -->
-  <script src="{{ asset('admin/js/inspinia.js') }}"></script>
-  <script src="{{ asset('admin/js/plugins/pace/pace.min.js') }}"></script>
-
-  <!-- jQuery UI -->
-  <script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-
-  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
-  <script type="text/javascript">
-    $(document).ready(function(){
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-  </script>
-  @endpush
+    $('input[name=cep]').mask("99.999-999");
+    $('input[name=t_pessoa]').on('click',function(){
+      if($(this).val() == 'PF'){
+        $('input[name=documento]').mask("999.999.999-99");
+        $('label[for=documento]').html('CPF');
+        $('label[for=cliente]').html('NOME');
+      }else{
+        $('input[name=documento]').mask("99.999.999/9999-99");
+        $('label[for=documento]').html('CNPJ');
+        $('label[for=cliente]').html('RAZÃO SOCIAL');
+      }
+    })
+  });
+</script>
+@endpush

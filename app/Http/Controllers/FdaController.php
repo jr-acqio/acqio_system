@@ -105,6 +105,7 @@ class FdaController extends Controller
     public function edit($id)
     {
       $fda = Fda::find($id);
+      return view('admin.clientes.fda.edit')->with(['fda'=>$fda]);
     }
 
     /**
@@ -116,7 +117,18 @@ class FdaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $fda = Fda::find($id);
+      $fda->fdaid = $request->fdaid;
+      $fda->documento = $request->documento;
+      $fda->email = $request->email;
+      $fda->nome_razao = $request->nome_razao;
+      $fda->endereco = $request->endereco;
+      $fda->cep = $request->cep;
+      $fda->cidade = $request->cidade;
+      $fda->uf = $request->uf;
+      $fda->save();
+
+      return redirect('admin/fda/'.$id.'/edit')->with(['msg'=>'Alterações realizadas com sucesso!','class'=>'success','fda'=>$fda]);
     }
 
     /**
