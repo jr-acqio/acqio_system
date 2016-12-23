@@ -31,9 +31,9 @@ class FdaController extends Controller
         })
         ->orWhere('email','like','%'.$fda.'%')
         ->orderBy('nome_razao','ASC')->paginate(16);
-        return view('admin.clientes.fda.cadastrados')->with(['clientes'=>$result]);
+        return view('admin.clientes.fda.index')->with(['clientes'=>$result]);
       }
-      return view('admin.clientes.fda.cadastrados');
+      return view('admin.clientes.fda.index');
     }
 
     /**
@@ -43,7 +43,7 @@ class FdaController extends Controller
      */
     public function create()
     {
-        return view('admin.clientes.fda.index');
+        return view('admin.clientes.fda.create');
     }
 
     /**
@@ -104,7 +104,7 @@ class FdaController extends Controller
      */
     public function edit($id)
     {
-        //
+      $fda = Fda::find($id);
     }
 
     /**

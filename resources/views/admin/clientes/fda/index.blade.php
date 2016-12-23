@@ -1,81 +1,141 @@
-@extends('layouts.master')
+<!DOCTYPE html>
+<html>
 
-@section('title','Cadastrar FDA')
-@push('links')
-<link href="https://admin.acqio.com.br/favicon.png" rel="shortcut icon" type="image/x-icon"/>
-<link href="{{ asset('admin/css/bootstrap.min.css') }}" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<head>
 
-<link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
-<link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- DataTables -->
-<link href="{{ asset('admin/css/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
-@endpush
+  <title>Clientes</title>
+  <link href="https://admin.acqio.com.br/favicon.png" rel="shortcut icon" type="image/x-icon"/>
+  <link href="{{ asset('admin/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
+  <link href="{{ asset('admin/css/animate.css') }}" rel="stylesheet">
+  <link href="{{ asset('admin/css/style.css') }}" rel="stylesheet">
 
-@section('content')
-<div class="ibox float-e-margins">
-  <div class="ibox-title">
-    <h5>Importar CSV de FDAS</h5>
-  </div>
-  <div class="ibox-content">
-    <form action="{{ route('admin.fda.store') }}" method="post" enctype="multipart/form-data">
-      {{ csrf_field() }}
-      <div class="form-group">
-        <label>Arquivo</label>
-        <input type="file" name="arquivo" value="">
+  <!-- DataTables -->
+  <link href="{{ asset('admin/css/plugins/dataTables/datatables.min.css') }}" rel="stylesheet">
+</head>
+
+<body>
+  <div id="wrapper">
+    @include('layouts.menu')
+
+    <div id="page-wrapper" class="gray-bg">
+      @include('layouts.top')
+      <div class="wrapper wrapper-content">
+        @if(session('msg'))
+        <div class="alert alert-{{ session('class') }}">
+          <b>{{ session('msg') }}</b>
+        </div>
+        @endif
+
+        <div class="animated fadeInRight">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                  @if(isset($clientes))
+                  <h2>
+                    {{$clientes->total() }} resultados encontrados para: <span class="text-navy">“{{request('search')}}”</span>
+                  </h2>
+                  @endif
+
+                  <div class="search-form">
+                    <form method="get">
+                      <div class="input-group">
+                        <input type="text" placeholder="PESQUISE PELO NOME OU DOCUMENTO" name="search" class="form-control input-lg" value="{{request('search')}}">
+                        <div class="input-group-btn">
+                          <button class="btn btn-lg btn-primary" type="submit">
+                            Buscar
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <br><br>
+                    @if(isset($clientes))
+                    @foreach ($clientes->chunk(4) as $chunk)
+                        <div class="row">
+                            @foreach ($chunk as $c)
+                            <div class="col-lg-3">
+                                <div class="contact-box center-version">
+                                    <a href="#">
+                                        <img alt="image" class="img-circle" src="http://bazyol.com.tr/img/icon-user.png">
+                                        <h3 class="m-b-xs"><strong>{{ strtoupper($c->nome_razao)}}</strong></h3>
+                                    </a>
+                                    <div class="contact-box-footer">
+                                        <div class="m-t-xs btn-group">
+                                            <a href="/admin/fda/historico-pedidos/{{encrypt($c->id)}}" class="btn btn-xs btn-default"><i class="fa fa-list"></i> Relatório de Vendas </a>
+                                            <a href="{{ route('admin.fda.edit',$c->id) }}" class="btn btn-xs btn-default"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Editar </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                    <div class="text-center">
+                      {!! $clientes->appends(['search' => Request::input('search')])->render() !!}
+                    </div>
+                    @endif
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+
+        </div>
       </div>
-      <div class="form-group">
-        <button type="submit" class="btn btn-primary"><b>ENVIAR</b></button>
-      </div>
-    </form>
+      @include('layouts.footer')
+    </div>
+    @include('layouts.right-side-bar')
   </div>
-</div>
-@endsection
 
+  <!-- Mainly scripts -->
+  <script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
+  <script src="{{ asset('admin/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
 
+  <!-- Flot -->
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.tooltip.min.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.spline.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.resize.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.pie.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.symbol.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/flot/jquery.flot.time.js') }}"></script>
 
-@push('scripts')
-<!-- Mainly scripts -->
-<script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
-<script src="{{ asset('admin/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
+  <!-- Peity -->
+  <script src="{{ asset('admin/js/plugins/peity/jquery.peity.min.js') }}"></script>
+  <script src="{{ asset('admin/js/demo/peity-demo.js') }}"></script>
 
-<!-- Flot -->
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.tooltip.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.spline.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.resize.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.pie.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.symbol.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/flot/jquery.flot.time.js') }}"></script>
+  <!-- Custom and plugin javascript -->
+  <script src="{{ asset('admin/js/inspinia.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/pace/pace.min.js') }}"></script>
 
-<!-- Peity -->
-<script src="{{ asset('admin/js/plugins/peity/jquery.peity.min.js') }}"></script>
-<script src="{{ asset('admin/js/demo/peity-demo.js') }}"></script>
+  <!-- jQuery UI -->
+  <script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
-<!-- Custom and plugin javascript -->
-<script src="{{ asset('admin/js/inspinia.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/pace/pace.min.js') }}"></script>
+  <!-- Jvectormap -->
+  <script src="{{ asset('admin/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
+  <script src="{{ asset('admin/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
 
-<!-- jQuery UI -->
-<script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+  <!-- EayPIE -->
+  <script src="{{ asset('admin/js/plugins/easypiechart/jquery.easypiechart.js') }}"></script>
 
-<!-- Jvectormap -->
-<script src="{{ asset('admin/js/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js') }}"></script>
-<script src="{{ asset('admin/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js') }}"></script>
+  <!-- Sparkline -->
+  <script src="{{ asset('admin/js/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
 
-<!-- EayPIE -->
-<script src="{{ asset('admin/js/plugins/easypiechart/jquery.easypiechart.js') }}"></script>
+  <!-- Sparkline demo data  -->
+  <script src="{{ asset('admin/js/demo/sparkline-demo.js') }}"></script>
 
-<!-- Sparkline -->
-<script src="{{ asset('admin/js/plugins/sparkline/jquery.sparkline.min.js') }}"></script>
+  <!-- DataTable -->
+  <script src="{{ asset('admin/js/plugins/dataTables/datatables.min.js') }}" charset="utf-8"></script>
 
-<!-- Sparkline demo data  -->
-<script src="{{ asset('admin/js/demo/sparkline-demo.js') }}"></script>
-
-<!-- DataTable -->
-<script src="{{ asset('admin/js/plugins/dataTables/datatables.min.js') }}" charset="utf-8"></script>
-@endpush
+</body>
+</html>

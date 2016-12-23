@@ -31,7 +31,6 @@ Route::get('/teste',function(){
   WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'"
   GROUP BY fdas.id'
   );
-  // dd($comissoes);
   foreach ($comissoes as $key => $value) {
     $comissoes_fda = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
     ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
