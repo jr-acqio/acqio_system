@@ -24,7 +24,6 @@ class CreateFdasTable extends Migration
             $table->string('cep')->nullable();
             $table->string('cidade')->nullable();
             $table->string('uf',2)->nullable();
-            $table->double('saldo',8,2);
             $table->timestamps();
         });
     }

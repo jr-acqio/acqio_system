@@ -19,14 +19,12 @@ class CreateFranqueadosTable extends Migration
             $table->foreign('fdaid')->references('id')->on('fdas')->onDelete('cascade');
 
             $table->string('franqueadoid');
-            // $table->primary('franqueadoid');
 
             $table->text('nome_razao')->nullable();
             $table->string('documento')->nullable();
             $table->string('email')->nullable();
             $table->string('cidade');
             $table->string('uf',2);
-            $table->double('valor',8,2);
             $table->timestamps();
         });
     }

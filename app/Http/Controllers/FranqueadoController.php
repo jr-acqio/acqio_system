@@ -67,7 +67,6 @@ class FranqueadoController extends Controller
             $updateIdFranqueado->cidade = $row->cidade;
             $updateIdFranqueado->uf = $row->uf;
             $updateIdFranqueado->save();
-            // dd($updateIdFranqueado,$row);
           }
           if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null){
             DB::beginTransaction();
