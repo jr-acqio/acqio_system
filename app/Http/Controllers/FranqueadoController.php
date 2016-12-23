@@ -32,9 +32,9 @@ class FranqueadoController extends Controller
                   })->orWhere('email','like','%'.$franqueado.'%')
                 ->orderBy('nome_razao','ASC')->paginate(16);
         // dd('oi');
-        return view('admin.clientes.franqueado.cadastrados')->with(['clientes'=>$result]);
+        return view('admin.clientes.franqueado.index')->with(['clientes'=>$result]);
       }
-      return view('admin.clientes.franqueado.cadastrados');
+      return view('admin.clientes.franqueado.index');
     }
 
     /**
@@ -44,7 +44,7 @@ class FranqueadoController extends Controller
      */
     public function create()
     {
-        return view('admin.clientes.franqueado.index');
+        return view('admin.clientes.franqueado.create');
     }
 
     /**
