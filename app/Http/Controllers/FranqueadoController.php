@@ -78,6 +78,8 @@ class FranqueadoController extends Controller
                 'nome_razao' =>  $row->nomerazao_social,
                 'documento'  =>  $row->cpfcnpj,
                 'email' =>  $row->e_mail,
+                'endereco'  =>  $row->endereco,
+                'cep' =>  $row->cep,
                 'cidade'  =>  $row->cidade,
                 'uf'  =>  $row->uf
               ]);

@@ -15,6 +15,8 @@ class Franqueado extends Model
       'documento',
       'nome_razao',
       'email',
+      'endereco',
+      'cep',
       'cidade',
       'uf'
     ];
