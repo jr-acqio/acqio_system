@@ -18,7 +18,7 @@ class CreateFranqueadosTable extends Migration
             $table->integer('fdaid')->unsigned();
             $table->foreign('fdaid')->references('id')->on('fdas')->onDelete('cascade');
 
-            $table->string('franqueadoid');
+            $table->string('franqueadoid')->unique();
 
             $table->text('nome_razao')->nullable();
             $table->string('documento')->nullable();

@@ -14,7 +14,7 @@ class CreateFdasTable extends Migration
     {
         Schema::create('fdas', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('fdaid');
+            $table->string('fdaid')->unique();
             // $table->primary('fdaid');
 
             $table->string('documento')->nullable();

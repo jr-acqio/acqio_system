@@ -141,6 +141,8 @@ class FranqueadoController extends Controller
         $franqueado->nome_razao = $request->nome_razao;
         $franqueado->documento = $request->documento;
         $franqueado->email = $request->email;
+        $franqueado->endereco = $request->endereco;
+        $franqueado->cep = $request->cep;
         $franqueado->cidade = $request->cidade;
         $franqueado->uf = $request->uf;
         $franqueado->save();
