@@ -59,13 +59,16 @@ class FranqueadoController extends Controller
       Excel::load($sheet, function ($reader) {
         $reader->each(function($row){
           // dd($row);
-          $updateIdFranqueado = Franqueado::where('email',$row->e_mail)->where('franqueadoid','!=',$row->franqueado)->first();
+          $updateIdFranqueado = Franqueado::where('email',$row->e_mail)->where('documento',$row->documento)->where('franqueadoid','!=',$row->franqueado)->first();
           if($updateIdFranqueado != null){
+            dd($updateIdFranqueado,$row);
             // Se já existir o email cadastrado com o id diferente da linha atual no arquivo csv irá atualizar o franqueadoid
             $updateIdFranqueado->franqueadoid = $row->franqueado;
             $updateIdFranqueado->nome_razao = $row->nomerazao_social;
             $updateIdFranqueado->documento = $row->cpfcnpj;
             $updateIdFranqueado->cidade = $row->cidade;
+            $updateIdFranqueado->endereco = $row->endereco;
+            $updateIdFranqueado->cep = $row->cep;
             $updateIdFranqueado->uf = $row->uf;
             $updateIdFranqueado->save();
           }
