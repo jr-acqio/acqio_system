@@ -1,0 +1,10 @@
+ANOTAÇÕES SOBRE O SISTEMA DE GESTÃO FINANCEIRA
+
+
+	1. Verificar com Silvio e Stefano qual é o critério que diferencia uma franquia de outra.
+
+		- Encontrei um cadastro com o mesmo e-mail, já que eu estava usando esse critério para substituição de ids. 
+		E devido a me falarem que o e-mail seria único para cada franquia.
+		CADASTRO ENCONTRADO COM ESSE "PROBLEMA" :
+			MS1.CAMPOGRANDE.EDUARDO - 05.069.974/0001-45
+			MS.CAMPOGRANDE.VSP - 865.218.539-53

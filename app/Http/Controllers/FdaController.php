@@ -57,7 +57,7 @@ class FdaController extends Controller
       $sheet = Input::file('arquivo');
       Excel::load($sheet, function ($reader) {
         $reader->each(function($row){
-          // dd($row);
+          //Verificar, talvez seja necessário incluir outra filtro em que o documento seja diferente, pois foi encontrado cadastro com mesmo e-mail porém um era CPF E O OUTRO CNPJ
           $updateIdFda = Fda::where('email',$row->e_mail)->where('fdaid','!=',$row->fda)->first();
           if($updateIdFda != null){
             // Se já existir o email cadastrado com o id diferente da linha atual no arquivo csv irá atualizar o franqueadoid
