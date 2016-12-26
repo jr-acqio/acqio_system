@@ -44,9 +44,9 @@ Route::get('/teste',function(){
     ->orderBy('fr.franqueadoid')
     ->get();
     
-    dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
-    );
+    // dispatch(
+    //   new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
+    // );
     
   }
   // Comissões Franqueado

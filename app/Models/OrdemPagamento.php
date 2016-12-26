@@ -28,4 +28,8 @@ class OrdemPagamento extends Model
   public function franqueado(){
    return $this->belongsTo('App\Models\Franqueado','franqueadoid','id'); 
   }
+
+  public function royalties(){
+    return $this->belongsToMany('App\Models\Royalties','royalties_ordem_pagamentos','idordempagamento','idroyalties');
+  }
 }

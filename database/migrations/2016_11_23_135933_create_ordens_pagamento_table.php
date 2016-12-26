@@ -54,9 +54,7 @@ class CreateOrdensPagamentoTable extends Migration
             ->onDelete('cascade')->onUpdate('cascade');
 
             $table->foreign('idordempagamento')->references('id')->on('ordens_pagamento')
-            ->onDelete('cascade')->onUpdate('cascade');            
-            
-            $table->timestamps();
+            ->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

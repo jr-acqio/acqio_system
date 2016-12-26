@@ -26,6 +26,6 @@ class Franqueado extends Model
     }
 
     public function hasRoyalties(){
-      return $this->hasMany('App\Models\Royalties','id');
+      return $this->hasMany('App\Models\Royalties','franqueadoid');
     }
 }

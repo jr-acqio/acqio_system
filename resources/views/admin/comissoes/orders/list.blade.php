@@ -90,16 +90,16 @@
 
                     </div>
                     <div class="tab-pane table-responsive" id="tab-2">
-                      <table class="table table-striped">
+                      <table class="table table-striped table-hover">
                         <thead>
                           <tr>
                             <th>#</th>
                             <th>Identificador Franqueado</th>
                             <th>Relatório PDF</th>
-                            <th>Total de Vendas</th>
+                            <th>Total Vendas</th>
                             <!-- <th>Total Comissão</th> -->
-                            <!-- <th>Royalties</th> -->
-                            <th>Valor Liq. à pagar</th>
+                            <th>Royalties</th>
+                            <th>Liq. à pagar</th>
                             <th>Status</th>
                             <th>Ações</th>
                           </tr>
@@ -114,6 +114,7 @@
                               <!-- <i class="fa fa-file-pdf-o"></i> -->
                             </td>   
                             <td>{{ $order->comissoes()->count() }}</td>
+                            <td style="@if($order->royalties()->sum('valor_original') > 0) color:red @endif">R$ {{ number_format($order->royalties()->sum('valor_original'),2,',','.') }}</td>
                             <td style="@if($order->valor < 0) color:red @endif">R$ {{ number_format($order->valor,2,',','.') }}</td>
                             <td>@if($order->status == 0) Processando @else Finalizado @endif
                             <td>

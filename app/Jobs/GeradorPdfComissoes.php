@@ -7,6 +7,8 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use DB;
+use App\Models\RoyaltiesOrdemPagamento;
+use App\Models\ComissaoOrdemPagamento;
 use PDF;
 class GeradorPdfComissoes extends Job implements ShouldQueue
 {
@@ -29,7 +31,6 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $this->cliente = $cliente;
         $this->type = $type;
         $this->month = mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
-        // dd($this);
     }
 
     /**
@@ -53,7 +54,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $order_payment->save();
         // dd($order_payment);
         foreach ($this->comissoes as $key => $value) {
-          $comissao_order_payment = new \App\Models\ComissaoOrdemPagamento;
+          $comissao_order_payment = new ComissaoOrdemPagamento;
           $comissao_order_payment->idcomissao = $this->comissoes[$key]->comissaoid;
           $comissao_order_payment->idordempagamento = $order_payment->id;
           $comissao_order_payment->save();
@@ -72,10 +73,21 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $order_payment->franqueadoid = $this->cliente->id;
         $order_payment->save();
         foreach ($this->comissoes as $key => $value) {
-          $comissao_order_payment = new \App\Models\ComissaoOrdemPagamento;
+          $comissao_order_payment = new ComissaoOrdemPagamento;
           $comissao_order_payment->idcomissao = $this->comissoes[$key]->comissaoid;
           $comissao_order_payment->idordempagamento = $order_payment->id;
           $comissao_order_payment->save(); 
+        }
+
+        $hasRoyalties = \App\Models\Franqueado::where('id',$this->cliente->id)->first()->hasRoyalties;
+        foreach ($hasRoyalties as $key => $value) {
+          $value->descontado = 's';
+          $value->save();
+          $royalties_order_payment = new RoyaltiesOrdemPagamento;
+          // dd($royalties_order_payment,$hasRoyalties);
+          $royalties_order_payment->idroyalties = $value->id;
+          $royalties_order_payment->idordempagamento = $order_payment->id;
+          $royalties_order_payment->save();
         }
       }
     }
