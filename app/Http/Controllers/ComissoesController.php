@@ -11,6 +11,7 @@ use App\Models\Fda;
 use App\Models\Comissoes;
 use App\Models\ComissaoProduto;
 use App\Models\Produto;
+use App\Models\Comissao;
 use File;
 use DB;
 use Redirect;
@@ -115,21 +116,28 @@ class ComissoesController extends Controller
           $data_aprov = Carbon::create($d[6].$d[7].$d[8].$d[9], $d[3].$d[4], $d[0].$d[1], $d[11].$d[12], $d[14].$d[15], $d[17].$d[18], 'America/Fortaleza');
           // dd($data_aprov,$data_aprov->format('Y-m-d H:i:s'),$counter);
           // dd($data_aprov,Comissoes::where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))->first());
-          if(
-          Comissoes::join('fdas as fd','fd.id','=','comissoes.fdaid')
+          $comissao = Comissoes::join('fdas as fd','fd.id','=','comissoes.fdaid')
           ->leftjoin('franqueados as fr','fr.id','=','comissoes.franqueadoid')
           ->where('data_cadastro',$data->format('Y-m-d'))
           ->where('nome_cliente',$row->nomerazao_social)
           ->where('fd.fdaid',$row->fda)
           ->where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))
-          ->orWhere(function($query) use ($row,$data){
-            $query->whereNull('fr.franqueadoid');
-            $query->where('nome_cliente',$row->nomerazao_social);
-            $query->where('data_cadastro',$data->format('Y-m-d'));
-            $query->where('fd.fdaid',$row->fda);
+          ->where('fr.franqueadoid',$row->franqueado)
+          ->orWhere(function($query) use ($row,$data,$data_aprov){
+            $query->where('data_cadastro',$data->format('Y-m-d'))
+            ->where('nome_cliente',$row->nomerazao_social)
+            ->where('fd.fdaid',$row->fda)
+            ->where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))
+            ->whereNull('fr.franqueadoid');
           })
-          ->first() == null
-          ){
+          ->select('comissoes.*','fr.franqueadoid','fd.fdaid')
+          ->first();
+          if($comissao != null && $comissao->franqueadoid == null && Franqueado::where('franqueadoid',$row->franqueado)->first() != null){
+            $comissaoUpdate = Comissoes::where('id',$comissao->id)->first();
+            $comissaoUpdate->franqueadoid = Franqueado::where('franqueadoid',$row->franqueado)->first()->id;
+            $comissaoUpdate->save();
+          }
+          else if ($comissao == null) {
             if($row->franqueado == "" && Fda::where('fdaid',$row->fda)->first() != null){
               $arrayMessages[] = array(
                 'linha'=>$counter+1,
@@ -162,7 +170,7 @@ class ComissoesController extends Controller
                 $cp->tx_venda = Produto::where('tags','like','%'.$v.'%')->first()->tx_venda;
                 $cp->save();
               }
-            }
+            } 
           }
         });
       });
