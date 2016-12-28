@@ -46,8 +46,8 @@
                 <div class="panel-heading">
                   <div class="panel-options">
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#tab-1" data-toggle="tab">Pagamentos Fda</a></li>
-                      <li class=""><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado</a></li>
+                      <li class="active"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">{{ $orders_fda->count() }}</span></a></li>
+                      <li class=""><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">{{ $orders_franqueado->count() }}</span></a></li>
                     </ul>
                   </div>
                 </div>
