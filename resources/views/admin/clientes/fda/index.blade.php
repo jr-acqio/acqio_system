@@ -62,7 +62,7 @@
                             <div class="col-lg-3">
                                 <div class="contact-box center-version">
                                     <a href="#">
-                                        <img alt="image" class="img-circle" src="http://bazyol.com.tr/img/icon-user.png">
+                                        <i class="fa fa-user" style="font-size: 54px;"></i>
                                         <h3 class="m-b-xs"><strong>{{ strtoupper($c->nome_razao)}}</strong></h3>
                                     </a>
                                     <div class="contact-box-footer">
