@@ -10,12 +10,17 @@ Route::get('/teste',function(){
                   'data_final' => \Carbon\Carbon::now()->subMonth()->format('Y-m-').date("t", mktime(0,0,0,\Carbon\Carbon::now()->subMonth()->format('m'),'01',\Carbon\Carbon::now()->format('Y'))));
 
 
-  $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
+  if(\Carbon\Carbon::now()->subMonth()->format('m') == 12){
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');  
+  }else{
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');  
+  }
   $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
+  
   if(!in_array($folder_year,$directories)){
     // Caindo aqui não existe o diretório do ano, ou seja, a pasta referente ao ano.
-    Storage::makeDirectory($directory.'/'.\Carbon\Carbon::now()->format('Y'));
+    Storage::makeDirectory($folder_year);
   }
   //Verificar agora se existe a pasta referente ao mês do ano corrente.
   if(!in_array($folder_month,Storage::directories($folder_year))){
@@ -52,12 +57,16 @@ Route::get('/teste',function(){
   // Comissões Franqueado
   $directory = 'relatorio-comissao/franqueados';
   $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
-  $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
+  if(\Carbon\Carbon::now()->subMonth()->format('m') == 12){
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');  
+  }else{
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');  
+  }
   $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
   if(!in_array($folder_year,$directories)){
     // Caindo aqui não existe o diretório do ano, ou seja, a pasta referente ao ano.
-    Storage::makeDirectory($directory.'/'.\Carbon\Carbon::now()->format('Y'));
+    Storage::makeDirectory($folder_year);
   }
   //Verificar agora se existe a pasta referente ao mês do ano corrente.
   if(!in_array($folder_month,Storage::directories($folder_year))){

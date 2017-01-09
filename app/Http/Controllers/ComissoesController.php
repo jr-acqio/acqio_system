@@ -105,7 +105,7 @@ class ComissoesController extends Controller
             );
           }
           $dataehora = array_map('trim', explode('-', $row->datahora_de_finalizacao));
-          // dd($dataehora,$counter,count($dataehora));
+          // dd($dataehora,$row->datahora_de_finalizacao);
           if(count($dataehora) == 1){
             $d = $dataehora[0].' '.'00:00:00';
           }elseif(count($dataehora) == 2){
