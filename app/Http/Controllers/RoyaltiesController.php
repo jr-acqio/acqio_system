@@ -80,6 +80,7 @@ class RoyaltiesController extends Controller
           if($f != null &&
             Royalties::where('data_vencimento',$data->format('Y-m-d'))->where('cliente',$row->cliente_fornecedor)
             ->where('franquia_loc',$row->franquia_loc)->where('valor_original',number_format((float)$valor_original, 2, '.', ''))
+            ->where('descontado','!=','s')
             ->where('cheques_devolvidos',number_format((float)$cheques_devolvidos, 2, '.', ''))->first() == null
           ){
             $r = new Royalties;

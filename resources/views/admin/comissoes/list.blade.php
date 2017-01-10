@@ -231,11 +231,12 @@
                               </td>
                               <td>{{ $c->totalProdutos }}</td>
                               <td>R$ {{ number_format($c->valor,2,',', '.') }}</td>
-                              <td>
-                                <?php $valor = \App\Models\Royalties::where('franqueadoid',$c->id)->get(); ?>
+                              <?php $valor = \App\Models\Royalties::where('franqueadoid',$c->id)->where('descontado','!=','s')->get();
+                                ?>
+                              <td style="color: @if($valor->sum('valor_original') + $valor->sum('cheques_devolvidos') > 0) red @endif;">
                                 <?php echo 'R$ '.number_format($valor->sum('valor_original') + $valor->sum('cheques_devolvidos'), 2,',','.'); ?>
                               </td>
-                              <td>
+                              <td style="color: @if($c->valor - ($valor->sum('valor_original') + $valor->sum('cheques_devolvidos')) < 0) red @endif">
                                 <?php echo number_format($c->valor - ($valor->sum('valor_original') + $valor->sum('cheques_devolvidos')),2,',','.') ?>
                               </td>
                               <td>
