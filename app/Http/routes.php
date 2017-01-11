@@ -50,7 +50,7 @@ Route::get('/teste',function(){
     ->get();
     
     dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes_fda,$value,$type = 1)
+      new \App\Jobs\GeradorPdfComissoes($folder_month,$params,$comissoes_fda,$value,$type = 1)
     );
     
   }
@@ -103,7 +103,7 @@ Route::get('/teste',function(){
     // $f = \App\Models\Franqueado::where('id',$value->id)->first();
     // dd($f->hasRoyalties()->sum('valor_original','cheques_devolvidos'));
     dispatch(
-      new \App\Jobs\GeradorPdfComissoes($folder_month,$comissoes,$value,$type = 2)
+      new \App\Jobs\GeradorPdfComissoes($folder_month,$params,$comissoes,$value,$type = 2)
     );
   }
   // Pusher::trigger('my-channel', 'generate_pdfs',array('message' => 'Todos os pdfs foram gerados com sucesso!!!' ));

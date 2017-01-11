@@ -30,8 +30,8 @@
         </div>
         <div class="col-sm-6 text-right">
           <p>
-            <span><strong>Data inicial:</strong> 01/11/2016</span><br/>
-            <span><strong>Data final:</strong> 30/11/2016</span>
+            <span><strong>Data inicial:</strong> {{ date('d/m/Y', strtotime($periodo['data_inicial'])) }}</span><br/>
+            <span><strong>Data final:</strong> {{ date('d/m/Y', strtotime($periodo['data_final'])) }}</span>
           </p>
         </div>
       </div>
@@ -103,11 +103,11 @@
 
       <div class="col-lg-6">
         @if(isset($fda))
-          Total de Vendas: {{ $comissoes_fda->sum('totalProdutos') }}<br>
-          Total de POS: {{ $comissoes_fda->count() }}
+          Total de Vendas: {{ $comissoes_fda->count() }}<br>
+          Total de POS: {{ $comissoes_fda->sum('totalProdutos') }}
         @else
-          Total de Vendas: {{ $comissoes_fr->sum('totalProdutos') }}<br>
-          Total de POS: {{ $comissoes_fr->count() }}
+          Total de Vendas: {{ $comissoes_fr->count() }}<br>
+          Total de POS: {{ $comissoes_fr->sum('totalProdutos') }}
         @endif
       </div>
       <div class="col-lg-6">

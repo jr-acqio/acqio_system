@@ -19,18 +19,21 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
     public $cliente;
     public $type; //Type = 1 Fda, Type = 2 Franqueado
     private $month;
+    public $periodo;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($folder,$comissoes,$cliente,$type)
+    public function __construct($folder,$params,$comissoes,$cliente,$type)
     {
         $this->folder = $folder;
         $this->comissoes = $comissoes;
         $this->cliente = $cliente;
         $this->type = $type;
         $this->month = mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
+        $this->periodo = $params;
+        // dd($this);
     }
 
     /**
@@ -42,7 +45,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
     {
       // Criar o pdf
       if($this->type == 1){
-        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$this->comissoes,'fda'=>$this->cliente]);
+        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fda'=>$this->comissoes,'fda'=>$this->cliente,'periodo'=>$this->periodo]);
         $pdf->save(storage_path().'/app/'.$this->folder.'/'.strtoupper($this->cliente->fdaid).'_'.$this->month.'.pdf');
         //Após salvar no storage devemos criar as ordens de pagamento e setar as comissoes que estão relacionadas a um pagamento.
 
@@ -62,7 +65,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
 
       }
       else if($this->type == 2){
-        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fr'=>$this->comissoes,'franqueado'=>$this->cliente]);
+        $pdf = PDF::loadView('admin.comissoes.pdf-comissao',['comissoes_fr'=>$this->comissoes,'franqueado'=>$this->cliente,'periodo'=>$this->periodo]);
         $pdf->save(storage_path().'/app/'.$this->folder.'/'.strtoupper($this->cliente->franqueadoid).'_'.$this->month.'.pdf');
         //Após salvar no storage devemos criar as ordens de pagamento e setar as comissões e royalties que estão relacionadas a um pagamento.
 
@@ -79,7 +82,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
           $comissao_order_payment->save(); 
         }
 
-        $hasRoyalties = \App\Models\Franqueado::where('id',$this->cliente->id)->first()->hasRoyalties;
+        $hasRoyalties = \App\Models\Franqueado::where('id',$this->cliente->id)->first()->hasRoyalties()->where('descontado','!=','s')->get();
         foreach ($hasRoyalties as $key => $value) {
           $value->descontado = 's';
           $value->save();

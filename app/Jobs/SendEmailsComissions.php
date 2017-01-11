@@ -38,19 +38,19 @@ class SendEmailsComissions extends Job implements ShouldQueue
             // Set the receiver and subject of the mail.
             $fda = Fda::where('id',$this->dados->id)->first();
             // dd($franqueado);
-            // $message->to('stefano.andrei@esfera5.com.br');
-            // $message->cc('joselito.junior@esfera5.com.br');
-            // $message->cc(Fda::where('id',$franqueado->fdaid)->first()->email);
+            // $message->to('joselito.junior@esfera5.com.br');
+            
             $message->to($fda->email);
-            $message->bcc('stefano.andrei@esfera5.com.br');
+            
+            // $message->bcc('stefano.andrei@esfera5.com.br');
             $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');
 
-            $message->subject('Relatório de Comissões - Novembro');
+            $message->subject('Relatório de Comissões - Dezembro');
             // Set the sender
             // dd($message);
             $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');
-            $message->attach(storage_path().'/app/relatorio-comissao/fdas/December_2016/'.strtoupper($fda->fdaid).'_09-12-2016.pdf');
+            $message->attach(storage_path().'/'.$this->dados->relatorio_pdf);
           });
         }
         else if($this->type == 2){
@@ -58,20 +58,18 @@ class SendEmailsComissions extends Job implements ShouldQueue
             // Set the receiver and subject of the mail.
             $franqueado = Franqueado::where('id',$this->dados->id)->first();
             // dd($franqueado);
-            // $message->to('stefano.andrei@esfera5.com.br');
-            // $message->cc('joselito.junior@esfera5.com.br');
+            // $message->to('joselito.junior@esfera5.com.br');
             $message->to($franqueado->email);
-            // $message->cc(Fda::where('id',$franqueado->fdaid)->first()->email);
-            // $message->cc('financeiro1@acqiofranchising.com.br');
+            
 
-            $message->bcc('stefano.andrei@esfera5.com.br');
+            // $message->bcc('stefano.andrei@esfera5.com.br');
             $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');
-            $message->subject('Relatório de Comissões - Novembro');
+            $message->subject('Relatório de Comissões - Dezembro');
             // Set the sender
 
             $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');
-            $message->attach(storage_path().'/app/relatorio-comissao/franqueados/December_2016/'.strtoupper($franqueado->franqueadoid).'_09-12-2016.pdf');
+            $message->attach(storage_path().'/'.$this->dados->relatorio_pdf);
           });
         }
 
