@@ -34,17 +34,23 @@
 															</tr>
 														</thead>
 														<tbody>
-															<tr v-for="order in filterFda(orders)">
-																<td>{{ order.id }}</td>
-																<td>{{ order.mes_ref }}</td>
+															<tr v-for="(order, key) in filterFda(orders)">
+																<td>{{ key + 1 }}</td>
+																<td>{{ order.cliente }}</td>
 																<td>
-																	<a href="#">
-																		{{ baseName(order.relatorio_pdf) }}
-																	</a>
+																	{{ baseName(order.relatorio_pdf) }}
 																</td>
-																<td></td>
-																<td></td>
-																<td></td>
+																<td>{{ order.totalVendas }}</td>
+																<td>R$ {{ order.valor.formatMoney(2,',','.') }}</td>
+																<td>
+																	<p v-if="order.status" class="pg">Pago</p>
+																	<p v-else>Processando</p>
+																</td>
+																                            <td>
+                              <a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+                              <a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+                            </td>
+
 															</tr>
 														</tbody>
 													</table>
@@ -66,13 +72,28 @@
 															</tr>
 														</thead>
 														<tbody>
-															<tr v-for="order in filterFranq(orders)">
-																<td>{{ order.id }}</td>
-																<td>{{ order.mes_ref }}</td>
-																<td></td>
-																<td></td>
-																<td></td>
-																<td></td>
+															<tr v-for="(order,key) in filterFranq(orders)">
+																<td>{{ key +1 }}</td>
+																<td>{{ order.cliente }}</td>
+																<td>{{ baseName(order.relatorio_pdf) }}</td>
+																<td>{{ order.totalVendas }}</td>
+																<td>
+																	<p v-if="order.totalRoyaltie > 0" class="rejected">
+																		R$ {{ order.totalRoyaltie.formatMoney(2,',','.') }}
+																	</p>
+																	<p v-else>R$ {{ order.totalRoyaltie.formatMoney(2,',','.') }}</p>
+
+																</td>
+																<td>R$ {{ order.valor.formatMoney(2,',','.') }}</td>
+																<td>
+																	<p v-if="order.status" class="pg">Pago</p>
+																	<p v-else>Processando</p>
+																</td>
+																<td>
+																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
+																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+																</td>
+
 															</tr>
 														</tbody>
 														<tfoot>
@@ -102,22 +123,21 @@
 	import _ from 'lodash'
 	export default{
 		data(){
-			return {
-				orders: []
-			}
-		},
-		mounted(){
-			var self = this
-			setTimeout(function(){ self.fetchAllOrders(); }, 1000);
-			
-			
+	return {
+		orders: []
+	}
+},
+mounted(){
+	var self = this
+	setTimeout(function(){ self.fetchAllOrders(); }, 1000);
+
+
 			// this.baseName(this.orders[0].relatorio_pdf);
 		},
 		methods:{
 			fetchAllOrders(){
 				this.$http.get('/admin/orders').then((response) => {
 					this.orders = response.data;
-					console.log(this.orders[0].relatorio_pdf)
 					iziToast.show({
 						title: 'Load Sucessfully',
 						message: 'Ordens de Pagamento carregadas com sucesso!!',
@@ -146,15 +166,22 @@
 			baseName(str)
 			{
 				// console.log(str)
-			   var base = new String(str).substring(str.lastIndexOf('/') + 1); 
-			   console.log(base);
+				var base = new String(str).substring(str.lastIndexOf('/') + 1); 
 			    // if(base.lastIndexOf(".") != -1)       
 			    //     base = base.substring(0, base.lastIndexOf("."));
-			   return base;
+			    return base;
 			}
 		}
 	}
 </script>
-<style scoped=""></style>
+<style scoped="">
+	.pg{
+		color: green;
+	}
+	.rejected{
+		color: red;
+	}
+
+</style>
 
 
