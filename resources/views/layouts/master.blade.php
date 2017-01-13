@@ -5,6 +5,7 @@
   <title>@yield('title')</title>
 
   @stack('links')
+  <link rel="stylesheet" type="text/css" href="/css/app.css">
 
 </head>
 
@@ -29,6 +30,11 @@
     @include('layouts.right-side-bar')
   </div>
 
+  <script>
+    window.Laravel = { csrfToken: '{{ csrf_token() }}' };
+  </script>
+  <script type="text/javascript" src="/js/app.js"></script>
   @stack('scripts')
+  
 </body>
 </html>

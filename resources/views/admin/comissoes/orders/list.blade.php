@@ -34,7 +34,9 @@
   </div>
 </div>
 
-
+<div id="app">
+  <Orders></Orders>
+</div>
 <div class="row">
   <div class="col-lg-12">
     <div class="animated fadeInUp">
@@ -46,8 +48,8 @@
                 <div class="panel-heading">
                   <div class="panel-options">
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">{{ $orders_fda->count() }}</span></a></li>
-                      <li class=""><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">{{ $orders_franqueado->count() }}</span></a></li>
+                      <li class="active"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">@if(isset($orders_fda)) $orders_fda->count() @endif</span></a></li>
+                      <li class=""><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">@if(isset($orders_franqueado)) $orders_franqueado->count() @endif</span></a></li>
                     </ul>
                   </div>
                 </div>
@@ -68,6 +70,7 @@
                           </tr>
                         </thead>
                         <tbody>
+                        @if(isset($orders_fda))
                           @foreach($orders_fda as $order)
                           <tr>
                             <td>{{ $order->id }}</td>
@@ -85,6 +88,7 @@
                             </td>
                           </tr>
                           @endforeach
+                        @endif
                         </tbody>
                       </table>
 
@@ -105,7 +109,8 @@
                           </tr>
                         </thead>
                         <tbody>
-                          @foreach($orders_franqueado as $order)
+                        @if(isset($orders_franqueado))
+                            @foreach($orders_franqueado as $order)
                           <tr>
                             <td>{{ $order->id }}</td>
                             <td>{{ strtoupper($order->franqueado->franqueadoid) }}</td>
@@ -123,6 +128,8 @@
                             </td>
                           </tr>
                           @endforeach
+                        @endif
+                          
                         </tbody>
                         <tfoot>
                           <td></td>
@@ -157,7 +164,7 @@
 
   @push('scripts')
   <!-- Mainly scripts -->
-  <script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script>
+  <!-- <script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script> -->
   <!-- <script src="{{ asset('admin/js/bootstrap.min.js') }}"></script> -->
   <script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
   <script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>

@@ -171,7 +171,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'],function(){
     // Route::get('comissoes/list/email')
     Route::resource('comissoes','ComissoesController',['except'=>['update','edit','show']]);
     Route::resource('royalties','RoyaltiesController',['only'=>['create','store','index','destroy']]);
-    Route::resource('orders','OrdensPagamento');
+    
+    Route::get('/orders/list',
+      ['as'=>'admin.orders.list.index','uses'=>'OrdensPagamentoController@view']);
+    Route::resource('orders','OrdensPagamentoController',['except'=>['create','edit']]);
     //Acessar os pdfs 
     Route::get('/orders/{id}/{filename}', function ($id,$filename)
     {
