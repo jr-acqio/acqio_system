@@ -44,8 +44,11 @@
 
 @push('scripts')
 <!-- Mainly scripts -->
+
 <!-- <script src="{{ asset('admin/js/jquery-2.1.1.js') }}"></script> -->
 <!-- <script src="{{ asset('admin/js/bootstrap.min.js') }}"></script> -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <script src="{{ asset('admin/js/plugins/metisMenu/jquery.metisMenu.js') }}"></script>
 <script src="{{ asset('admin/js/plugins/slimscroll/jquery.slimscroll.min.js') }}"></script>
 
@@ -56,7 +59,6 @@
 <!-- jQuery UI -->
 <script src="{{ asset('admin/js/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
 <script type="text/javascript">

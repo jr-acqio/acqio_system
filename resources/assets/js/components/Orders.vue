@@ -2,11 +2,25 @@
 	<div>
 		<div class="row">
 			<div class="col-lg-12">
-
-				<div class="form-group">
-					<h3>Pesquisar:</h3>
-					<input v-on:keyup="pesquisar()" type="text" placeholder="Pesquisar" class="form-control" v-model="pesquisar">
+				<div class="row">
+						<div class="form-group col-lg-8">
+							<h3>Pesquisar:</h3>
+							<input type="text" placeholder="Pesquisar" class="form-control" v-model="filterInput">
+						</div>
+						<div class="form-group col-lg-4">
+							<div class="dropdown">
+						    <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Ações
+						    <span class="caret"></span></button>
+						    <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+						      <li role="presentation">
+						      	<a role="menuitem" tabindex="-1" href="#" @click.prevent="csv()">Exportar CSV</a>
+						      </li>
+						      <!-- <li role="presentation" class="divider"></li> -->
+						    </ul>
+						  </div>
+						</div>	
 				</div>
+				
 
 				<div class="animated fadeInUp">
 					<div class="ibox">
@@ -17,8 +31,8 @@
 										<div class="panel-heading">
 											<div class="panel-options">
 												<ul class="nav nav-tabs">
-													<li class="active"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">{{ filterFda(orders).length }}</span></a></li>
-													<li class=""><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">{{ filterFranq(orders).length }}</span></a></li>
+													<li class="active" @click.prevent="alterTab(1)"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">{{ countOrdersFda }}</span></a></li>
+													<li class="" @click.prevent="alterTab(2)"><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">{{ countOrdersFranq }}</span></a></li>
 												</ul>
 											</div>
 										</div>
@@ -39,11 +53,11 @@
 															</tr>
 														</thead>
 														<tbody>
-															<tr v-for="(order, key) in filterFda(orders)">
+															<tr v-for="(order, key) in filterBy(filterFda(orders),filterInput)">
 																<td>{{ key + 1 }}</td>
 																<td>{{ order.cliente }}</td>
 																<td>
-																	{{ baseName(order.relatorio_pdf) }}
+																	<a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a>
 																</td>
 																<td>{{ order.totalVendas }}</td>
 																<td>R$ {{ order.valor.formatMoney(2,',','.') }}</td>
@@ -77,10 +91,10 @@
 															</tr>
 														</thead>
 														<tbody>
-															<tr v-for="(order,key) in filterFranq(orders)">
+															<tr v-for="(order,key) in filterBy(filterFranq(orders),filterInput)">
 																<td>{{ key +1 }}</td>
 																<td>{{ order.cliente }}</td>
-																<td>{{ baseName(order.relatorio_pdf) }}</td>
+																<td><a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a></td>
 																<td>{{ order.totalVendas }}</td>
 																<td>
 																	<p v-if="order.totalRoyaltie > 0" class="rejected">
@@ -130,19 +144,18 @@
 		data(){
 	return {
 		orders: [],
+		countOrdersFda: 0,
+		countOrdersFranq: 0,
 		sortDirection: 1,
 		sortProperty: 'cliente',
-		pesquisar: '',
-		ordersFilter: []
+		filterInput: '',
+		filterTab: 1
 	}
 },
 mounted(){
 	var self = this
 	setTimeout(function(){ self.fetchAllOrders(); }, 1000);
-
-
-			// this.baseName(this.orders[0].relatorio_pdf);
-		},
+},
 		methods:{
 			fetchAllOrders(){
 				this.$http.get('/admin/orders').then((response) => {
@@ -153,6 +166,8 @@ mounted(){
 		   				color: 'green', // blue, red, green, yellow,
 		   				position: 'topRight'
 		   			});
+					this.countOrdersFda = this.filterFda(this.orders).length
+					this.countOrdersFranq = this.filterFranq(this.orders).length
 				}, (response) => {
 					iziToast.show({
 						title: 'Error:',
@@ -174,11 +189,8 @@ mounted(){
 			},
 			baseName(str)
 			{
-				// console.log(str)
 				var base = new String(str).substring(str.lastIndexOf('/') + 1); 
-			    // if(base.lastIndexOf(".") != -1)       
-			    //     base = base.substring(0, base.lastIndexOf("."));
-			    return base;
+			  return base;
 			},
 			sortFunction(field){
 				this.sortProperty = field
@@ -190,12 +202,24 @@ mounted(){
 					this.orders = _.sortBy( this.orders, field ).reverse();					 
 				}
 			},
-			pesquisar(){
-				var self = this
-				this.ordersFilter = _.filter(this.orders, function(o) {
-					console.log(o.cliente);
-					return o.cliente == self.pesquisar; 
-				});
+			filterBy(list,value){
+				value = value.toUpperCase();
+				if(this.filterTab == 1){
+					return this.ordersFilter = list.filter(function(order){
+						return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1;
+					});	
+				}else{
+					return this.ordersFilter = list.filter(function(order){
+						return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1 || order.totalRoyaltie.toString().indexOf(value) > -1;
+					});	
+				}
+
+			},
+			alterTab(int){
+					this.filterTab = int
+			},
+			csv(){
+				downloadCSV({filename: 'ordens_pagamento.csv'}, this.ordersFilter);
 			}
 		}
 	}

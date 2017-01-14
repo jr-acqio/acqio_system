@@ -8,7 +8,7 @@ window._ = require('lodash');
  */
 
 window.$ = window.jQuery = require('jquery');
-require('bootstrap-sass');
+// require('bootstrap-sass');
 window.iziToast = require('izitoast');
 // require('sweetalert');
 
