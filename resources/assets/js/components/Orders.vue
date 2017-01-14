@@ -1,8 +1,13 @@
 <template>
 	<div>
-		<h1>Estou dentro do Component</h1>
 		<div class="row">
 			<div class="col-lg-12">
+
+				<div class="form-group">
+					<h3>Pesquisar:</h3>
+					<input v-on:keyup="pesquisar()" type="text" placeholder="Pesquisar" class="form-control" v-model="pesquisar">
+				</div>
+
 				<div class="animated fadeInUp">
 					<div class="ibox">
 						<div class="ibox-content">
@@ -25,11 +30,11 @@
 														<thead>
 															<tr>
 																<th>#</th>
-																<th>Fda</th>
-																<th>Relatório PDF</th>
-																<th>Total de Vendas</th>
-																<th>Valor à pagar</th>
-																<th>Status</th>
+																<th><a href="#" @click.prevent="sortFunction('cliente')">Fda</a></th>
+																<th><a href="#" @click.prevent="sortFunction('relatorio_pdf')">Relatório PDF</a></th>
+																<th><a href="#" @click.prevent="sortFunction('totalVendas')">Total de Vendas</a></th>
+																<th><a href="#" @click.prevent="sortFunction('valor')">Valor à pagar</a></th>
+																<th><a href="#" @click.prevent="sortFunction('status')">Status</a></th>
 																<th>Ações</th>
 															</tr>
 														</thead>
@@ -124,7 +129,11 @@
 	export default{
 		data(){
 	return {
-		orders: []
+		orders: [],
+		sortDirection: 1,
+		sortProperty: 'cliente',
+		pesquisar: '',
+		ordersFilter: []
 	}
 },
 mounted(){
@@ -170,6 +179,23 @@ mounted(){
 			    // if(base.lastIndexOf(".") != -1)       
 			    //     base = base.substring(0, base.lastIndexOf("."));
 			    return base;
+			},
+			sortFunction(field){
+				this.sortProperty = field
+				if(this.sortDirection == 1){
+					this.orders = _.sortBy( this.orders, field );
+ 					this.sortDirection = -1
+				}else{
+					this.sortDirection = 1
+					this.orders = _.sortBy( this.orders, field ).reverse();					 
+				}
+			},
+			pesquisar(){
+				var self = this
+				this.ordersFilter = _.filter(this.orders, function(o) {
+					console.log(o.cliente);
+					return o.cliente == self.pesquisar; 
+				});
 			}
 		}
 	}
