@@ -109,8 +109,12 @@
 																	<p v-else>Processando</p>
 																</td>
 																<td>
-																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-up" aria-hidden="true"></i></a>
-																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top"><i class="fa fa-thumbs-down" aria-hidden="true"></i></a>
+																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top" @click.prevent="approvedOrder(order)">
+																		<i class="fa fa-thumbs-up" aria-hidden="true"></i>
+																	</a>
+																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top">
+																		<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+																	</a>
 																</td>
 
 															</tr>
@@ -177,6 +181,10 @@ mounted(){
 		   			});
 				});
 			},
+			approvedOrder(order){
+				swal("Good job!", "You clicked the button in order "+order.id, "success")
+			},
+			//Filters
 			filterFranq(orders){
 				return _.filter(orders, function(o) {
 					return o.fdaid == null;

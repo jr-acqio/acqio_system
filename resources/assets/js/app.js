@@ -4,7 +4,7 @@ require('./bootstrap');
 
 
 import VueLocalStorage from 'vue-localstorage'
-import 	Orders from './components/Orders.vue'
+import 	Orders from './components/Orders/Orders.vue'
 Vue.use(VueLocalStorage)
 
 

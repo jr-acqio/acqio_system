@@ -18,8 +18,9 @@ elixir((mix) => {
        .webpack('app.js');
 
     // mix.copy(['../../../node_modules/izitoast/dist/css/iziToast.css','public/admin/css/style.css']);
-    mix.styles(
-    	["../../../node_modules/izitoast/dist/css/iziToast.css"
-
-    	],'public/admin/css/main.css');
+    // mix.styles(
+    // 	["../../../node_modules/izitoast/dist/css/iziToast.css",
+    // 		"../../../node_modules/sweetalert/dist/sweetalert.css"
+    // 	]
+    // 	,'public/admin/css/app.css');
 });
