@@ -31,8 +31,8 @@
 										<div class="panel-heading">
 											<div class="panel-options">
 												<ul class="nav nav-tabs">
-													<li class="active" @click.prevent="alterTab(1)"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">{{ countOrdersFda }}</span></a></li>
-													<li class="" @click.prevent="alterTab(2)"><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">{{ countOrdersFranq }}</span></a></li>
+													<li class="active" @click.prevent="alterTab(1)"><a href="#tab-1" data-toggle="tab">Pagamentos Fda <span class="badge badge-primary">{{ filterByFda((orders.orders_fda),filterInput).length }}</span></a></li>
+													<li class="" @click.prevent="alterTab(2)"><a href="#tab-2" data-toggle="tab">Pagamentos Franqueado <span class="badge badge-primary">{{ filterByFranq((orders.orders_fr),filterInput).length }}</span></a></li>
 												</ul>
 											</div>
 										</div>
@@ -53,7 +53,7 @@
 															</tr>
 														</thead>
 														<tbody>
-															<tr v-for="(order, key) in filterBy(filterFda(orders),filterInput)">
+															<tr v-for="(order, key) in filterByFda((orders.orders_fda),filterInput)">
 																<td>{{ key + 1 }}</td>
 																<td>{{ order.cliente }}</td>
 																<td>
@@ -80,7 +80,7 @@
 														<thead>
 															<tr>
 																<th>#</th>
-																<th>Identificador Franqueado</th>
+																<th><a href="#" @click.prevent="sortFunction('cliente')">Franqueado</a></th>
 																<th>Relatório PDF</th>
 																<th>Total Vendas</th>
 																<!-- <th>Total Comissão</th> -->
@@ -91,7 +91,7 @@
 															</tr>
 														</thead>
 														<tbody>
-															<tr v-for="(order,key) in filterBy(filterFranq(orders),filterInput)">
+															<tr v-for="(order,key) in filterByFranq((orders.orders_fr),filterInput)">
 																<td>{{ key +1 }}</td>
 																<td>{{ order.cliente }}</td>
 																<td><a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a></td>
@@ -143,9 +143,10 @@
 	export default{
 		data(){
 	return {
-		orders: [],
-		countOrdersFda: 0,
-		countOrdersFranq: 0,
+		orders: {
+			orders_fda: [],
+			orders_fr: []	
+		},
 		sortDirection: 1,
 		sortProperty: 'cliente',
 		filterInput: '',
@@ -159,15 +160,14 @@ mounted(){
 		methods:{
 			fetchAllOrders(){
 				this.$http.get('/admin/orders').then((response) => {
-					this.orders = response.data;
+					this.orders.orders_fda = this.filterFda(response.data);
+					this.orders.orders_fr = this.filterFranq(response.data);
 					iziToast.show({
 						title: 'Load Sucessfully',
 						message: 'Ordens de Pagamento carregadas com sucesso!!',
 		   				color: 'green', // blue, red, green, yellow,
 		   				position: 'topRight'
 		   			});
-					this.countOrdersFda = this.filterFda(this.orders).length
-					this.countOrdersFranq = this.filterFranq(this.orders).length
 				}, (response) => {
 					iziToast.show({
 						title: 'Error:',
@@ -195,28 +195,43 @@ mounted(){
 			sortFunction(field){
 				this.sortProperty = field
 				if(this.sortDirection == 1){
-					this.orders = _.sortBy( this.orders, field );
+					if(this.filterTab == 1){
+						this.orders.orders_fda = _.sortBy( this.orders.orders_fda, field );	
+					}else{
+						this.orders.orders_fr = _.sortBy( this.orders.orders_fr, field );	
+					}
  					this.sortDirection = -1
 				}else{
 					this.sortDirection = 1
-					this.orders = _.sortBy( this.orders, field ).reverse();					 
+					if(this.filterTab == 1){
+						this.orders.orders_fda = _.sortBy( this.orders.orders_fda, field ).reverse();	
+					}else{
+						this.orders.orders_fr = _.sortBy( this.orders.orders_fr, field ).reverse();	
+					}
 				}
 			},
-			filterBy(list,value){
+			filterByFda(list,value){
+				// if(this.filterTab != 1){
+				// 	return false;
+				// }
 				value = value.toUpperCase();
-				if(this.filterTab == 1){
-					return this.ordersFilter = list.filter(function(order){
-						return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1;
-					});	
-				}else{
-					return this.ordersFilter = list.filter(function(order){
-						return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1 || order.totalRoyaltie.toString().indexOf(value) > -1;
-					});	
-				}
-
+				// alert('filtrando fdas');
+				return list.filter(function(order){
+					return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1;
+				});
+			},
+			filterByFranq(list,value){
+				// if(this.filterTab != 2){
+				// 	return false;
+				// }
+				value = value.toUpperCase();
+				// alert('filtrando franqueados');
+				return list.filter(function(order){
+					return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1 || order.totalRoyaltie.toString().indexOf(value) > -1;
+				});	
 			},
 			alterTab(int){
-					this.filterTab = int
+				this.filterTab = int
 			},
 			csv(){
 				downloadCSV({filename: 'ordens_pagamento.csv'}, this.ordersFilter);
@@ -231,7 +246,10 @@ mounted(){
 	.rejected{
 		color: red;
 	}
-
+	.dropdown{
+		margin-top: 30px;
+		float: left;
+	}
 </style>
 
 
