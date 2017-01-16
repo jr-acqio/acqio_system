@@ -47,9 +47,17 @@ class OrdensPagamentoController extends Controller
         //
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, OrdemPagamento $orders)
     {
-        //
+        if($request->params['type'] == "approvedOrder"){
+            $orders->status = 1;
+            $orders->save();
+            return response()->json(200);    
+        }
+        // else{
+        //     return response()->json($orders,200);
+        // }
+
     }
 
     /**
