@@ -20,6 +20,7 @@ class OrdensPagamentoController extends Controller
                 JOIN royalties on royalties.id = royalties_ordem_pagamentos.idroyalties
                 GROUP BY royalties_ordem_pagamentos.idordempagamento
             ) as totalRoyaltie on totalRoyaltie.ropid = op.id
+            WHERE op.status != 1
 
         ');
         return Response::json($result);

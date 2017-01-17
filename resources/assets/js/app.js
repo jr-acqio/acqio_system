@@ -4,13 +4,13 @@ require('./bootstrap');
 
 
 import VueLocalStorage from 'vue-localstorage'
-import 	Orders from './components/Orders/Orders.vue'
+import 	Orders from './components/Orders/OrdersList.vue'
 Vue.use(VueLocalStorage)
 
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
 
-const app = new Vue({
+var app = new Vue({
 	localStorage: {
 		token: ''
 	},
