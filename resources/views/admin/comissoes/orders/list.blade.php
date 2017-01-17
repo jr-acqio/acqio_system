@@ -17,25 +17,13 @@
 
 @section('content')
 
-<div class="row wrapper border-bottom white-bg page-heading" style="margin: 1px 1px;">
-  <div class="col-lg-12">
-    <h2>Ordens de Pagamento - Comissões</h2>
-    <ol class="breadcrumb">
-      <li>
-        <a href="{{ url('/admin/dashboard') }}">Home</a>
-      </li>
-      <li>
-        <a href="{{ url('/admin/orders') }}">Orders</a>
-      </li>
-      <li class="active">
-        <strong>Ordens de Pagamento</strong>
-      </li>
-    </ol>
-  </div>
-</div>
 
 <div id="app">
-  <Orders></Orders>
+  <!-- <orders-list></orders-list> -->
+  <!-- route outlet -->
+  <!-- component matched by the route will render here -->
+  <!-- <router-view></router-view> -->
+  <router-view></router-view>
 </div>
 
 

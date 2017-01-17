@@ -3,13 +3,16 @@
 
 		<div class="row wrapper border-bottom white-bg page-heading" style="margin: 1px 1px;">
 		  <div class="col-lg-12">
-		    <h2>Ordens de Pagamento (Comissões)</h2>
+		    <h2>Ordens de Pagamento - Comissões</h2>
 		    <ol class="breadcrumb">
 		      <li>
 		        <a href="/admin/dashboard">Home</a>
 		      </li>
+		      <li>
+		        <a href="/admin/orders">Orders</a>
+		      </li>
 		      <li class="active">
-		        <a href="/admin/orders/list"><strong>Orders</strong></a>
+		        <strong>Ordens de Pagamento - Pagas</strong>
 		      </li>
 		    </ol>
 		  </div>
@@ -44,21 +47,16 @@
 				<div class="row">
 					<div class="col-lg-12">
 						<div class="form-group">
-	    					<router-link class="btn btn-default" to="/admin/orders/list/pay">Realizados <i class="glyphicon glyphicon-ok pg"></i></router-link>
-	  						
-								<router-link to="/admin/orders/list" class="btn btn-default">
-								Pendentes <i class="glyphicon glyphicon-remove rejected"></i>
-					    	</router-link>	  							
-
-					    	<router-link to="/bar" class="btn btn-default">
-								Rejeitados <i class="glyphicon glyphicon-remove rejected"></i>
+							<router-link to="/admin/orders/list" class="btn btn-default">
+								Pendentes <i class="fa fa-exclamation rejected"></i>
 					    	</router-link>
-						 </div>
+						</div>
+						
 					</div>					
 
 				</div>
 
-				
+				<router-view></router-view>
 				<div class="animated fadeInUp">
 					<div class="ibox">
 						<div class="ibox-content">
@@ -103,11 +101,8 @@
 																	<p v-else>Processando</p>
 																</td>
 																<td>
-																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top" @click.prevent="approvedOrder(order,orders.orders_fda)" v-if="order.status != 1">
-																		<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-																	</a>
-																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top" v-if="order.status != 1">
-																		<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+																	<a href="#" class="btn btn-default btn-xs" title="Pendenciar" data-toggle="tooltip" data-placement="top" v-if="order.status == 1" @click.prevent="neutrazileOrder(order,orders.orders_fda)">
+																		<i class="fa fa-reply" aria-hidden="true"></i>
 																	</a>
 																</td>
 
@@ -205,7 +200,7 @@
 		},
 		methods:{
 			fetchAllOrders(){
-					this.$http.get('/admin/orders').then((response) => {
+				this.$http.get('/admin/orders?type=pay').then((response) => {
 					this.orders.orders_fda = this.filterFda(response.data);
 					this.orders.orders_fr = this.filterFranq(response.data);
 					iziToast.show({
@@ -214,35 +209,24 @@
 			   				color: 'green', // blue, red, green, yellow,
 			   				position: 'topRight'
 			   			});
-					}, (response) => {
-						iziToast.show({
-							title: 'Error:',
-							message: 'Houve algum erro ao carregar as ordens de pagamento :(',
-				   				color: 'red', // blue, red, green, yellow,
-				   				position: 'topRight'
-				   			});
-					});	
-				
+				}, (response) => {
+					iziToast.show({
+						title: 'Error:',
+						message: 'Houve algum erro ao carregar as ordens de pagamento :(',
+			   				color: 'red', // blue, red, green, yellow,
+			   				position: 'topRight'
+			   			});
+				});
 			},
-			approvedOrder(order,list){
-					//Verificar se o status já é de aprovado.
-					if(order.status){
-						iziToast.show({
-							title: 'Error:',
-							message: 'Este pagamento já foi realizado!!',
-		   				color: 'red', // blue, red, green, yellow,
-		   				position: 'topRight'
-		   			});	
-						return false;
-					}
-					this.$http.put('/admin/orders/'+order.id, {params: {type: 'approvedOrder'} }).then(response => {
+			neutrazileOrder(order,list){
+					this.$http.put('/admin/orders/'+order.id, {params: {type: 'neutrazileOrder'} }).then(response => {
 						//Atualizar no cliente
 						let index = list.indexOf(order)
-						list[index]['status'] = 1
+						list[index]['status'] = 0
 						//Alert message success update
 						iziToast.show({
 							title: 'Updated Sucessfully:',
-							message: '#OrderID: '+order.id+'. Pagamento realizado!!',
+							message: '#OrderID: '+order.id+'. Alterado para Pendente!!',
 		   				color: 'green', // blue, red, green, yellow,
 		   				position: 'topRight'
 		   			});	
@@ -255,7 +239,7 @@
 			   			});
 					}
 				},
-			//Filters
+			
 			filterFranq(orders){
 				return _.filter(orders, function(o) {
 					return o.fdaid == null;

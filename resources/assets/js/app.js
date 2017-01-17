@@ -4,19 +4,39 @@ require('./bootstrap');
 
 
 import VueLocalStorage from 'vue-localstorage'
-import 	Orders from './components/Orders/OrdersList.vue'
+import 	OrdersList from './components/Orders/OrdersList.vue'
+import VueRouter from 'vue-router'
+import OrdersPay from './components/Orders/OrdersPay.vue'
 Vue.use(VueLocalStorage)
+Vue.use(VueRouter)
 
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
+
+
+const Foo = { template: '<div>foo</div>' }
+const Bar = { template: '<div>bar</div>' }
+
+
+const routes = [
+  { path: '/admin/orders/list/pay', component: OrdersPay },
+  { path: '/bar', component: Bar },
+  { path: '/admin/orders/list', component: OrdersList }
+]
+
+const router = new VueRouter({
+  routes,
+  mode: 'history'
+})
 
 var app = new Vue({
 	localStorage: {
 		token: ''
 	},
+	router,
 	el: '#app',
 	components:{
-		Orders,
+		OrdersList,
 	},
 	mounted(){
 
