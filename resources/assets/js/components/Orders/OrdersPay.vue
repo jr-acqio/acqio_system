@@ -50,6 +50,8 @@
 							<router-link to="/admin/orders/list" class="btn btn-default">
 								Pendentes <i class="fa fa-exclamation rejected"></i>
 					    	</router-link>
+
+					    	<button class="btn btn-success pull-right" @click.prevent="fetchAllOrders()">Atualizar <i class="fa fa-refresh"></i></button>
 						</div>
 						
 					</div>					
@@ -145,11 +147,8 @@
 																	<p v-else>Processando</p>
 																</td>
 																<td>
-																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top" @click.prevent="approvedOrder(order,orders.orders_fr)" v-if="order.status != 1">
-																		<i class="fa fa-thumbs-up" aria-hidden="true"></i>
-																	</a>
-																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top" v-if="order.status != 1">
-																		<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+																	<a href="#" class="btn btn-default btn-xs" title="Pendenciar" data-toggle="tooltip" data-placement="top" v-if="order.status == 1" @click.prevent="neutrazileOrder(order,orders.orders_fr)">
+																		<i class="fa fa-reply" aria-hidden="true"></i>
 																	</a>
 																</td>
 
@@ -207,14 +206,14 @@
 						title: 'Load Sucessfully',
 						message: 'Ordens de Pagamento carregadas com sucesso!!',
 			   				color: 'green', // blue, red, green, yellow,
-			   				position: 'topRight'
+			   				position: 'bottomLeft'
 			   			});
 				}, (response) => {
 					iziToast.show({
 						title: 'Error:',
 						message: 'Houve algum erro ao carregar as ordens de pagamento :(',
 			   				color: 'red', // blue, red, green, yellow,
-			   				position: 'topRight'
+			   				position: 'bottomLeft'
 			   			});
 				});
 			},
@@ -228,14 +227,14 @@
 							title: 'Updated Sucessfully:',
 							message: '#OrderID: '+order.id+'. Alterado para Pendente!!',
 		   				color: 'green', // blue, red, green, yellow,
-		   				position: 'topRight'
+		   				position: 'bottomLeft'
 		   			});	
 					}),(response) =>{
 						iziToast.show({
 							title: 'Error:',
 							message: 'Houve algum erro ao atualizar esta ordem de pagamento :(',
 			   				color: 'red', // blue, red, green, yellow,
-			   				position: 'topRight'
+			   				position: 'bottomLeft'
 			   			});
 					}
 				},

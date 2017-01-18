@@ -13,14 +13,8 @@ Vue.use(VueRouter)
 
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
 
-
-const Foo = { template: '<div>foo</div>' }
-const Bar = { template: '<div>bar</div>' }
-
-
 const routes = [
   { path: '/admin/orders/list/pay', component: OrdersPay },
-  { path: '/bar', component: Bar },
   { path: '/admin/orders/list', component: OrdersList }
 ]
 

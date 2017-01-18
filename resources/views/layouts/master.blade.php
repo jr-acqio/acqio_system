@@ -22,7 +22,9 @@
         </div>
         @endif
 
-        @yield('content')
+        <div id="app">
+          @yield('content')
+        </div>
 
       </div>
       @include('layouts.footer')

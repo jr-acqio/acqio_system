@@ -17,15 +17,9 @@
 
 @section('content')
 
-
-<div id="app">
-  <!-- <orders-list></orders-list> -->
-  <!-- route outlet -->
-  <!-- component matched by the route will render here -->
-  <!-- <router-view></router-view> -->
+<!-- <div id="app"> -->
   <router-view></router-view>
-</div>
-
+<!-- </div> -->
 
 @endsection
 
