@@ -41,27 +41,7 @@
 					</div>
 				</div>
 
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="form-group">
-	    					<router-link class="btn btn-default" to="/admin/orders/list/pay">
-	    						Realizados
-	    					</router-link>
-	  						
-								<router-link to="/admin/orders/list" class="btn btn-default">
-									Pendentes
-					    	</router-link>	  							
-
-					    	<router-link to="/admin/orders/list/rejected" class="btn btn-default">
-									Rejeitados
-					    	</router-link>
-
-
-					    	<button class="btn btn-primary pull-right" @click.prevent="fetchAllOrders()">Atualizar <i class="fa fa-refresh"></i></button>
-						 </div>
-					</div>					
-
-				</div>
+				<Buttons v-on:fetchAllOrders="fetchAllOrders()" :dad="'OrdersList'"></Buttons>
 
 				
 				<div class="animated fadeInUp">
@@ -190,6 +170,7 @@
 </template>
 <script>
 	import _ from 'lodash'
+	import Buttons from './ButtonsAction.vue'
 	export default{
 		data(){
 			return {
@@ -203,6 +184,9 @@
 				filterMonth: '',
 				filterTab: 1
 			}
+		},
+		components: {
+			Buttons
 		},
 		mounted(){
 			var self = this
