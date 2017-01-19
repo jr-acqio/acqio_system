@@ -17,9 +17,9 @@
 
 @section('content')
 
-<!-- <div id="app"> -->
+<div id="app">
   <router-view></router-view>
-<!-- </div> -->
+</div>
 
 @endsection
 

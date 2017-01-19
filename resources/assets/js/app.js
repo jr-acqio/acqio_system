@@ -6,7 +6,7 @@ require('./bootstrap');
 import VueLocalStorage from 'vue-localstorage'
 import 	OrdersList from './components/Orders/OrdersList.vue'
 import VueRouter from 'vue-router'
-import OrdersPay from './components/Orders/OrdersPay.vue'
+import OrderView from './components/Orders/OrderView.vue'
 Vue.use(VueLocalStorage)
 Vue.use(VueRouter)
 
@@ -14,8 +14,9 @@ Vue.use(VueRouter)
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
 
 const routes = [
-  { path: '/admin/orders/list/pay', component: OrdersPay },
-  { path: '/admin/orders/list', component: OrdersList }
+  { path: '/admin/orders/list', query: {} , name: 'orders-list' , component: OrdersList },
+  // { path: '/admin/orders/list', component: OrdersList },
+  { path: '/admin/orders/view-order/:orderid', component: OrderView }
 ]
 
 const router = new VueRouter({
@@ -30,7 +31,7 @@ var app = new Vue({
 	router,
 	el: '#app',
 	components:{
-		OrdersList,
+		OrdersList, OrderView
 	},
 	mounted(){
 

@@ -56,9 +56,9 @@ class OrdensPagamentoController extends Controller
         //
     }
 
-    public function show($id)
+    public function show(OrdemPagamento $orders)
     {
-        //
+        return response()->json($orders);
     }
 
     public function update(Request $request, OrdemPagamento $orders)
@@ -68,7 +68,7 @@ class OrdensPagamentoController extends Controller
             $orders->save();
             return response()->json(200);
         }
-        else if($request->params['type'] == 'neutrazileOrder'){
+        else if($request->params['type'] == 'neutralizeOrder'){
             $orders->status = 0;
             $orders->save();
             return response()->json(200);
@@ -89,4 +89,6 @@ class OrdensPagamentoController extends Controller
     {
         //
     }
+
+
 }

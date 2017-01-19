@@ -41,7 +41,7 @@
 					</div>
 				</div>
 
-				<buttons-list-view v-on:fetchAllOrders="fetchAllOrders()" :dad="'OrdersList'"></buttons-list-view>
+				<buttons-list-view v-on:fetchAllOrders="fetchAllOrders()"></buttons-list-view>
 
 				
 				<div class="animated fadeInUp">
@@ -88,11 +88,15 @@
 																	<p v-else>Processando</p>
 																</td>
 																<td>
+																	<a href="#" class="btn btn-default btn-xs" @click.prevent="viewOrder(order)"><i class="fa fa-eye"></i></a>
 																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top" @click.prevent="approvedOrder(order,orders.orders_fda)" v-if="order.status != 1">
 																		<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 																	</a>
 																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top" v-if="order.status != 1">
 																		<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+																	</a>
+																	<a href="#" class="btn btn-default btn-xs" title="Pendenciar" data-toggle="tooltip" data-placement="top" v-if="order.status == 1" @click.prevent="neutralizeOrder(order,orders.orders_fda)">
+																		<i class="fa fa-reply" aria-hidden="true"></i>
 																	</a>
 																</td>
 
@@ -140,6 +144,9 @@
 																	</a>
 																	<a href="#" class="btn btn-danger btn-xs" title="Não pago" data-toggle="tooltip" data-placement="top" v-if="order.status != 1">
 																		<i class="fa fa-thumbs-down" aria-hidden="true"></i>
+																	</a>
+																	<a href="#" class="btn btn-default btn-xs" title="Pendenciar" data-toggle="tooltip" data-placement="top" v-if="order.status == 1" @click.prevent="neutralizeOrder(order,orders.orders_fr)">
+																		<i class="fa fa-reply" aria-hidden="true"></i>
 																	</a>
 																</td>
 
@@ -192,17 +199,19 @@
 			var self = this
 			setTimeout(function(){ self.fetchAllOrders(); }, 1000);
 		},
+		watch: {
+    '$route' (to, from) {
+      // react to route changes...
+      // console.log(to)
+      this.fetchAllOrders()
+    }
+  },
 		methods:{
 			fetchAllOrders(){
-					this.$http.get('/admin/orders').then((response) => {
+				if(this.$route.query.type == 'pay'){
+					this.$http.get('/admin/orders?type=pay').then((response) => {
 					this.orders.orders_fda = this.filterFda(response.data);
 					this.orders.orders_fr = this.filterFranq(response.data);
-					// iziToast.show({
-					// 	title: 'Load Sucessfully',
-					// 	message: 'Ordens de Pagamento carregadas com sucesso!!',
-			  //  				color: 'green', // blue, red, green, yellow,
-			  //  				position: 'bottomLeft'
-			  //  			});
 					}, (response) => {
 						iziToast.show({
 							title: 'Error:',
@@ -210,8 +219,31 @@
 				   				color: 'red', // blue, red, green, yellow,
 				   				position: 'bottomLeft'
 				   			});
-					});	
+					});
+				}else{
+					this.$http.get('/admin/orders').then((response) => {
+					this.orders.orders_fda = this.filterFda(response.data);
+					this.orders.orders_fr = this.filterFranq(response.data);
+					}, (response) => {
+						iziToast.show({
+							title: 'Error:',
+							message: 'Houve algum erro ao carregar as ordens de pagamento :(',
+				   				color: 'red', // blue, red, green, yellow,
+				   				position: 'bottomLeft'
+				   			});
+					});
+				}
+					// iziToast.show({
+					// 	title: 'Load Sucessfully',
+					// 	message: 'Ordens de Pagamento carregadas com sucesso!!',
+			  //  				color: 'green', // blue, red, green, yellow,
+			  //  				position: 'bottomLeft'
+			  //  			});	
 				
+			},
+			viewOrder(order){
+				console.log(this.$router.push({ path: '/admin/orders/view-order/'+order.id , params: { orderid: order.id } } ));
+				// this.router.push('/admin/orders/view-order/'+order.id);
 			},
 			approvedOrder(order,list){
 					//Verificar se o status já é de aprovado.
@@ -232,6 +264,27 @@
 						iziToast.show({
 							title: 'Updated Sucessfully:',
 							message: '#OrderID: '+order.id+'. Pagamento realizado!!',
+		   				color: 'green', // blue, red, green, yellow,
+		   				position: 'bottomLeft'
+		   			});	
+					}),(response) =>{
+						iziToast.show({
+							title: 'Error:',
+							message: 'Houve algum erro ao atualizar esta ordem de pagamento :(',
+			   				color: 'red', // blue, red, green, yellow,
+			   				position: 'bottomLeft'
+			   			});
+					}
+				},
+				neutralizeOrder(order,list){
+					this.$http.put('/admin/orders/'+order.id, {params: {type: 'neutralizeOrder'} }).then(response => {
+						//Atualizar no cliente
+						let index = list.indexOf(order)
+						list[index]['status'] = 0
+						//Alert message success update
+						iziToast.show({
+							title: 'Updated Sucessfully:',
+							message: '#OrderID: '+order.id+'. Alterado para Pendente!!',
 		   				color: 'green', // blue, red, green, yellow,
 		   				position: 'bottomLeft'
 		   			});	
