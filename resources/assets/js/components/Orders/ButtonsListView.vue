@@ -3,15 +3,15 @@
 		<div class="row">
 					<div class="col-lg-12">
 						<div class="form-group">
-	    					<router-link class="btn btn-default" to="/admin/orders/list/pay" v-if="dad != 'OrdersPay'">
+	    					<router-link class="btn btn-success" to="/admin/orders/list/pay" v-if="dad != 'OrdersPay'">
 	    						Realizados
 	    					</router-link>
 	  						
-								<router-link to="/admin/orders/list" class="btn btn-default" v-if="dad != 'OrdersList'">
+								<router-link class="btn btn-default" to="/admin/orders/list" v-if="dad != 'OrdersList'">
 									Pendentes
 					    	</router-link>	  							
 
-					    	<router-link to="/admin/orders/list/rejected" class="btn btn-default">
+					    	<router-link class="btn btn-danger" to="/admin/orders/list/rejected" >
 									Rejeitados
 					    	</router-link>
 

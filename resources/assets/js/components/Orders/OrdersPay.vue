@@ -8,11 +8,8 @@
 		      <li>
 		        <a href="/admin/dashboard">Home</a>
 		      </li>
-		      <li>
-		        <a href="/admin/orders">Orders</a>
-		      </li>
 		      <li class="active">
-		        <strong>Ordens de Pagamento - Pagas</strong>
+		        <a href="/admin/orders/list/pay"><strong>Orders</strong></a>
 		      </li>
 		    </ol>
 		  </div>
@@ -44,7 +41,7 @@
 					</div>
 				</div>
 
-				<Buttons v-on:fetchAllOrders="fetchAllOrders()" :dad="'OrdersPay'"></Buttons>
+				<buttons-list-view v-on:fetchAllOrders="fetchAllOrders()" :dad="'OrdersPay'"></buttons-list-view>
 
 				<router-view></router-view>
 				<div class="animated fadeInUp">
@@ -107,11 +104,11 @@
 															<tr>
 																<th>#</th>
 																<th><a href="#" @click.prevent="sortFunction('cliente')">Franqueado</a></th>
-																<th>Relatório PDF</th>
-																<th>Total Vendas</th>
+																<th><a href="#" @click.prevent="sortFunction('relatorio_pdf')">Relatório PDF</a></th>
+																<th><a href="#" @click.prevent="sortFunction('totalVendas')">Total Vendas</a></th>
 																<!-- <th>Total Comissão</th> -->
-																<th>Royalties</th>
-																<th>Liq. à pagar</th>
+																<th><a href="#" @click.prevent="sortFunction('totalRoyaltie')">Royalties</a></th>
+																<th><a href="#" @click.prevent="sortFunction('valor')">Liq. à pagar</a></th>
 																<th>Status</th>
 																<th>Ações</th>
 															</tr>
@@ -167,7 +164,7 @@
 </template>
 <script>
 	import _ from 'lodash'
-	import Buttons from './ButtonsAction.vue'
+	import ButtonsListView from './ButtonsListView.vue'
 	export default{
 		data(){
 			return {
@@ -183,7 +180,7 @@
 			}
 		},
 		components:{
-			Buttons
+			ButtonsListView
 		},
 		mounted(){
 			var self = this
@@ -194,12 +191,12 @@
 				this.$http.get('/admin/orders?type=pay').then((response) => {
 					this.orders.orders_fda = this.filterFda(response.data);
 					this.orders.orders_fr = this.filterFranq(response.data);
-					iziToast.show({
-						title: 'Load Sucessfully',
-						message: 'Ordens de Pagamento carregadas com sucesso!!',
-			   				color: 'green', // blue, red, green, yellow,
-			   				position: 'bottomLeft'
-			   			});
+					// iziToast.show({
+					// 	title: 'Load Sucessfully',
+					// 	message: 'Ordens de Pagamento carregadas com sucesso!!',
+			  //  				color: 'green', // blue, red, green, yellow,
+			  //  				position: 'bottomLeft'
+			  //  			});
 				}, (response) => {
 					iziToast.show({
 						title: 'Error:',
