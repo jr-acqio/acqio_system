@@ -107,33 +107,18 @@
 
 			<script>
 				export default{
+					props: ['order_prop'],
 					data(){
 						return {
 							order: []
 						}
 					},
 					mounted(){
-						this.fetchOrder();
+						this.order = JSON.parse(this.order_prop)
 					},
 					methods: {
-						fetchOrder(){
-							var self = this
-							this.$http.get('/admin/orders/'+self.$route.params.orderid).then(response => {
-								this.order = response.data;
-								iziToast.show({
-									title: 'Updated Sucessfully:',
-									message: '#OrderID: '+self.$route.params.orderid+'. carregado!!',
-			   				color: 'green', // blue, red, green, yellow,
-			   				position: 'bottomLeft'
-			   			});	
-							}),(response) =>{
-								iziToast.show({
-									title: 'Error:',
-									message: 'Houve algum erro ao atualizar esta ordem de pagamento :(',
-				   				color: 'red', // blue, red, green, yellow,
-				   				position: 'bottomLeft'
-				   			});
-				 }
-				}}}
-		</script>
-		<style scoped=""></style>
+						
+					}
+				}
+			</script>
+			<style scoped=""></style>

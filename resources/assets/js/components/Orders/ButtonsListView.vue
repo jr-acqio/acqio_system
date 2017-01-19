@@ -4,24 +4,26 @@
 					<div class="col-lg-12">
 						<div class="form-group">
 	    					<router-link class="btn btn-success" :to="{ name: 'orders-list', query: { type: 'pay' }}" v-if="this.$route.query.type != 'pay'">
-	    						Realizados
+	    						<b>Realizados</b>
 	    					</router-link>
 	  						
 								<router-link class="btn btn-default" to="/admin/orders/list" v-if="$route.query.type =='pay'">
-									Pendentes
+									<b>Pendentes</b>
 					    	</router-link>	  							
 
 					    	<router-link class="btn btn-danger" to="/admin/orders/list/rejected" >
-									Rejeitados
+									<b>Rejeitados</b>
 					    	</router-link>
 
 
-					    	<button class="btn btn-primary pull-right" @click.prevent="atualizar()">Atualizar <i class="fa fa-refresh"></i></button>
+					    	<button class="btn btn-primary ladda-button ladda-button-demo pull-right" data-style="expand-right" @click.prevent="atualizar()"><b>Atualizar</b></button>
 
-					    	<div class="col-sm-3">
-                                    <h4>expand-right</h4>
-                                    <button class="ladda-button btn btn-primary" data-style="expand-right"><span class="ladda-label">Submit</span><span class="ladda-spinner"></span></button>
-                                </div>
+                <div class="sk-spinner sk-spinner-three-bounce" v-show="isloading">
+                    <div class="sk-bounce1"></div>
+                    <div class="sk-bounce2"></div>
+                    <div class="sk-bounce3"></div>
+                </div>
+
 						 </div>
 					</div>					
 
@@ -31,31 +33,26 @@
 
 <script>
 export default{
-	// props:{
-	// 	query:{
-	// 		required: true,
-	// 		type: Object
-	// 	}
-	// },
 	data(){
-		return{
-			// query: ''
+		return {
+			isloading: false
 		}
 	},
 	methods: {
 		atualizar(){
-			console.log(this.$route.query)
-
-			this.$emit('fetchAllOrders');
+			this.isloading = true
+			var self = this;
+			var l = Ladda.create( document.querySelector( '.ladda-button-demo' ) );	
+			l.start();
+			setTimeout(function(){
+				self.$emit('fetchAllOrders');	
+				l.stop();
+				self.isloading = false
+			},1000)
 		}
 	},
 	mounted(){
-		var l = $( '.ladda-button-demo' ).ladda();
-		l.ladda( 'start' );
 
-		setTimeout(function()
-              l.ladda('stop');
-          },2000)
 	},
 	watch: {
 

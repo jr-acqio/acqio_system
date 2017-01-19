@@ -14,9 +14,8 @@ Vue.use(VueRouter)
 Vue.http.headers.common['X-CSRF-TOKEN'] = Laravel.csrfToken;
 
 const routes = [
-  { path: '/admin/orders/list', query: {} , name: 'orders-list' , component: OrdersList },
-  // { path: '/admin/orders/list', component: OrdersList },
-  { path: '/admin/orders/view-order/:orderid', component: OrderView }
+  { path: '/admin/orders/list', query: {} , name: 'orders-list' , component: OrdersList }
+  // { path: 'admin/orders/:id', name:'order-view', component: OrderView }
 ]
 
 const router = new VueRouter({

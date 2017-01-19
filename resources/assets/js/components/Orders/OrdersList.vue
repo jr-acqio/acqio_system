@@ -88,7 +88,7 @@
 																	<p v-else>Processando</p>
 																</td>
 																<td>
-																	<a href="#" class="btn btn-default btn-xs" @click.prevent="viewOrder(order)"><i class="fa fa-eye"></i></a>
+																	<a :href="'/admin/orders/'+order.id" class="btn btn-default btn-xs"><i class="fa fa-eye"></i></a>
 																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top" @click.prevent="approvedOrder(order,orders.orders_fda)" v-if="order.status != 1">
 																		<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 																	</a>
@@ -210,8 +210,8 @@
 			fetchAllOrders(){
 				if(this.$route.query.type == 'pay'){
 					this.$http.get('/admin/orders?type=pay').then((response) => {
-					this.orders.orders_fda = this.filterFda(response.data);
-					this.orders.orders_fr = this.filterFranq(response.data);
+					this.orders.orders_fda = _.orderBy(this.filterFda(response.data),['valor'],['desc']);
+					this.orders.orders_fr = _.orderBy(this.filterFranq(response.data),['valor'],['desc']);
 					}, (response) => {
 						iziToast.show({
 							title: 'Error:',
@@ -222,8 +222,8 @@
 					});
 				}else{
 					this.$http.get('/admin/orders').then((response) => {
-					this.orders.orders_fda = this.filterFda(response.data);
-					this.orders.orders_fr = this.filterFranq(response.data);
+					this.orders.orders_fda = _.orderBy(this.filterFda(response.data),['valor'],['desc']);
+					this.orders.orders_fr = _.orderBy(this.filterFranq(response.data),['valor'],['desc']);
 					}, (response) => {
 						iziToast.show({
 							title: 'Error:',
@@ -233,17 +233,7 @@
 				   			});
 					});
 				}
-					// iziToast.show({
-					// 	title: 'Load Sucessfully',
-					// 	message: 'Ordens de Pagamento carregadas com sucesso!!',
-			  //  				color: 'green', // blue, red, green, yellow,
-			  //  				position: 'bottomLeft'
-			  //  			});	
 				
-			},
-			viewOrder(order){
-				console.log(this.$router.push({ path: '/admin/orders/view-order/'+order.id , params: { orderid: order.id } } ));
-				// this.router.push('/admin/orders/view-order/'+order.id);
 			},
 			approvedOrder(order,list){
 					//Verificar se o status já é de aprovado.

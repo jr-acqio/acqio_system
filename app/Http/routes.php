@@ -175,7 +175,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'],function(){
     Route::get('/orders/list',
       ['as'=>'admin.orders.list.index','uses'=>'OrdensPagamentoController@view']);
     Route::resource('orders','OrdensPagamentoController',['except'=>['create','edit']]);
-
     //Acessar os pdfs 
     Route::get('/orders/{id}/{filename}', function ($id,$filename)
     {

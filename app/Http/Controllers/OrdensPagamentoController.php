@@ -58,7 +58,10 @@ class OrdensPagamentoController extends Controller
 
     public function show(OrdemPagamento $orders)
     {
-        return response()->json($orders);
+        //$result = DB::select();
+
+        return view('admin.comissoes.orders.show')->with(['order'=> $orders]);
+        //return response()->json($orders);
     }
 
     public function update(Request $request, OrdemPagamento $orders)
