@@ -43,7 +43,7 @@
 								<h4>Pagamento No. <span class="text-navy">{{ order.id }}</span></h4>
 								<span>Para:</span>
 								<address>
-									<strong></strong><br>
+									<strong>{{ order.cliente }}</strong><br>
 									{{ order.endereco }}<br>
 									{{ order.cidade }}<br>
 									<abbr title="Phone">Email:</abbr> {{ order.email }}
@@ -56,27 +56,31 @@
 						</div>
 
 						<div class="table-responsive m-t">
-							<table class="table">
+							<table class="table invoice-table table-hover">
 								<thead>
 									<tr>
+										<th>Data Cadastro</th>
+										<th>Data Aprovação</th>
 										<th>Clientes</th>
 										<th>Quantidade</th>
 										<th>Modelos</th>
 										<!-- <th>Tax</th> -->
-										<th>Total Price</th>
+										<th>Valor Total</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr v-for="item in order.vendas">
+										<td>{{ item.data_cadastro }}</td>
+										<td>{{ item.data_aprovacao }}</td>
 										<td><div><strong>{{ item.nome_cliente.toUpperCase() }}</strong></div>
 											<small v-if="item.uf != null && item.cidade != null">{{ item.uf + ' - ' + item.cidade }}</small>
 										</td>
-										<td>1</td>
-										<td v-for="produto in item.produtos">
-											{{ produto.descricao }},
+										<td>{{ item.produtos.length }}</td>
+										<td>
+											<span v-for="produto in item.produtos">{{ produto.descricao }} </span>
 										</td>
 										<!-- <td>$5.98</td> -->
-										<td>$31,98</td>
+										<td>R$ {{ sum(item.produtos) }}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -85,16 +89,16 @@
 						<table class="table invoice-total">
 							<tbody>
 								<tr>
-									<td><strong>Sub Total :</strong></td>
-									<td>$1026.00</td>
+									<td><strong>Sub Total (Comissões) :</strong></td>
+									<td>R$ {{  }}</td>
 								</tr>
 								<tr>
-									<td><strong>TAX :</strong></td>
-									<td>$235.98</td>
+									<td><strong>Sub Total (Royalties) :</strong></td>
+									<td>R$ {{ order.totalRoyaltie }}</td>
 								</tr>
 								<tr>
 									<td><strong>TOTAL :</strong></td>
-									<td>R$ {{ order.valor.formatMoney(2,',','.') }}</td>
+									<td>R$ {{ order.valor }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -126,14 +130,23 @@
 			this.order = JSON.parse(this.order_prop)
 			var startDate = moment([2016, this.order.mes_ref-1]).add(+1,"month");
 			this.startDate = new Date(2016, this.order.mes_ref, 1)
-			alert(startDate + 'oiii')
 			var endDate = moment(startDate, 'YYYY-MM-DD').endOf('month');
 			this.endDate= endDate;
 		    // console.log(startDate.toObject().date +'/'+ startDate.toObject().months +'/'+ startDate.toObject().years);
     		// console.log(endDate.toObject().date +'/'+ endDate.toObject().months +'/'+ endDate.toObject().years);
 		},
 		methods: {
-
+			sum( obj ) {
+			  var sum = 0;
+			  for(var i = 0; i< obj.length ; i++){
+			  	if(this.order.fdaid == null){
+			  		sum += parseFloat(obj[i].tx_venda)
+			  	}else{
+			  		sum += parseFloat(obj[i].tx_install)
+			  	}
+			  }
+			  return sum;
+			}	
 		}
 	}
 </script>
