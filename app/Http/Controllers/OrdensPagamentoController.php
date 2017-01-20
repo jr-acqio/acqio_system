@@ -58,7 +58,7 @@ class OrdensPagamentoController extends Controller
 
     public function show(OrdemPagamento $orders)
     {
-        $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url, null as vendas ,null as produtos from ordens_pagamento as op 
+        $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, COALESCE(fr.cidade, fd.cidade) as cidade, COALESCE(fr.endereco,fd.endereco) as endereco, COALESCE(fr.email,fd.email) as email ,op.*, copTotal.totalVendas as totalVendas, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url, null as vendas ,null as produtos from ordens_pagamento as op 
             LEFT JOIN fdas as fd on op.fdaid = fd.id 
             LEFT JOIN franqueados as fr on op.franqueadoid = fr.id 
             JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as copid, COUNT(*) as totalVendas FROM comissoes_ordens_pagamento GROUP BY comissoes_ordens_pagamento.idordempagamento) as copTotal on copTotal.copid = op.id
@@ -75,16 +75,16 @@ class OrdensPagamentoController extends Controller
             WHERE cop.idordempagamento = '.$orders->id.'
             '
         );
-dd($vendas);
+// dd($vendas);
         foreach ($vendas as $key => $value) {
-            # code...
+            // dd($value);
+            $produtos = DB::SELECT('SELECT p.descricao, p.tx_install, p.tx_venda from comissoes_produto as cp
+                JOIN produtos as p on p.id = cp.produtoid
+                WHERE cp.comissaoid = '.$value->id.'
+            ');
+           $value->produtos = $produtos;
         }
-        $produtos = DB::SELECT('SELECT p.descricao, p.tx_install, p.tx_venda from comissoes_produto as cp
-            JOIN produtos as p on p.id = cp.produtoid
-            JOIN comissoes_ordens_pagamento as cop on cop.idcomissao = cp.comissaoid
-            WHERE cop.idordempagamento = '.$orders->id.'
-        ');
-        dd($produtos);
+        
         // $obj = (object) array_merge((array) $result[0]->vendas, (array) $vendas);
         $result[0]->vendas = $vendas;
         // dd($result[0]);

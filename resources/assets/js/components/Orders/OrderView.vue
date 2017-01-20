@@ -40,14 +40,13 @@
 							</div>
 
 							<div class="col-sm-6 text-right">
-								<h4>Invoice No.</h4>
-								<h4 class="text-navy">INV-{{ $route.params.orderid }}</h4>
+								<h4>Pagamento No. <span class="text-navy">{{ order.id }}</span></h4>
 								<span>Para:</span>
 								<address>
 									<strong></strong><br>
-									112 Street Avenu, 1080<br>
-									Miami, CT 445611<br>
-									<abbr title="Phone">P:</abbr> (120) 9000-4321
+									{{ order.endereco }}<br>
+									{{ order.cidade }}<br>
+									<abbr title="Phone">Email:</abbr> {{ order.email }}
 								</address>
 								<p>
 									<span><strong>Invoice Date:</strong> Marh 18, 2014</span><br>
@@ -57,24 +56,26 @@
 						</div>
 
 						<div class="table-responsive m-t">
-							<table class="table invoice-table">
+							<table class="table">
 								<thead>
 									<tr>
 										<th>Clientes</th>
-										<th>Quantity</th>
-										<th>Unit Price</th>
-										<th>Tax</th>
+										<th>Quantidade</th>
+										<th>Modelos</th>
+										<!-- <th>Tax</th> -->
 										<th>Total Price</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr v-for="item in order.vendas">
 										<td><div><strong>{{ item.nome_cliente.toUpperCase() }}</strong></div>
-											<small>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small>
+											<small v-if="item.uf != null && item.cidade != null">{{ item.uf + ' - ' + item.cidade }}</small>
 										</td>
 										<td>1</td>
-										<td>$26.00</td>
-										<td>$5.98</td>
+										<td v-for="produto in item.produtos">
+											{{ produto.descricao }},
+										</td>
+										<!-- <td>$5.98</td> -->
 										<td>$31,98</td>
 									</tr>
 								</tbody>
@@ -121,11 +122,6 @@
 		},
 		mounted(){
 			this.order = JSON.parse(this.order_prop)
-			for (var i = 0; i < this.order[0].vendas.length; i++) {
-				console.log(this.order[0].vendas[i].nome_cliente)
-				alert(this.order[0].vendas[i].nome_cliente)
-			}
-			console.log(Object.keys(this.order.vendas).length)
 		},
 		methods: {
 
