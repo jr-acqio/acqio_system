@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-	Pagamento - {{ $order->id }}
+	Pagamento - {{ $order['id'] }}
 @endsection
 @push('links')
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
