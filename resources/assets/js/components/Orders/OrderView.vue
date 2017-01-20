@@ -122,6 +122,12 @@
 		},
 		mounted(){
 			this.order = JSON.parse(this.order_prop)
+			var startDate = moment([2016, this.order.mes_ref]);
+			alert(startDate)
+			var endDate = moment(startDate, 'YYYY-MM-DD').endOf('month');
+		    console.log(startDate.toObject().date +'/'+ startDate.toObject().months +'/'+ startDate.toObject().years);
+    		console.log(endDate.toObject().date +'/'+ endDate.toObject().months +'/'+ endDate.toObject().years);
+			alert(startDate)
 		},
 		methods: {
 

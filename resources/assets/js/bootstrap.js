@@ -11,6 +11,8 @@ window.$ = window.jQuery = require('jquery');
 // require('bootstrap-sass');
 window.iziToast = require('izitoast');
 require('sweetalert');
+window.moment = require('moment');
+moment.locale('pt-br');
 window.Ladda = require('ladda');
 
 /**
