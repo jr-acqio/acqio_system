@@ -49,8 +49,8 @@
 									<abbr title="Phone">Email:</abbr> {{ order.email }}
 								</address>
 								<p>
-									<span><strong>Invoice Date:</strong> Marh 18, 2014</span><br>
-									<span><strong>Due Date:</strong> March 24, 2014</span>
+									<span><strong>Invoice Date:</strong> {{ startDate }}</span><br>
+									<span><strong>Due Date:</strong> {{ endDate }}</span>
 								</p>
 							</div>
 						</div>
@@ -94,7 +94,7 @@
 								</tr>
 								<tr>
 									<td><strong>TOTAL :</strong></td>
-									<td>$1261.98</td>
+									<td>R$ {{ order.valor.formatMoney(2,',','.') }}</td>
 								</tr>
 							</tbody>
 						</table>
@@ -117,17 +117,20 @@
 		props: ['order_prop'],
 		data(){
 			return {
-				order: ''
+				order: '',
+				startDate: '',
+				endDate: ''
 			}
 		},
 		mounted(){
 			this.order = JSON.parse(this.order_prop)
-			var startDate = moment([2016, this.order.mes_ref]);
-			alert(startDate)
+			var startDate = moment([2016, this.order.mes_ref-1]).add(+1,"month");
+			this.startDate = new Date(2016, this.order.mes_ref, 1)
+			alert(startDate + 'oiii')
 			var endDate = moment(startDate, 'YYYY-MM-DD').endOf('month');
-		    console.log(startDate.toObject().date +'/'+ startDate.toObject().months +'/'+ startDate.toObject().years);
-    		console.log(endDate.toObject().date +'/'+ endDate.toObject().months +'/'+ endDate.toObject().years);
-			alert(startDate)
+			this.endDate= endDate;
+		    // console.log(startDate.toObject().date +'/'+ startDate.toObject().months +'/'+ startDate.toObject().years);
+    		// console.log(endDate.toObject().date +'/'+ endDate.toObject().months +'/'+ endDate.toObject().years);
 		},
 		methods: {
 
