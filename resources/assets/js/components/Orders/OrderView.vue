@@ -1,25 +1,25 @@
 <template>
 	<div>
 		<div class="row wrapper border-bottom white-bg page-heading">
-			<div class="col-lg-8">
-				<h2>Pagamento - {{ order.id }}</h2>
+			<div class="col-lg-6">
+				<h2>Pagamento</h2>
 				<ol class="breadcrumb">
 					<li>
 						<a href="/">Home</a>
 					</li>
 					<li>
-						Other Pages
+						<a href="/admin/orders/list">Lista de Pagamentos</a>
 					</li>
 					<li class="active">
-						<strong></strong>
+						<strong>Pagamento - {{ order.id }}</strong>
 					</li>
 				</ol>
 			</div>
-			<div class="col-lg-4">
+			<div class="col-lg-6">
 				<div class="title-action">
 					<a href="#" class="btn btn-white"><i class="fa fa-pencil"></i> Editar </a>
 					<a href="#" class="btn btn-white"><i class="fa fa-check "></i> Salvar </a>
-					<a href="#" target="_blank" class="btn btn-primary"><i class="fa fa-print"></i> Imprimir Resumo </a>
+					<a target="_blank" :href="'/admin/orders/'+order.id+'/'+baseName(order.relatorio_pdf)" class="btn btn-primary"><i class="fa fa-eye"></i> Visualizar Relatório </a>
 				</div>
 			</div>
 		</div>
@@ -55,8 +55,8 @@
 									<abbr title="Phone">Email:</abbr> {{ order.franqueado.email }}
 								</address>
 								<p>
-									<span><strong>Invoice Date:</strong> {{ startDate }}</span><br>
-									<span><strong>Due Date:</strong> {{ endDate }}</span>
+									<span><strong>Data inicial:</strong> {{ startDate }}</span><br>
+									<span><strong>Data final:</strong> {{ endDate }}</span>
 								</p>
 							</div>
 						</div>
@@ -98,30 +98,73 @@
 								</tbody>
 							</table>
 						</div><!-- /table-responsive -->
+						
 
-						<table class="table invoice-total">
-							<tbody>
-								<tr>
-									<td><strong>Sub Total (Comissões) :</strong></td>
-									<td>R$ {{ totalLiq }}</td>
-								</tr>
-								<tr v-if="totalRoyaltie > 0">
-									<td><strong>Sub Total (Royalties) :</strong></td>
-									<td style="color:red;">- R$ {{ totalRoyaltie }}</td>
-								</tr>
-								<tr>
-									<td><strong>TOTAL :</strong></td>
-									<td>R$ {{ order.valor }}</td>
-								</tr>
-							</tbody>
-						</table>
-						<div class="text-right">
-							<button class="btn btn-primary"><i class="fa fa-dollar"></i> Make A Payment</button>
+						<div class="row">							
+							<div class="col-lg-6">
+								<a v-if="listDebitos == false" @click="listDebitos = true" class="btn btn-default">Exibir Débitos
+									<i class="fa fa-plus"></i>
+								</a>
+								<a v-else="" @click="listDebitos = false" class="btn btn-default">
+									Esconder Débitos 
+									<i class="fa fa-minus"></i>
+								</a>
+								<br><br>
+								<!-- Table Descontos -->
+								<table class="table table-hover" v-if="listDebitos == true">
+									<thead>
+										<!-- <th>Id</th> -->
+										<th>Data Vencimento</th>
+										<th>Valor</th>
+										<th>Cheques Devolv.</th>
+										<th>Franquia/Localização</th>
+									</thead>
+									<tbody>
+										<tr v-for="royaltie in order.royalties">
+											<!-- <td>{{ royaltie.id }}</td> -->
+											<td>{{ royaltie.data_vencimento }}</td>
+											<td>{{ royaltie.valor_original }}</td>
+											<td>{{ royaltie.cheques_devolvidos }}</td>
+											<td>{{ royaltie.franquia_loc }}</td>
+										</tr>
+									</tbody>
+								</table>
+
+							</div>
+							<div class="col-lg-6">
+								<table class="table invoice-total">
+									<tbody>
+										<tr>
+											<td><strong>Sub Total (Comissões) :</strong></td>
+											<td>R$ {{ totalLiq }}</td>
+										</tr>
+										<tr v-if="totalRoyaltie > 0">
+											<td>
+												<strong>Sub Total (Royalties) :</strong>
+											</td>
+											<td style="color:red;">- R$ {{ totalRoyaltie }}</td>
+										</tr>
+										<tr>
+											<td><strong>TOTAL :</strong></td>
+											<td>R$ {{ order.valor }}</td>
+										</tr>
+									</tbody>
+								</table>
+
+
+
+								<div class="text-right">
+									<button v-if="order.status != 1" class="btn btn-primary" @click.prevent="approvedOrder(order)"><i class="fa fa-dollar"></i> Pagamento Realizado</button>
+
+									<button v-else="" class="btn btn-default" @click.prevent="neutralizeOrder(order)"><i class="fa fa-reply"></i> Pendenciar Pagamento</button>
+								</div>
+							</div>	
 						</div>
+						
 
-						<div class="well m-t"><strong>Comments </strong>
-
-							<!-- {{ sum( order.valor , 'valor_original' ) }} -->
+						<div class="well m-t"><strong>Situação: </strong>
+							<span v-if="order.status == 1" style="color:green"><strong>Pago <i class="fa fa-check"></i></strong></span>
+							<span v-else="" style="color:red"><strong>Pagamento Pendente!!</strong></span>
 						</div>
 					</div>
 				</div>
@@ -131,6 +174,7 @@
 </template>
 
 <script>
+	import _ from 'lodash'
 	export default{
 		props: ['order_prop'],
 		data(){
@@ -139,7 +183,9 @@
 				startDate: '',
 				endDate: '',
 				totalRoyaltie: '',
-				totalLiq: ''
+				totalLiq: '',
+
+				listDebitos: false
 			}
 		},
 		mounted(){
@@ -172,6 +218,39 @@
 					}
 				}
 				return sum;
+			},
+			baseName(str)
+			{
+				var base = new String(str).substring(_.lastIndexOf(str,'/') + 1); 
+				return base;
+			},
+			approvedOrder(order){
+				this.$http.put('/admin/orders/'+order.id, {params: {type: 'approvedOrder'} }).then(response => {
+					order.status = 1
+					swal("Feito!", "Pagamento de comissão realizado!", "success")
+				}),(response) =>{
+					iziToast.show({
+						title: 'Error:',
+						message: 'Houve algum erro ao atualizar esta ordem de pagamento :(',
+		   				color: 'red', // blue, red, green, yellow,
+		   				position: 'bottomLeft'
+		   			});
+				}
+			},
+			neutralizeOrder(order){
+				this.$http.put('/admin/orders/'+order.id, {params: {type: 'neutralizeOrder'} }).then(response => {
+					//Atualizar no cliente
+					order.status = 0
+					//Alert message success update
+					swal("Feito!", "Pagamento de comissão pendenciado!", "success")
+				}),(response) =>{
+					iziToast.show({
+						title: 'Error:',
+						message: 'Houve algum erro ao atualizar esta ordem de pagamento :(',
+		   				color: 'red', // blue, red, green, yellow,
+		   				position: 'bottomLeft'
+		   			});
+				}
 			}
 		}
 	}
