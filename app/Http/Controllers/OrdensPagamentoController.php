@@ -58,40 +58,13 @@ class OrdensPagamentoController extends Controller
 
     public function show(OrdemPagamento $orders)
     {
-        $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, COALESCE(fr.cidade, fd.cidade) as cidade, COALESCE(fr.endereco,fd.endereco) as endereco, COALESCE(fr.email,fd.email) as email ,op.*, copTotal.totalVendas as totalVendas, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url, null as vendas ,null as produtos from ordens_pagamento as op 
-            LEFT JOIN fdas as fd on op.fdaid = fd.id 
-            LEFT JOIN franqueados as fr on op.franqueadoid = fr.id 
-            JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as copid, COUNT(*) as totalVendas FROM comissoes_ordens_pagamento GROUP BY comissoes_ordens_pagamento.idordempagamento) as copTotal on copTotal.copid = op.id
-            LEFT JOIN (SELECT royalties_ordem_pagamentos.idordempagamento as ropid, SUM(royalties.valor_original + royalties.cheques_devolvidos) as vRoyaltie FROM royalties_ordem_pagamentos
-                JOIN royalties on royalties.id = royalties_ordem_pagamentos.idroyalties
-                GROUP BY royalties_ordem_pagamentos.idordempagamento
-            ) as totalRoyaltie on totalRoyaltie.ropid = op.id
-            WHERE op.id = '.$orders->id.'
-        ');
-        
-        $vendas = DB::select(
-            'SELECT c.*, null as produtos FROM comissoes as c
-            JOIN comissoes_ordens_pagamento as cop on cop.idcomissao = c.id
-            WHERE cop.idordempagamento = '.$orders->id.'
-            '
-        );
-// dd($vendas);
-        foreach ($vendas as $key => $value) {
-            // dd($value);
-            $produtos = DB::SELECT('SELECT p.descricao, p.tx_install, p.tx_venda from comissoes_produto as cp
-                JOIN produtos as p on p.id = cp.produtoid
-                WHERE cp.comissaoid = '.$value->id.'
-            ');
-           $value->produtos = $produtos;
-        }
-        
-        // $obj = (object) array_merge((array) $result[0]->vendas, (array) $vendas);
-        $result[0]->vendas = $vendas;
-        // dd($result[0]);
-        // $result[0]->vendas
-        
-        // return response()->json(collect($result[0]));
-        return view('admin.comissoes.orders.show')->with(['order'=> collect($result[0])]);
+        // \DB::enableQueryLog();
+        $result = OrdemPagamento::where('ordens_pagamento.id',$orders->id)
+        ->with('franqueado')->with('fda')
+        ->with('comissoes')->with('royalties')
+        ->first();
+        //$queries = \DB::getQueryLog();
+        return view('admin.comissoes.orders.show')->with(['order'=> ($result)]);
         //return response()->json($orders);
     }
 

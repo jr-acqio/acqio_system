@@ -42,11 +42,17 @@
 							<div class="col-sm-6 text-right">
 								<h4>Pagamento No. <span class="text-navy">{{ order.id }}</span></h4>
 								<span>Para:</span>
-								<address>
-									<strong>{{ order.cliente }}</strong><br>
-									{{ order.endereco }}<br>
-									{{ order.cidade }}<br>
-									<abbr title="Phone">Email:</abbr> {{ order.email }}
+								<address v-if="order.fda != null">
+									<strong>{{ order.fda.nome_razao }}</strong><br>
+									{{ order.fda.endereco }}<br>
+									{{ order.fda.cidade }}<br>
+									<abbr title="Phone">Email:</abbr> {{ order.fda.email }}
+								</address>
+								<address v-if="order.franqueado != null">
+									<strong>{{ order.franqueado.nome_razao }}</strong><br>
+									{{ order.franqueado.endereco }}<br>
+									{{ order.franqueado.cidade }}<br>
+									<abbr title="Phone">Email:</abbr> {{ order.franqueado.email }}
 								</address>
 								<p>
 									<span><strong>Invoice Date:</strong> {{ startDate }}</span><br>
@@ -69,7 +75,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr v-for="item in order.vendas">
+									<tr v-for="item in order.comissoes">
 										<td>{{ item.data_cadastro }}</td>
 										<td>{{ item.data_aprovacao }}</td>
 										<td><div><strong>{{ item.nome_cliente.toUpperCase() }}</strong></div>
@@ -77,10 +83,17 @@
 										</td>
 										<td>{{ item.produtos.length }}</td>
 										<td>
-											<span v-for="produto in item.produtos">{{ produto.descricao }} </span>
+											<span v-for="produto in item.produtos">{{ produto.descricao }}</span>
 										</td>
 										<!-- <td>$5.98</td> -->
-										<td>R$ {{ sum(item.produtos) }}</td>
+										<td>R$ 
+											<span v-if="order.franqueado == null">
+												{{ sum(item.produtos,'tx_install') }}
+											</span>
+											<span v-else>
+												{{ sum(item.produtos,'tx_venda') }}
+											</span>
+										</td>
 									</tr>
 								</tbody>
 							</table>
@@ -90,11 +103,11 @@
 							<tbody>
 								<tr>
 									<td><strong>Sub Total (Comissões) :</strong></td>
-									<td>R$ {{  }}</td>
+									<td>R$ {{ totalLiq }}</td>
 								</tr>
-								<tr>
+								<tr v-if="totalRoyaltie > 0">
 									<td><strong>Sub Total (Royalties) :</strong></td>
-									<td>R$ {{ order.totalRoyaltie }}</td>
+									<td style="color:red;">- R$ {{ totalRoyaltie }}</td>
 								</tr>
 								<tr>
 									<td><strong>TOTAL :</strong></td>
@@ -106,8 +119,9 @@
 							<button class="btn btn-primary"><i class="fa fa-dollar"></i> Make A Payment</button>
 						</div>
 
-						<div class="well m-t"><strong>Comments</strong>
-							It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less
+						<div class="well m-t"><strong>Comments </strong>
+
+							<!-- {{ sum( order.valor , 'valor_original' ) }} -->
 						</div>
 					</div>
 				</div>
@@ -123,30 +137,42 @@
 			return {
 				order: '',
 				startDate: '',
-				endDate: ''
+				endDate: '',
+				totalRoyaltie: '',
+				totalLiq: ''
 			}
 		},
 		mounted(){
 			this.order = JSON.parse(this.order_prop)
-			var startDate = moment([2016, this.order.mes_ref-1]).add(+1,"month");
-			this.startDate = new Date(2016, this.order.mes_ref, 1)
-			var endDate = moment(startDate, 'YYYY-MM-DD').endOf('month');
-			this.endDate= endDate;
-		    // console.log(startDate.toObject().date +'/'+ startDate.toObject().months +'/'+ startDate.toObject().years);
-    		// console.log(endDate.toObject().date +'/'+ endDate.toObject().months +'/'+ endDate.toObject().years);
+			
+
+			this.totalRoyaltie = this.sum(this.order.royalties,'valor_original')
+
+			var total = 0;
+			for(var i = 0; i < this.order.comissoes.length ; i++){
+				for(var j = 0 ; j < this.order.comissoes[i].produtos.length ; j++){
+					if(this.order.fdaid == null){
+						total += parseFloat(this.order.comissoes[i].produtos[j].tx_venda)
+					}else{
+						total += parseFloat(this.order.comissoes[i].produtos[j].tx_install)
+					}
+				}
+			}
+			this.totalLiq = total;
 		},
 		methods: {
-			sum( obj ) {
-			  var sum = 0;
-			  for(var i = 0; i< obj.length ; i++){
-			  	if(this.order.fdaid == null){
-			  		sum += parseFloat(obj[i].tx_venda)
-			  	}else{
-			  		sum += parseFloat(obj[i].tx_install)
-			  	}
-			  }
-			  return sum;
-			}	
+			sum( obj,element ) {
+				// console.log(obj,element)
+				var sum = 0;
+				for(var i = 0; i < obj.length ; i++){
+					if(this.order.fdaid == null){
+						sum += parseFloat(obj[i][element])
+					}else{
+						sum += parseFloat(obj[i][element])
+					}
+				}
+				return sum;
+			}
 		}
 	}
 </script>
