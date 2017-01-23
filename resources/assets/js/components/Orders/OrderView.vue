@@ -88,10 +88,10 @@
 										<!-- <td>$5.98</td> -->
 										<td>R$ 
 											<span v-if="order.franqueado == null">
-												{{ sum(item.produtos,'tx_install') }}
+												{{ sum(item.produtos,'tx_install').formatMoney(2,',','.') }}
 											</span>
 											<span v-else>
-												{{ sum(item.produtos,'tx_venda') }}
+												{{ sum(item.produtos,'tx_venda').formatMoney(2,',','.') }}
 											</span>
 										</td>
 									</tr>
@@ -102,13 +102,16 @@
 
 						<div class="row">							
 							<div class="col-lg-6">
-								<a v-if="listDebitos == false" @click="listDebitos = true" class="btn btn-default">Exibir Débitos
-									<i class="fa fa-plus"></i>
-								</a>
-								<a v-else="" @click="listDebitos = false" class="btn btn-default">
-									Esconder Débitos 
-									<i class="fa fa-minus"></i>
-								</a>
+								<div v-if="totalRoyaltie > 0">
+									<a v-if="listDebitos == false" @click="listDebitos = true" class="btn btn-default">Exibir Débitos
+										<i class="fa fa-plus"></i>
+									</a>
+									<a v-else="" @click="listDebitos = false" class="btn btn-default">
+										Esconder Débitos 
+										<i class="fa fa-minus"></i>
+									</a>	
+								</div>
+								
 								<br><br>
 								<!-- Table Descontos -->
 								<table class="table table-hover" v-if="listDebitos == true">
@@ -123,8 +126,8 @@
 										<tr v-for="royaltie in order.royalties">
 											<!-- <td>{{ royaltie.id }}</td> -->
 											<td>{{ royaltie.data_vencimento }}</td>
-											<td>{{ royaltie.valor_original }}</td>
-											<td>{{ royaltie.cheques_devolvidos }}</td>
+											<td>{{ royaltie.valor_original.formatMoney(2,',','.') }}</td>
+											<td>{{ royaltie.cheques_devolvidos.formatMoney(2,',','.') }}</td>
 											<td>{{ royaltie.franquia_loc }}</td>
 										</tr>
 									</tbody>
@@ -142,7 +145,7 @@
 											<td>
 												<strong>Sub Total (Royalties) :</strong>
 											</td>
-											<td style="color:red;">- R$ {{ totalRoyaltie }}</td>
+											<td style="color:red;">- R$ {{ sum(order.royalties,'valor_original').formatMoney(2,',','.') }}</td>
 										</tr>
 										<tr>
 											<td><strong>TOTAL :</strong></td>
@@ -205,6 +208,7 @@
 				}
 			}
 			this.totalLiq = total;
+			console.log(this.totalLiq);
 		},
 		methods: {
 			sum( obj,element ) {
