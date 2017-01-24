@@ -79,11 +79,11 @@
 										<td>{{ item.data_cadastro }}</td>
 										<td>{{ item.data_aprovacao }}</td>
 										<td><div><strong>{{ item.nome_cliente.toUpperCase() }}</strong></div>
-											<small v-if="item.uf != null && item.cidade != null">{{ item.uf + ' - ' + item.cidade }}</small>
+											<small v-if="item.uf != 'nu' && item.uf != 'null' || item.cidade != 'null'">{{ item.uf + ' - ' + item.cidade }}</small>
 										</td>
 										<td>{{ item.produtos.length }}</td>
 										<td>
-											<span v-for="produto in item.produtos">{{ produto.descricao }}</span>
+											<span v-for="produto in item.produtos">{{ produto.descricao }} </span>
 										</td>
 										<!-- <td>$5.98</td> -->
 										<td>R$ 
@@ -118,7 +118,7 @@
 									<thead>
 										<!-- <th>Id</th> -->
 										<th>Data Vencimento</th>
-										<th>Valor</th>
+										<th>Valor Royalties</th>
 										<th>Cheques Devolv.</th>
 										<th>Franquia/Localização</th>
 									</thead>
