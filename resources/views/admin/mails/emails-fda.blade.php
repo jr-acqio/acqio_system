@@ -514,7 +514,7 @@ Parabéns pelas vendas!</p> -->
 
 <p data-mce-style="text-align: left;" dir="ltr"><br>
 
-O valor de Taxa de Instalação, referente às&nbsp;{{ $data->totalProdutos }} POS instaladas no mês de Outubro&nbsp;é de de&nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.</p>
+O valor de Taxa de Instalação, referente às&nbsp;{{ $data->totalProdutos }} POS instaladas no mês de {{ mes_extenso($data->mes_ref) }}&nbsp;é de de&nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.</p>
 &nbsp;
 
 <p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>

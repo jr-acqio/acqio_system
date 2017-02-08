@@ -38,9 +38,9 @@ class SendEmailsComissions extends Job implements ShouldQueue
             // Set the receiver and subject of the mail.
             $fda = Fda::where('id',$this->dados->id)->first();
             // dd($franqueado);
-            // $message->to('joselito.junior@esfera5.com.br');
+            $message->to('joselito.junior@esfera5.com.br');
             
-            $message->to($fda->email);
+            // $message->to($fda->email);
             
             // $message->bcc('stefano.andrei@esfera5.com.br');
             $message->bcc('leandro.xavier@esfera5.com.br');
@@ -58,12 +58,12 @@ class SendEmailsComissions extends Job implements ShouldQueue
             // Set the receiver and subject of the mail.
             $franqueado = Franqueado::where('id',$this->dados->id)->first();
             // dd($franqueado);
-            // $message->to('joselito.junior@esfera5.com.br');
-            $message->to($franqueado->email);
+            $message->to('joselito.junior@esfera5.com.br');
+            // $message->to($franqueado->email);
             
 
-            // $message->bcc('stefano.andrei@esfera5.com.br');
-            $message->bcc('leandro.xavier@esfera5.com.br');
+            $message->bcc('stefano.andrei@esfera5.com.br');
+            // $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');
             $message->subject('Relatório de Comissões - Dezembro');
             // Set the sender

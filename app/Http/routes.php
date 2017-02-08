@@ -1,5 +1,14 @@
 <?php
 use Vinkla\Pusher\Facades\Pusher;
+
+Route::get('poo',function(){
+	$template = "teste";
+	Mail::send($template, [], function($message){
+            $message->to('joselito.junior@esfera5.com.br');
+            $message->subject('Teste');
+            $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');
+          });
+});
 Route::get('/enviar-email','MailController@sendMail');
 
 Route::get('/teste',function(){

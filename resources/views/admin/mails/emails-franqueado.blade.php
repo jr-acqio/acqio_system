@@ -1,7 +1,7 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-	<head>
-		<!-- NAME: SIMPLE TEXT -->
+<head>
+	<!-- NAME: SIMPLE TEXT -->
 		<!--[if gte mso 15]>
         <xml>
             <o:OfficeDocumentSettings>
@@ -10,379 +10,379 @@
             </o:OfficeDocumentSettings>
         </xml>
         <![endif]-->
-		<meta charset="UTF-8">
+        <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Relatório</title>
+        <title>Relatório</title>
 
-    <style type="text/css">
-		p{
-			margin:10px 0;
-			padding:0;
-		}
-		table{
-			border-collapse:collapse;
-		}
-		h1,h2,h3,h4,h5,h6{
-			display:block;
-			margin:0;
-			padding:0;
-		}
-		img,a img{
-			border:0;
-			height:auto;
-			outline:none;
-			text-decoration:none;
-		}
-		body,#bodyTable,#bodyCell{
-			height:100%;
-			margin:0;
-			padding:0;
-			width:100%;
-		}
-		#outlook a{
-			padding:0;
-		}
-		img{
-			-ms-interpolation-mode:bicubic;
-		}
-		table{
-			mso-table-lspace:0pt;
-			mso-table-rspace:0pt;
-		}
-		.ReadMsgBody{
-			width:100%;
-		}
-		.ExternalClass{
-			width:100%;
-		}
-		p,a,li,td,blockquote{
-			mso-line-height-rule:exactly;
-		}
-		a[href^=tel],a[href^=sms]{
-			color:inherit;
-			cursor:default;
-			text-decoration:none;
-		}
-		p,a,li,td,body,table,blockquote{
-			-ms-text-size-adjust:100%;
-			-webkit-text-size-adjust:100%;
-		}
-		.ExternalClass,.ExternalClass p,.ExternalClass td,.ExternalClass div,.ExternalClass span,.ExternalClass font{
-			line-height:100%;
-		}
-		a[x-apple-data-detectors]{
-			color:inherit !important;
-			text-decoration:none !important;
-			font-size:inherit !important;
-			font-family:inherit !important;
-			font-weight:inherit !important;
-			line-height:inherit !important;
-		}
-		#bodyCell{
-			padding:10px;
-		}
-		.templateContainer{
-			max-width:600px !important;
-		}
-		a.mcnButton{
-			display:block;
-		}
-		.mcnImage{
-			vertical-align:bottom;
-		}
-		.mcnTextContent{
-			word-break:break-word;
-		}
-		.mcnTextContent img{
-			height:auto !important;
-		}
-		.mcnDividerBlock{
-			table-layout:fixed !important;
-		}
+        <style type="text/css">
+        	p{
+        		margin:10px 0;
+        		padding:0;
+        	}
+        	table{
+        		border-collapse:collapse;
+        	}
+        	h1,h2,h3,h4,h5,h6{
+        		display:block;
+        		margin:0;
+        		padding:0;
+        	}
+        	img,a img{
+        		border:0;
+        		height:auto;
+        		outline:none;
+        		text-decoration:none;
+        	}
+        	body,#bodyTable,#bodyCell{
+        		height:100%;
+        		margin:0;
+        		padding:0;
+        		width:100%;
+        	}
+        	#outlook a{
+        		padding:0;
+        	}
+        	img{
+        		-ms-interpolation-mode:bicubic;
+        	}
+        	table{
+        		mso-table-lspace:0pt;
+        		mso-table-rspace:0pt;
+        	}
+        	.ReadMsgBody{
+        		width:100%;
+        	}
+        	.ExternalClass{
+        		width:100%;
+        	}
+        	p,a,li,td,blockquote{
+        		mso-line-height-rule:exactly;
+        	}
+        	a[href^=tel],a[href^=sms]{
+        		color:inherit;
+        		cursor:default;
+        		text-decoration:none;
+        	}
+        	p,a,li,td,body,table,blockquote{
+        		-ms-text-size-adjust:100%;
+        		-webkit-text-size-adjust:100%;
+        	}
+        	.ExternalClass,.ExternalClass p,.ExternalClass td,.ExternalClass div,.ExternalClass span,.ExternalClass font{
+        		line-height:100%;
+        	}
+        	a[x-apple-data-detectors]{
+        		color:inherit !important;
+        		text-decoration:none !important;
+        		font-size:inherit !important;
+        		font-family:inherit !important;
+        		font-weight:inherit !important;
+        		line-height:inherit !important;
+        	}
+        	#bodyCell{
+        		padding:10px;
+        	}
+        	.templateContainer{
+        		max-width:600px !important;
+        	}
+        	a.mcnButton{
+        		display:block;
+        	}
+        	.mcnImage{
+        		vertical-align:bottom;
+        	}
+        	.mcnTextContent{
+        		word-break:break-word;
+        	}
+        	.mcnTextContent img{
+        		height:auto !important;
+        	}
+        	.mcnDividerBlock{
+        		table-layout:fixed !important;
+        	}
 	/*
 	tab Page
 	section Background Style
 	tip Set the background color and top border for your email. You may want to choose colors that match your company's branding.
 	*/
-		body,#bodyTable{
-			/*editable*/background-color:#FFFFFF;
-			/*editable*/background-image:none;
-			/*editable*/background-repeat:no-repeat;
-			/*editable*/background-position:center;
-			/*editable*/background-size:cover;
-		}
+	body,#bodyTable{
+		/*editable*/background-color:#FFFFFF;
+		/*editable*/background-image:none;
+		/*editable*/background-repeat:no-repeat;
+		/*editable*/background-position:center;
+		/*editable*/background-size:cover;
+	}
 	/*
 	tab Page
 	section Background Style
 	tip Set the background color and top border for your email. You may want to choose colors that match your company's branding.
 	*/
-		#bodyCell{
-			/*editable*/border-top:0;
-		}
+	#bodyCell{
+		/*editable*/border-top:0;
+	}
 	/*
 	tab Page
 	section Email Border
 	tip Set the border for your email.
 	*/
-		.templateContainer{
-			/*editable*/border:0;
-		}
+	.templateContainer{
+		/*editable*/border:0;
+	}
 	/*
 	tab Page
 	section Heading 1
 	tip Set the styling for all first-level headings in your emails. These should be the largest of your headings.
 	style heading 1
 	*/
-		h1{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:26px;
-			/*editable*/font-style:normal;
-			/*editable*/font-weight:bold;
-			/*editable*/line-height:125%;
-			/*editable*/letter-spacing:normal;
-			/*editable*/text-align:left;
-		}
+	h1{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:26px;
+		/*editable*/font-style:normal;
+		/*editable*/font-weight:bold;
+		/*editable*/line-height:125%;
+		/*editable*/letter-spacing:normal;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Page
 	section Heading 2
 	tip Set the styling for all second-level headings in your emails.
 	style heading 2
 	*/
-		h2{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:22px;
-			/*editable*/font-style:normal;
-			/*editable*/font-weight:bold;
-			/*editable*/line-height:125%;
-			/*editable*/letter-spacing:normal;
-			/*editable*/text-align:left;
-		}
+	h2{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:22px;
+		/*editable*/font-style:normal;
+		/*editable*/font-weight:bold;
+		/*editable*/line-height:125%;
+		/*editable*/letter-spacing:normal;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Page
 	section Heading 3
 	tip Set the styling for all third-level headings in your emails.
 	style heading 3
 	*/
-		h3{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:20px;
-			/*editable*/font-style:normal;
-			/*editable*/font-weight:bold;
-			/*editable*/line-height:125%;
-			/*editable*/letter-spacing:normal;
-			/*editable*/text-align:left;
-		}
+	h3{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:20px;
+		/*editable*/font-style:normal;
+		/*editable*/font-weight:bold;
+		/*editable*/line-height:125%;
+		/*editable*/letter-spacing:normal;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Page
 	section Heading 4
 	tip Set the styling for all fourth-level headings in your emails. These should be the smallest of your headings.
 	style heading 4
 	*/
-		h4{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:18px;
-			/*editable*/font-style:normal;
-			/*editable*/font-weight:bold;
-			/*editable*/line-height:125%;
-			/*editable*/letter-spacing:normal;
-			/*editable*/text-align:left;
-		}
+	h4{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:18px;
+		/*editable*/font-style:normal;
+		/*editable*/font-weight:bold;
+		/*editable*/line-height:125%;
+		/*editable*/letter-spacing:normal;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Header
 	section Header Style
 	tip Set the borders for your email's header area.
 	*/
-		#templateHeader{
-			/*editable*/border-top:0;
-			/*editable*/border-bottom:0;
-		}
+	#templateHeader{
+		/*editable*/border-top:0;
+		/*editable*/border-bottom:0;
+	}
 	/*
 	tab Header
 	section Header Text
 	tip Set the styling for your email's header text. Choose a size and color that is easy to read.
 	*/
-		#templateHeader .mcnTextContent,#templateHeader .mcnTextContent p{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:16px;
-			/*editable*/line-height:150%;
-			/*editable*/text-align:left;
-		}
+	#templateHeader .mcnTextContent,#templateHeader .mcnTextContent p{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:16px;
+		/*editable*/line-height:150%;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Header
 	section Header Link
 	tip Set the styling for your email's header links. Choose a color that helps them stand out from your text.
 	*/
-		#templateHeader .mcnTextContent a,#templateHeader .mcnTextContent p a{
-			/*editable*/color:#2BAADF;
-			/*editable*/font-weight:normal;
-			/*editable*/text-decoration:underline;
-		}
+	#templateHeader .mcnTextContent a,#templateHeader .mcnTextContent p a{
+		/*editable*/color:#2BAADF;
+		/*editable*/font-weight:normal;
+		/*editable*/text-decoration:underline;
+	}
 	/*
 	tab Body
 	section Body Style
 	tip Set the borders for your email's body area.
 	*/
-		#templateBody{
-			/*editable*/border-top:0;
-			/*editable*/border-bottom:0;
-		}
+	#templateBody{
+		/*editable*/border-top:0;
+		/*editable*/border-bottom:0;
+	}
 	/*
 	tab Body
 	section Body Text
 	tip Set the styling for your email's body text. Choose a size and color that is easy to read.
 	*/
-		#templateBody .mcnTextContent,#templateBody .mcnTextContent p{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:16px;
-			/*editable*/line-height:150%;
-			/*editable*/text-align:left;
-		}
+	#templateBody .mcnTextContent,#templateBody .mcnTextContent p{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:16px;
+		/*editable*/line-height:150%;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Body
 	section Body Link
 	tip Set the styling for your email's body links. Choose a color that helps them stand out from your text.
 	*/
-		#templateBody .mcnTextContent a,#templateBody .mcnTextContent p a{
-			/*editable*/color:#2BAADF;
-			/*editable*/font-weight:normal;
-			/*editable*/text-decoration:underline;
-		}
+	#templateBody .mcnTextContent a,#templateBody .mcnTextContent p a{
+		/*editable*/color:#2BAADF;
+		/*editable*/font-weight:normal;
+		/*editable*/text-decoration:underline;
+	}
 	/*
 	tab Footer
 	section Footer Style
 	tip Set the borders for your email's footer area.
 	*/
-		#templateFooter{
-			/*editable*/border-top:0;
-			/*editable*/border-bottom:0;
-		}
+	#templateFooter{
+		/*editable*/border-top:0;
+		/*editable*/border-bottom:0;
+	}
 	/*
 	tab Footer
 	section Footer Text
 	tip Set the styling for your email's footer text. Choose a size and color that is easy to read.
 	*/
-		#templateFooter .mcnTextContent,#templateFooter .mcnTextContent p{
-			/*editable*/color:#202020;
-			/*editable*/font-family:Helvetica;
-			/*editable*/font-size:12px;
-			/*editable*/line-height:150%;
-			/*editable*/text-align:left;
-		}
+	#templateFooter .mcnTextContent,#templateFooter .mcnTextContent p{
+		/*editable*/color:#202020;
+		/*editable*/font-family:Helvetica;
+		/*editable*/font-size:12px;
+		/*editable*/line-height:150%;
+		/*editable*/text-align:left;
+	}
 	/*
 	tab Footer
 	section Footer Link
 	tip Set the styling for your email's footer links. Choose a color that helps them stand out from your text.
 	*/
-		#templateFooter .mcnTextContent a,#templateFooter .mcnTextContent p a{
-			/*editable*/color:#202020;
-			/*editable*/font-weight:normal;
-			/*editable*/text-decoration:underline;
-		}
+	#templateFooter .mcnTextContent a,#templateFooter .mcnTextContent p a{
+		/*editable*/color:#202020;
+		/*editable*/font-weight:normal;
+		/*editable*/text-decoration:underline;
+	}
 	media only screen and (min-width:768px){
 		.templateContainer{
 			width:600px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		body,table,td,p,a,li,blockquote{
 			-webkit-text-size-adjust:none !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		body{
 			width:100% !important;
 			min-width:100% !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		#bodyCell{
 			padding-top:10px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImage{
 			width:100% !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnCartContainer,.mcnCaptionTopContent,.mcnRecContentContainer,.mcnCaptionBottomContent,.mcnTextContentContainer,.mcnBoxedTextContentContainer,.mcnImageGroupContentContainer,.mcnCaptionLeftTextContentContainer,.mcnCaptionRightTextContentContainer,.mcnCaptionLeftImageContentContainer,.mcnCaptionRightImageContentContainer,.mcnImageCardLeftTextContentContainer,.mcnImageCardRightTextContentContainer{
 			max-width:100% !important;
 			width:100% !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnBoxedTextContentContainer{
 			min-width:100% !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImageGroupContent{
 			padding:9px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnCaptionLeftContentOuter .mcnTextContent,.mcnCaptionRightContentOuter .mcnTextContent{
 			padding-top:9px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImageCardTopImageContent,.mcnCaptionBlockInner .mcnCaptionTopContent:last-child .mcnTextContent{
 			padding-top:18px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImageCardBottomImageContent{
 			padding-bottom:9px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImageGroupBlockInner{
 			padding-top:0 !important;
 			padding-bottom:0 !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImageGroupBlockOuter{
 			padding-top:9px !important;
 			padding-bottom:9px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnTextContent,.mcnBoxedTextContentColumn{
 			padding-right:18px !important;
 			padding-left:18px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcnImageCardLeftImageContent,.mcnImageCardRightImageContent{
 			padding-right:18px !important;
 			padding-bottom:0 !important;
 			padding-left:18px !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 		.mcpreview-image-uploader{
 			display:none !important;
 			width:100% !important;
 		}
 
-}	media only screen and (max-width: 480px){
+	}	media only screen and (max-width: 480px){
 	/*
 	tab Mobile Styles
 	section Heading 1
 	tip Make the first-level headings larger in size for better readability on small screens.
 	*/
-		h1{
-			/*editable*/font-size:22px !important;
-			/*editable*/line-height:125% !important;
-		}
+	h1{
+		/*editable*/font-size:22px !important;
+		/*editable*/line-height:125% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -390,10 +390,10 @@
 	section Heading 2
 	tip Make the second-level headings larger in size for better readability on small screens.
 	*/
-		h2{
-			/*editable*/font-size:20px !important;
-			/*editable*/line-height:125% !important;
-		}
+	h2{
+		/*editable*/font-size:20px !important;
+		/*editable*/line-height:125% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -401,10 +401,10 @@
 	section Heading 3
 	tip Make the third-level headings larger in size for better readability on small screens.
 	*/
-		h3{
-			/*editable*/font-size:18px !important;
-			/*editable*/line-height:125% !important;
-		}
+	h3{
+		/*editable*/font-size:18px !important;
+		/*editable*/line-height:125% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -412,10 +412,10 @@
 	section Heading 4
 	tip Make the fourth-level headings larger in size for better readability on small screens.
 	*/
-		h4{
-			/*editable*/font-size:16px !important;
-			/*editable*/line-height:150% !important;
-		}
+	h4{
+		/*editable*/font-size:16px !important;
+		/*editable*/line-height:150% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -423,10 +423,10 @@
 	section Boxed Text
 	tip Make the boxed text larger in size for better readability on small screens. We recommend a font size of at least 16px.
 	*/
-		table.mcnBoxedTextContentContainer td.mcnTextContent,td.mcnBoxedTextContentContainer td.mcnTextContent p{
-			/*editable*/font-size:14px !important;
-			/*editable*/line-height:150% !important;
-		}
+	table.mcnBoxedTextContentContainer td.mcnTextContent,td.mcnBoxedTextContentContainer td.mcnTextContent p{
+		/*editable*/font-size:14px !important;
+		/*editable*/line-height:150% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -434,10 +434,10 @@
 	section Header Text
 	tip Make the header text larger in size for better readability on small screens.
 	*/
-		td#templateHeader td.mcnTextContent,td#templateHeader td.mcnTextContent p{
-			/*editable*/font-size:16px !important;
-			/*editable*/line-height:150% !important;
-		}
+	td#templateHeader td.mcnTextContent,td#templateHeader td.mcnTextContent p{
+		/*editable*/font-size:16px !important;
+		/*editable*/line-height:150% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -445,10 +445,10 @@
 	section Body Text
 	tip Make the body text larger in size for better readability on small screens. We recommend a font size of at least 16px.
 	*/
-		td#templateBody td.mcnTextContent,td#templateBody td.mcnTextContent p{
-			/*editable*/font-size:16px !important;
-			/*editable*/line-height:150% !important;
-		}
+	td#templateBody td.mcnTextContent,td#templateBody td.mcnTextContent p{
+		/*editable*/font-size:16px !important;
+		/*editable*/line-height:150% !important;
+	}
 
 }	media only screen and (max-width: 480px){
 	/*
@@ -456,114 +456,123 @@
 	section Footer Text
 	tip Make the footer content text larger in size for better readability on small screens.
 	*/
-		td#templateFooter td.mcnTextContent,td#templateFooter td.mcnTextContent p{
-			/*editable*/font-size:14px !important;
-			/*editable*/line-height:150% !important;
-		}
+	td#templateFooter td.mcnTextContent,td#templateFooter td.mcnTextContent p{
+		/*editable*/font-size:14px !important;
+		/*editable*/line-height:150% !important;
+	}
 
 }</style></head>
-    <body>
-        <center>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
-                <tr>
-                    <td align="left" valign="top" id="bodyCell">
-                        <!-- BEGIN TEMPLATE // -->
+<body>
+	<center>
+		<table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable">
+			<tr>
+				<td align="left" valign="top" id="bodyCell">
+					<!-- BEGIN TEMPLATE // -->
 						<!--[if gte mso 9]>
 						<table align="center" border="0" cellspacing="0" cellpadding="0" width="600" style="width:600px;">
 						<tr>
 						<td align="center" valign="top" width="600" style="width:600px;">
-						<![endif]-->
-                        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
-                            <tr>
-                                <td valign="top" id="templateHeader"></td>
-                            </tr>
-                            <tr>
-                                <td valign="top" id="templateBody"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
-    <tbody class="mcnImageBlockOuter">
-            <tr>
-                <td valign="top" style="padding:9px" class="mcnImageBlockInner">
-                    <table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
-                        <tbody><tr>
-                            <td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
+							<![endif]-->
+							<table border="0" cellpadding="0" cellspacing="0" width="100%" class="templateContainer">
+								<tr>
+									<td valign="top" id="templateHeader"></td>
+								</tr>
+								<tr>
+									<td valign="top" id="templateBody"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnImageBlock" style="min-width:100%;">
+										<tbody class="mcnImageBlockOuter">
+											<tr>
+												<td valign="top" style="padding:9px" class="mcnImageBlockInner">
+													<table align="left" width="100%" border="0" cellpadding="0" cellspacing="0" class="mcnImageContentContainer" style="min-width:100%;">
+														<tbody><tr>
+															<td class="mcnImageContent" valign="top" style="padding-right: 9px; padding-left: 9px; padding-top: 0; padding-bottom: 0; text-align:center;">
 
 
-                                        <img align="center" alt="" src="https://gallery.mailchimp.com/821d2b6e39baed8f3f8a71299/images/11a6e6bc-df1c-46a5-a7fa-8e8d6fc11764.png" width="208" style="max-width:208px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
+																<img align="center" alt="" src="https://gallery.mailchimp.com/821d2b6e39baed8f3f8a71299/images/11a6e6bc-df1c-46a5-a7fa-8e8d6fc11764.png" width="208" style="max-width:208px; padding-bottom: 0; display: inline !important; vertical-align: bottom;" class="mcnImage">
 
 
-                            </td>
-                        </tr>
-                    </tbody></table>
-                </td>
-            </tr>
-    </tbody>
-</table></td>
-                            </tr>
-                            <tr>
-                                <td valign="top" id="templateFooter"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
-    <tbody class="mcnTextBlockOuter">
-        <tr>
-            <td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
+															</td>
+														</tr>
+													</tbody></table>
+												</td>
+											</tr>
+										</tbody>
+									</table></td>
+								</tr>
+								<tr>
+									<td valign="top" id="templateFooter"><table border="0" cellpadding="0" cellspacing="0" width="100%" class="mcnTextBlock" style="min-width:100%;">
+										<tbody class="mcnTextBlockOuter">
+											<tr>
+												<td valign="top" class="mcnTextBlockInner" style="padding-top:9px;">
               	<!--[if mso]>
 				<table align="left" border="0" cellspacing="0" cellpadding="0" width="100%" style="width:100%;">
 				<tr>
-				<![endif]-->
+					<![endif]-->
 
 				<!--[if mso]>
 				<td valign="top" width="600" style="width:600px;">
-				<![endif]-->
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
-                    <tbody><tr>
+					<![endif]-->
+					<table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width:100%; min-width:100%;" width="100%" class="mcnTextContentContainer">
+						<tbody><tr>
 
-                        <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
-                          <?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
-                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;<b>{{-- $primeiro_nome[0] --}}</b>, tudo bem?</p>
+							<td style="text-align: justify;" valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
+								<?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
+								<p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;<b>{{-- $primeiro_nome[0] --}}</b>, tudo bem?</p>
+								<br>
+								<p dir="ltr">
 
-<!-- <p data-mce-style="text-align: left;" dir="ltr"><br>
-Parabéns pelas vendas!</p> -->
+									<b>O valor de suas comissões, referente às&nbsp;{{ $data->totalProdutos }}
+										POS vendidas no mês de {{ mes_extenso($data->mes_ref) }}&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.
+									</b>
+									@if($data->totalRoyalties > 0)
+									<b>
+										Deste saldo será abatido R$ {{ number_format($data->totalRoyalties,2,',','.') }} referente à royalties vencidos,
+									</b>
+									@if($data->valorFinal < 0)
+									<b>
+										totalizando um valor de R$ {{ number_format(abs($data->valorFinal),2,',','.') }} em aberto.
+									</b>
+								</p>
+								<p>
+									Estamos disponibilizando canais exclusivos para negociação de valores de royaties em aberto. É possível entrar em contato através do WhatsApp do setor financeiro para Royalties: (17) 99161 1578, do telefone (17) 3512-5555 ou através dos e-mails da Suelen Ribeiro ( financeiro2@acqiofranchising.com.br ) e Flávio Lino ( financeiro3@acqiofranchising.com.br).	
+								</p>
+								<p>
+									Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta entrar em contato, ok?	
+								</p>
+									@endif
 
-<p data-mce-style="text-align: left;" dir="ltr"><br>
-<b>O valor de suas comissões, referente às&nbsp;{{ $data->totalProdutos }}
-POS vendidas no mês de Outubro&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.
-@if($data->totalRoyalties > 0)
-	Deste saldo será abatido R$ {{ number_format($data->totalRoyalties,2,',','.') }} referente à royalties vencidos,
-	@if($data->valorFinal < 0)
-		totalizando um valor de R$ {{ number_format(abs($data->valorFinal),2,',','.') }} em aberto.
-	@else
-		totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.
-	@endif
-@endif</b></p>
-&nbsp;
+								@else
+								<b>Totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.</b>
 
-<p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>
-<br>
-As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
-<br>
-As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
-<br>
-A Nota fiscal deverá conter as seguintes informações:<br>
-<br>
-Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
-Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
-Endereço: Rua Domingos José Martins, 75 Sala 304, Bairro do Recife – Recife/PE<br>
-CEP: 50.030-200<br>
-CNPJ/MF: 18.577.728/0001-46<br>
-NIRE: 26300022508<br>
-Inscrição Municipal: 4989392<br>
-Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
-<br>
-<br>
-Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
-<br>
-Atenciosamente,</p>
-
-<p data-mce-style="text-align: left;" dir="ltr"><br>
-Júnior Paiva</p>
-
-<p data-mce-style="text-align: left;" dir="ltr">Financeiro Acqio</p>
-
-                        </td>
-                    </tr>
-                </tbody></table>
+								<p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>
+									<br>
+									As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
+									<br>
+									As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
+									<br>
+									A Nota fiscal deverá conter as seguintes informações:<br>
+									<br>
+									Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
+									Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
+									Endereço: Rua Domingos José Martins, 75 Sala 304, Bairro do Recife – Recife/PE<br>
+									CEP: 50.030-200<br>
+									CNPJ/MF: 18.577.728/0001-46<br>
+									NIRE: 26300022508<br>
+									Inscrição Municipal: 4989392<br>
+									Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
+									<br>
+									<br>
+									Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
+									@endif
+								</p>
+								&nbsp;
+								<br>
+								Atenciosamente,
+								<p data-mce-style="text-align: left;" dir="ltr"><br>
+									Júnior Paiva</p>
+									<p data-mce-style="text-align: left;" dir="ltr">Financeiro Acqio</p>
+								</td>
+							</tr>
+						</tbody></table>
 				<!--[if mso]>
 				</td>
 				<![endif]-->
@@ -572,21 +581,21 @@ Júnior Paiva</p>
 				</tr>
 				</table>
 				<![endif]-->
-            </td>
-        </tr>
-    </tbody>
+			</td>
+		</tr>
+	</tbody>
 </table></td>
-                            </tr>
-                        </table>
+</tr>
+</table>
 						<!--[if gte mso 9]>
 						</td>
 						</tr>
 						</table>
 						<![endif]-->
-                        <!-- // END TEMPLATE -->
-                    </td>
-                </tr>
-            </table>
-        </center>
-    </body>
-</html>
+						<!-- // END TEMPLATE -->
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+	</html>

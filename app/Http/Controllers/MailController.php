@@ -22,7 +22,7 @@ class MailController extends Controller
       $comissoes = DB::select('SELECT franqueados.id, franqueados.franqueadoid, franqueados.nome_razao, COUNT(*) as totalVendas,
       SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal,
       COALESCE(total_royalties,0) as totalRoyalties,COALESCE(total_chequesdevolvidos,0) as totalChequesDevolvidos,
-      SUM(vttotal.valor_total) - COALESCE(total_royalties,0) as valorFinal, op.relatorio_pdf
+      SUM(vttotal.valor_total) - COALESCE(total_royalties,0) as valorFinal, op.relatorio_pdf, op.mes_ref
       FROM comissoes
       JOIN franqueados ON comissoes.franqueadoid = franqueados.id
       JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_venda) as valor_total FROM comissoes_produto
@@ -31,9 +31,10 @@ class MailController extends Controller
       GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
       JOIN ordens_pagamento AS op ON op.franqueadoid = franqueados.id
        LEFT JOIN (SELECT royalties_ordem_pagamentos.idordempagamento as opid, SUM(royalties.valor_original) as total_royalties, SUM(royalties.cheques_devolvidos) as total_chequesdevolvidos FROM royalties_ordem_pagamentos JOIN royalties ON royalties.id = royalties_ordem_pagamentos.idroyalties GROUP BY opid) as rttotal ON rttotal.opid = op.id
-      WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
+      WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and franqueados.franqueadoid = "SP.CAMPINAS.THIAGO.STABARBARA" and op.mes_ref = "'.$month.'"
       GROUP BY franqueados.id');
-      // return view('admin.mails.emails-franqueado')->with(['data'=>$comissoes[18]]);
+      // dd($comissoes);
+      // return view('admin.mails.emails-franqueado')->with(['data'=>$comissoes[0]]);
       $count = 0;
       foreach ($comissoes as $key => $value) {
         dispatch(
@@ -46,7 +47,7 @@ class MailController extends Controller
       // Emails FDA
       $comissoes =
       DB::select('SELECT fdas.id, fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas,
-      SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal, op.relatorio_pdf
+      SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal, op.relatorio_pdf, op.mes_ref
       FROM comissoes
       JOIN fdas ON comissoes.fdaid = fdas.id
       JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_instalacao) as valor_total FROM comissoes_produto
@@ -56,11 +57,11 @@ class MailController extends Controller
       JOIN ordens_pagamento AS op ON op.fdaid = fdas.id
       WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
       GROUP BY fdas.id');
-      
+      // return view('admin.mails.emails-fda')->with(['data'=>$comissoes[0]]);
       foreach ($comissoes as $key => $value) {
-          dispatch(
-            new \App\Jobs\SendEmailsComissions(1,$value)
-          );
+          // dispatch(
+          //   new \App\Jobs\SendEmailsComissions(1,$value)
+          // );
           // dd('oi');
           $count++;
       }
