@@ -13,10 +13,13 @@ class OrdensPagamentoController extends Controller
     public function index(Request $request)
     {
         if($request->type == 'pay'){
-            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
+            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, cpTotal.totalProdutos as totalProdutos, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
             LEFT JOIN fdas as fd on op.fdaid = fd.id 
             LEFT JOIN franqueados as fr on op.franqueadoid = fr.id 
             JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as copid, COUNT(*) as totalVendas FROM comissoes_ordens_pagamento GROUP BY comissoes_ordens_pagamento.idordempagamento) as copTotal on copTotal.copid = op.id
+            JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as cpid, COUNT(*) as totalProdutos FROM comissoes_ordens_pagamento 
+                JOIN comissoes_produto ON comissoes_produto.comissaoid = comissoes_ordens_pagamento.idcomissao
+                GROUP BY comissoes_ordens_pagamento.idordempagamento) as cpTotal on cpTotal.cpid = op.id
             LEFT JOIN (SELECT royalties_ordem_pagamentos.idordempagamento as ropid, SUM(royalties.valor_original + royalties.cheques_devolvidos) as vRoyaltie FROM royalties_ordem_pagamentos
                 JOIN royalties on royalties.id = royalties_ordem_pagamentos.idroyalties
                 GROUP BY royalties_ordem_pagamentos.idordempagamento
@@ -24,10 +27,13 @@ class OrdensPagamentoController extends Controller
             WHERE op.status != 0
             ');
         }else{
-            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
+            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, cpTotal.totalProdutos as totalProdutos, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
             LEFT JOIN fdas as fd on op.fdaid = fd.id 
             LEFT JOIN franqueados as fr on op.franqueadoid = fr.id 
             JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as copid, COUNT(*) as totalVendas FROM comissoes_ordens_pagamento GROUP BY comissoes_ordens_pagamento.idordempagamento) as copTotal on copTotal.copid = op.id
+            JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as cpid, COUNT(*) as totalProdutos FROM comissoes_ordens_pagamento 
+                JOIN comissoes_produto ON comissoes_produto.comissaoid = comissoes_ordens_pagamento.idcomissao
+                GROUP BY comissoes_ordens_pagamento.idordempagamento) as cpTotal on cpTotal.cpid = op.id
             LEFT JOIN (SELECT royalties_ordem_pagamentos.idordempagamento as ropid, SUM(royalties.valor_original + royalties.cheques_devolvidos) as vRoyaltie FROM royalties_ordem_pagamentos
                 JOIN royalties on royalties.id = royalties_ordem_pagamentos.idroyalties
                 GROUP BY royalties_ordem_pagamentos.idordempagamento
@@ -35,7 +41,7 @@ class OrdensPagamentoController extends Controller
             WHERE op.status != 1
             ');    
         }
-        
+        // dd($result);
         return Response::json($result);
     }
 

@@ -69,6 +69,7 @@
 																<th><a href="#" @click.prevent="sortFunction('cliente')">Fda</a></th>
 																<th><a href="#" @click.prevent="sortFunction('relatorio_pdf')">Relatório PDF</a></th>
 																<th><a href="#" @click.prevent="sortFunction('totalVendas')">Total de Vendas</a></th>
+																<th><a href="#" @click.prevent="sortFunction('totalProdutos')">Total de Produtos</a></th>
 																<th><a href="#" @click.prevent="sortFunction('valor')">Valor à pagar</a></th>
 																<th><a href="#" @click.prevent="sortFunction('status')">Status</a></th>
 																<th>Ações</th>
@@ -82,6 +83,7 @@
 																	<a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a>
 																</td>
 																<td>{{ order.totalVendas }}</td>
+																<td>{{ order.totalProdutos }}</td>
 																<td>R$ {{ order.valor.formatMoney(2,',','.') }}</td>
 																<td>
 																	<p v-if="order.status" class="pg">Pago <i class="glyphicon glyphicon-ok"></i> </p>
@@ -113,6 +115,7 @@
 																<th><a href="#" @click.prevent="sortFunction('cliente')">Franqueado</a></th>
 																<th><a href="#" @click.prevent="sortFunction('relatorio_pdf')">Relatório PDF</a></th>
 																<th><a href="#" @click.prevent="sortFunction('totalVendas')">Total Vendas</a></th>
+																<th><a href="#" @click.prevent="sortFunction('totalProdutos')">Total Produtos</a></th>
 																<!-- <th>Total Comissão</th> -->
 																<th><a href="#" @click.prevent="sortFunction('totalRoyaltie')">Royalties</a></th>
 																<th><a href="#" @click.prevent="sortFunction('valor')">Liq. à pagar</a></th>
@@ -126,6 +129,7 @@
 																<td>{{ order.cliente }}</td>
 																<td><a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a></td>
 																<td>{{ order.totalVendas }}</td>
+																<td>{{ order.totalProdutos }}</td>
 																<td>
 																	<p v-if="order.totalRoyaltie > 0" class="rejected">
 																		R$ {{ order.totalRoyaltie.formatMoney(2,',','.') }}
@@ -181,6 +185,7 @@
 	import _ from 'lodash'
 	import ButtonsListView from './ButtonsListView.vue'
 	export default{
+		name: 'OrdersList',
 		data(){
 			return {
 				orders: {
