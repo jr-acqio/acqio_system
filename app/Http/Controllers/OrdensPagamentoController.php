@@ -13,7 +13,7 @@ class OrdensPagamentoController extends Controller
     public function index(Request $request)
     {
         if($request->type == 'pay'){
-            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, cpTotal.totalProdutos as totalProdutos, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
+            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, COALESCE(fr.nome_razao,fd.nome_razao) as nome_razao, op.*, copTotal.totalVendas as totalVendas, cpTotal.totalProdutos as totalProdutos, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
             LEFT JOIN fdas as fd on op.fdaid = fd.id 
             LEFT JOIN franqueados as fr on op.franqueadoid = fr.id 
             JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as copid, COUNT(*) as totalVendas FROM comissoes_ordens_pagamento GROUP BY comissoes_ordens_pagamento.idordempagamento) as copTotal on copTotal.copid = op.id
@@ -27,7 +27,7 @@ class OrdensPagamentoController extends Controller
             WHERE op.status != 0
             ');
         }else{
-            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, op.*, copTotal.totalVendas as totalVendas, cpTotal.totalProdutos as totalProdutos, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
+            $result = DB::select('SELECT COALESCE(fr.franqueadoid,fd.fdaid) as cliente, COALESCE(fr.nome_razao,fd.nome_razao) as nome_razao, op.*, copTotal.totalVendas as totalVendas, cpTotal.totalProdutos as totalProdutos, COALESCE(totalRoyaltie.vRoyaltie,0) as totalRoyaltie, concat("/admin/orders/",op.id,"/", SUBSTRING_INDEX(op.relatorio_pdf, "/", -1) ) as url from ordens_pagamento as op 
             LEFT JOIN fdas as fd on op.fdaid = fd.id 
             LEFT JOIN franqueados as fr on op.franqueadoid = fr.id 
             JOIN (SELECT comissoes_ordens_pagamento.idordempagamento as copid, COUNT(*) as totalVendas FROM comissoes_ordens_pagamento GROUP BY comissoes_ordens_pagamento.idordempagamento) as copTotal on copTotal.copid = op.id

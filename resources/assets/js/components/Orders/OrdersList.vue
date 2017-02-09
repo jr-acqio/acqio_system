@@ -67,6 +67,7 @@
 															<tr>
 																<th>#</th>
 																<th><a href="#" @click.prevent="sortFunction('cliente')">Fda</a></th>
+																<th><a href="#" @click.prevent="sortFunction('nome_razao')">Nome / Razão Social</a></th>
 																<th><a href="#" @click.prevent="sortFunction('relatorio_pdf')">Relatório PDF</a></th>
 																<th><a href="#" @click.prevent="sortFunction('totalVendas')">Total de Vendas</a></th>
 																<th><a href="#" @click.prevent="sortFunction('totalProdutos')">Total de Produtos</a></th>
@@ -79,6 +80,7 @@
 															<tr v-for="(order, key) in filterByFda((orders.orders_fda),filterInput)">
 																<td>{{ key + 1 }}</td>
 																<td>{{ order.cliente }}</td>
+																<td>{{ order.nome_razao }}</td>
 																<td>
 																	<a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a>
 																</td>
@@ -113,6 +115,7 @@
 															<tr>
 																<th>#</th>
 																<th><a href="#" @click.prevent="sortFunction('cliente')">Franqueado</a></th>
+																<th><a href="#" @click.prevent="sortFunction('nome_razao')">Nome / Razão Social</a></th>
 																<th><a href="#" @click.prevent="sortFunction('relatorio_pdf')">Relatório PDF</a></th>
 																<th><a href="#" @click.prevent="sortFunction('totalVendas')">Total Vendas</a></th>
 																<th><a href="#" @click.prevent="sortFunction('totalProdutos')">Total Produtos</a></th>
@@ -127,6 +130,7 @@
 															<tr v-for="(order,key) in filterByFranq((orders.orders_fr),filterInput)">
 																<td>{{ key +1 }}</td>
 																<td>{{ order.cliente }}</td>
+																<td>{{ order.nome_razao }}</td>
 																<td><a target="_blank" :href="order.url">{{ baseName(order.relatorio_pdf) }}</a></td>
 																<td>{{ order.totalVendas }}</td>
 																<td>{{ order.totalProdutos }}</td>
