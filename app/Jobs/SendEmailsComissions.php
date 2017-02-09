@@ -32,23 +32,21 @@ class SendEmailsComissions extends Job implements ShouldQueue
      */
     public function handle()
     {
-        // dd($this->dados);
         if($this->type == 1){
           Mail::send('admin.mails.emails-fda', ['data'=>$this->dados], function($message){
             // Set the receiver and subject of the mail.
             $fda = Fda::where('id',$this->dados->id)->first();
             // dd($franqueado);
-            $message->to('joselito.junior@esfera5.com.br');
+            // $message->to('joselito.junior@esfera5.com.br');
             
-            // $message->to($fda->email);
+            $message->to($fda->email);
             
-            // $message->bcc('stefano.andrei@esfera5.com.br');
+            $message->bcc('stefano.andrei@esfera5.com.br');
             $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');
 
-            $message->subject('Relatório de Comissões - Dezembro');
+            $message->subject('Relatório de Comissões - '.mes_extenso($this->dados->mes_ref));
             // Set the sender
-            // dd($message);
             $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');
             $message->attach(storage_path().'/'.$this->dados->relatorio_pdf);
           });
@@ -57,15 +55,14 @@ class SendEmailsComissions extends Job implements ShouldQueue
           Mail::send('admin.mails.emails-franqueado', ['data'=>$this->dados], function($message){
             // Set the receiver and subject of the mail.
             $franqueado = Franqueado::where('id',$this->dados->id)->first();
-            // dd($franqueado);
-            $message->to('joselito.junior@esfera5.com.br');
-            // $message->to($franqueado->email);
+            // $message->to('joselito.junior@esfera5.com.br');
+            $message->to($franqueado->email);
             
-
             $message->bcc('stefano.andrei@esfera5.com.br');
-            // $message->bcc('leandro.xavier@esfera5.com.br');
+            $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');
-            $message->subject('Relatório de Comissões - Dezembro');
+
+            $message->subject('Relatório de Comissões - '.mes_extenso($this->dados->mes_ref));
             // Set the sender
 
             $message->from('joselito.junior@esfera5.com.br','Júnior Paiva');

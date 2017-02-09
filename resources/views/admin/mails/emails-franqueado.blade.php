@@ -524,45 +524,76 @@
 										POS vendidas no mês de {{ mes_extenso($data->mes_ref) }}&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.
 									</b>
 									@if($data->totalRoyalties > 0)
+									<!-- Caindo aqui ele tem royalties para abater -->
 									<b>
 										Deste saldo será abatido R$ {{ number_format($data->totalRoyalties,2,',','.') }} referente à royalties vencidos,
 									</b>
-									@if($data->valorFinal < 0)
-									<b>
-										totalizando um valor de R$ {{ number_format(abs($data->valorFinal),2,',','.') }} em aberto.
-									</b>
-								</p>
-								<p>
-									Estamos disponibilizando canais exclusivos para negociação de valores de royaties em aberto. É possível entrar em contato através do WhatsApp do setor financeiro para Royalties: (17) 99161 1578, do telefone (17) 3512-5555 ou através dos e-mails da Suelen Ribeiro ( financeiro2@acqiofranchising.com.br ) e Flávio Lino ( financeiro3@acqiofranchising.com.br).	
-								</p>
-								<p>
-									Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta entrar em contato, ok?	
-								</p>
+										@if($data->valorFinal < 0)
+										<!-- Caindo aqui ele tem Royalties e o saldo permanece negativo -->
+											<b>
+												totalizando um valor de R$ {{ number_format(abs($data->valorFinal),2,',','.') }} em aberto.
+											</b>
+											<p>
+												Estamos disponibilizando canais exclusivos para negociação de valores de royaties em aberto. É possível entrar em contato através do WhatsApp do setor financeiro para Royalties: (17) 99161 1578, do telefone (17) 3512-5555 ou através dos e-mails da Suelen Ribeiro (financeiro2@acqiofranchising.com.br) e Flávio Lino (financeiro3@acqiofranchising.com.br).
+											</p>
+											<p>
+												Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta entrar em contato, ok?	
+											</p>								
+										@else
+										<!-- Caindo aqui ele tem Royalties e o saldo continua positivo -->
+											<b>totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.</b>
+
+											<p data-mce-style="text-align: left;" dir="ltr">
+												Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail <b>notafiscal@esfera5.com.br.</b>
+											<br>
+											<br>
+											As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
+											<br>
+											As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
+											<br>
+											A Nota fiscal deverá conter as seguintes informações:<br>
+											<br>
+											Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
+											Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
+											Endereço: Rua Domingos José Martins, 75 Sala 304, Bairro do Recife – Recife/PE<br>
+											CEP: 50.030-200<br>
+											CNPJ/MF: 18.577.728/0001-46<br>
+											NIRE: 26300022508<br>
+											Inscrição Municipal: 4989392<br>
+											Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
+											<br>
+											<br>
+											Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
+										@endif
+									</p>
+									@else
+									<!-- Caindo aqui ele NÃO TEM ROYALTIES, SALDO POSITIVO -->
+										<b>Totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.</b>
+
+										<p data-mce-style="text-align: left;" dir="ltr">
+											Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail <b>notafiscal@esfera5.com.br.</b>
+											<br>
+											<br>
+											As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
+											<br>
+											As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
+											<br>
+											A Nota fiscal deverá conter as seguintes informações:<br>
+											<br>
+											Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
+											Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
+											Endereço: Rua Domingos José Martins, 75 Sala 304, Bairro do Recife – Recife/PE<br>
+											CEP: 50.030-200<br>
+											CNPJ/MF: 18.577.728/0001-46<br>
+											NIRE: 26300022508<br>
+											Inscrição Municipal: 4989392<br>
+											Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
+											<br>
+											<br>
+											Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
 									@endif
 
-								@else
-								<b>Totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.</b>
 
-								<p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>
-									<br>
-									As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
-									<br>
-									As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
-									<br>
-									A Nota fiscal deverá conter as seguintes informações:<br>
-									<br>
-									Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
-									Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
-									Endereço: Rua Domingos José Martins, 75 Sala 304, Bairro do Recife – Recife/PE<br>
-									CEP: 50.030-200<br>
-									CNPJ/MF: 18.577.728/0001-46<br>
-									NIRE: 26300022508<br>
-									Inscrição Municipal: 4989392<br>
-									Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
-									<br>
-									<br>
-									Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
-									@endif
 								</p>
 								&nbsp;
 								<br>

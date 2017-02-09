@@ -139,6 +139,8 @@
 																	<p v-else>Processando</p>
 																</td>
 																<td>
+																	<a :href="'/admin/orders/'+order.id" class="btn btn-default btn-xs"><i class="fa fa-eye"></i></a>
+																	
 																	<a href="#" class="btn btn-success btn-xs" title="Pago" data-toggle="tooltip" data-placement="top" @click.prevent="approvedOrder(order,orders.orders_fr)" v-if="order.status != 1">
 																		<i class="fa fa-thumbs-up" aria-hidden="true"></i>
 																	</a>
