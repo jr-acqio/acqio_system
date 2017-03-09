@@ -344,13 +344,13 @@
 			filterByFda(list,value){
 				value = value.toUpperCase();	
 				return _.filter(this.filterByMonth(list),function(order){
-					return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1;
+					return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1 || order.nome_razao.toString().indexOf(value) > -1;
 				});
 			},
 			filterByFranq(list,value){
 				value = value.toUpperCase();
 				return this.filterByMonth(list).filter(function(order){
-					return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1 || order.totalRoyaltie.toString().indexOf(value) > -1;
+					return order.cliente.indexOf(value) > -1 || order.relatorio_pdf.indexOf(value) > -1 || order.valor.toString().indexOf(value) > -1 || order.totalVendas.toString().indexOf(value) > -1 || order.totalRoyaltie.toString().indexOf(value) > -1 || order.nome_razao.toString().indexOf(value) > -1;
 				});	
 			},
 			alterTab(int){

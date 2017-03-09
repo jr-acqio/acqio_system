@@ -54,6 +54,9 @@ class Handler extends ExceptionHandler
         {
             return \Response::make(['error'=>'not_found','error_message'=>'Please check the URL you submitted'], 404);
         }
+        if($e instanceof \ErrorException){
+            return "<h3>Não foi possível carregar esta página, devido a tentar acessar dados que não existem. \nVerifique com o administrador do sistema.</h3>";
+        }
       return parent::render($request, $e);
     }
 }

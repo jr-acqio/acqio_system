@@ -47,8 +47,8 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <td>@if($pedido->fdaid != 0) ({{ \App\Models\Fda::where('id',$pedido->fdaid)->first()->fdaid }})  - {{ \App\Models\Fda::where('id',$pedido->fdaid)->first()->nome_razao }} @else Não Cadastrado @endif</td>
-                        <td>@if($pedido->franqueadoid != 0) ({{ \App\Models\Franqueado::where('id',$pedido->franqueadoid)->first()->franqueadoid }}) - {{ \App\Models\Franqueado::where('id',$pedido->franqueadoid)->first()->nome_razao }} @else Não Cadastrado @endif</td>
+                        <td>@if($pedido->fdaid != 0 && \App\Models\Fda::where('id',$pedido->fdaid)->first() != null) ({{ \App\Models\Fda::where('id',$pedido->fdaid)->first()->fdaid }})  - {{ \App\Models\Fda::where('id',$pedido->fdaid)->first()->nome_razao }} @else Não Cadastrado @endif</td>
+                        <td>@if($pedido->franqueadoid != 0 && \App\Models\Franqueado::where('id',$pedido->franqueadoid)->first() != null) ({{ \App\Models\Franqueado::where('id',$pedido->franqueadoid)->first()->franqueadoid }}) - {{ \App\Models\Franqueado::where('id',$pedido->franqueadoid)->first()->nome_razao }} @else Não Cadastrado @endif</td>
                       </tr>
                     </tbody>
                   </table>
