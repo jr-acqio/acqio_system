@@ -65,6 +65,7 @@ class RoyaltiesController extends Controller
       $rowCounter=0;
       Excel::load($sheet, function ($reader) use($messages,&$arrayMessages,&$rowCounter) {
         $reader->each(function($row) use($messages,&$arrayMessages,&$rowCounter){
+          // dd($row);
           $rowCounter++;
           $f = Franqueado::where('franqueadoid',$row->id_franqueado)->first();
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_vencimento);

@@ -14,7 +14,7 @@ if (! function_exists('mes_extenso')) {
         		$mes_extenso = 'Janeiro';
         		break;
         	case 2:
-        		$mes_extenso = 'Feverereiro';
+        		$mes_extenso = 'Fevereiro';
         		break;
         	case 3:
         		$mes_extenso = 'Março';

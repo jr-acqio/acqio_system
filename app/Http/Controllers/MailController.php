@@ -31,7 +31,7 @@ class MailController extends Controller
       GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
       JOIN ordens_pagamento AS op ON op.franqueadoid = franqueados.id
        LEFT JOIN (SELECT royalties_ordem_pagamentos.idordempagamento as opid, SUM(royalties.valor_original) as total_royalties, SUM(royalties.cheques_devolvidos) as total_chequesdevolvidos FROM royalties_ordem_pagamentos JOIN royalties ON royalties.id = royalties_ordem_pagamentos.idroyalties GROUP BY opid) as rttotal ON rttotal.opid = op.id
-      WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and (franqueados.franqueadoid = "PE.RECIFE.BRUNO" or franqueados.franqueadoid = "sp.campinas.paulo.PIRACICABA") and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
+      WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
       GROUP BY franqueados.id');
       // dd($comissoes);
       // return view('admin.mails.emails-franqueado')->with(['data'=>$comissoes[0]]);
@@ -55,7 +55,7 @@ class MailController extends Controller
       JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto
       GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
       JOIN ordens_pagamento AS op ON op.fdaid = fdas.id
-      WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and fdas.fdaid = "PE.RECIFE" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
+      WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
       GROUP BY fdas.id');
       // return view('admin.mails.emails-fda')->with(['data'=>$comissoes[0]]);
       foreach ($comissoes as $key => $value) {
