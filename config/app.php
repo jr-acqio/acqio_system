@@ -163,6 +163,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         Vinkla\Pusher\PusherServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Barryvdh\Cors\ServiceProvider::class,
     ],
 
     /*

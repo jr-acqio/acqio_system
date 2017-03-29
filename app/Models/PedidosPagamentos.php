@@ -14,4 +14,10 @@ class PedidosPagamentos extends Model
       'pedido_id'
     ];
 
+    public function pagamento_cartoes(){
+      return $this->hasMany('App\Models\Pagamento','id')->with('cartoes');
+    }
+    public function pagamento_boletos(){
+      return $this->hasMany('App\Models\Pagamento','id')->with('boletos');
+    }
 }

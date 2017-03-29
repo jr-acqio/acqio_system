@@ -81,4 +81,47 @@ class ApiAjaxController extends Controller
 
       return response()->json($produto);
     }
+
+    // Return clientes com seus pedidos e valores do pedido
+    public function getCliente($c){
+      $clientes = \App\Models\Cliente::with('pedidos.itens.produto')
+      ->whereHas('pedidos.itens', function($query){
+        $query->whereNotNull('id');
+        // dd($query);
+     })
+    ->where('clientes.nome','like','%'.$c.'%')
+    ->orWhere('clientes.razao','like','%'.$c.'%')
+    ->orWhere('clientes.cpf','like','%'.$c.'%')
+    ->orWhere('clientes.cnpj','like','%'.$c.'%')
+    ->get();
+
+
+// foreach($clientes as $cliente)
+// {
+  // var_dump($cliente->pedidos());
+  // $cliente->pedidos();//->itens()->produto();
+// }
+
+// $clientes->pedidos->itens()->produto();
+
+return $clientes;
+        // return \App\Models\Cliente::with('pedidos.itens.produto')
+        // ->whereHas('pedidos.itens', function($query){
+        //     $query->whereNull('created_at');
+        // })
+        // ->where('clientes.nome','like','%'.$c.'%')
+        // ->orWhere('clientes.razao','like','%'.$c.'%')
+        // ->orWhere('clientes.cpf','like','%'.$c.'%')
+        // ->orWhere('clientes.cnpj','like','%'.$c.'%')
+        //
+        // ->get();
+        // return \App\Models\Cliente::with('pedidos.itens.produto')->whereHas('pedidos.itens.produto', function($query){
+        //     $query->where('id', '<>', 0);
+        // })
+        // ->has('pedidos.itens.produto')
+        // ->where('clientes.nome','like','%'.$c.'%')
+        // ->orWhere('clientes.razao','like','%'.$c.'%')
+        // ->orWhere('clientes.cpf','like','%'.$c.'%')
+        // ->orWhere('clientes.cnpj','like','%'.$c.'%')->get();
+    }
 }

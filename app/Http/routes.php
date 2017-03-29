@@ -11,13 +11,13 @@ Route::get('/teste',function(){
 
 
   if(\Carbon\Carbon::now()->subMonth()->format('m') == 12){
-    $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');  
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');
   }else{
-    $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');  
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
   }
   $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
-  
+
   if(!in_array($folder_year,$directories)){
     // Caindo aqui não existe o diretório do ano, ou seja, a pasta referente ao ano.
     Storage::makeDirectory($folder_year);
@@ -48,19 +48,19 @@ Route::get('/teste',function(){
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
-    
+
     dispatch(
       new \App\Jobs\GeradorPdfComissoes($folder_month,$params,$comissoes_fda,$value,$type = 1)
     );
-    
+
   }
   // Comissões Franqueado
   $directory = 'relatorio-comissao/franqueados';
   $directories = Storage::directories($directory);// Obter os diretórios da pasta 'relatorio-comissao/fdas'
   if(\Carbon\Carbon::now()->subMonth()->format('m') == 12){
-    $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');  
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');
   }else{
-    $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');  
+    $folder_year = $directory.'/'.\Carbon\Carbon::now()->format('Y');
   }
   $folder_month = $folder_year.'/'.mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
 
@@ -112,7 +112,7 @@ Route::get('/teste',function(){
 Route::get('/baixar-pdfs','ComissoesController@gerarPdfs');
 //ajax
 Route::get('/login','AuthController@index');
-Route::group(['prefix'=> 'api'],function(){
+Route::group(['prefix'=> 'api', 'middleware' => 'cors'],function(){
   Route::get('ajax/codigo/{codigo}/data/{data}','ApiAjaxController@getCheckCodigo');
   Route::get('ajax/boleto/{num}','ApiAjaxController@getCheckBoleto');
 
@@ -121,6 +121,9 @@ Route::group(['prefix'=> 'api'],function(){
   //Route Edit Products
   Route::get('ajax/produto-details/{idproduto}','ApiAjaxController@getDetailsProduct');
   Route::post('ajax/editProduct/{idproduto}','ApiAjaxController@postEditProduct');
+
+  //Route getCliente for boleto.acqio.co
+  Route::get('/v1/getCliente/{c}','ApiAjaxController@getCliente');
 });
 // Route::post("/migrar","ExcelController@uploadMigrar");
 // Route::post("/migrarBoleto","ExcelController@uploadMigrarBoleto");
@@ -171,11 +174,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'],function(){
     // Route::get('comissoes/list/email')
     Route::resource('comissoes','ComissoesController',['except'=>['update','edit','show']]);
     Route::resource('royalties','RoyaltiesController',['only'=>['create','store','index','destroy']]);
-    
+
     Route::get('/orders/list',
       ['as'=>'admin.orders.list.index','uses'=>'OrdensPagamentoController@view']);
     Route::resource('orders','OrdensPagamentoController',['except'=>['create','edit']]);
-    //Acessar os pdfs 
+    //Acessar os pdfs
     Route::get('/orders/{id}/{filename}', function ($id,$filename)
     {
         $path = storage_path().'/'.\App\Models\OrdemPagamento::where('id',$id)->first()->relatorio_pdf;

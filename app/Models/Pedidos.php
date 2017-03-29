@@ -9,7 +9,7 @@ class Pedidos extends Model
     protected $fillable = ['status', 'data_cancel', 'motivo'];
     protected $table = 'pedidos';
 
-    public function produtos(){
+    public function itens(){
       return $this->hasMany('App\Models\PedidosItens', 'pedido_id');
     }
     public function cliente(){

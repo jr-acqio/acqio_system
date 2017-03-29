@@ -12,4 +12,8 @@ class PedidosItens extends Model
     {
         return $this->belongsTo('App\Models\Pedidos');
     }
+
+    public function produto(){
+      return $this->hasOne('App\Models\Produto','id','produto_id');
+    }
 }
