@@ -1,10 +1,10 @@
 <?php
 
-if (\App::environment('local')) {
-  $allowedOrigins = ['localhost:8000'];
-}else{
-  $allowedOrigins= ['boletos.acqio.co'];
-}
+// if (\App::environment('local')) {
+//   $allowedOrigins = ['localhost:8000'];
+// }else{
+//   $allowedOrigins= ['boletos.acqio.co'];
+// }
 
 return [
     /*
@@ -17,8 +17,8 @@ return [
      |
      */
     'supportsCredentials' => false,
-    // 'allowedOrigins' => ['localhost:8000', 'boletos.acqio.co'],
-    'allowedOrigins' => $allowedOrigins,
+    'allowedOrigins' => /*['localhost:8000',*/ ['boletos.acqio.co'],
+    // 'allowedOrigins' => $allowedOrigins,
     'allowedHeaders' => ['*'],
     'allowedMethods' => ['GET'],
     'exposedHeaders' => [],
