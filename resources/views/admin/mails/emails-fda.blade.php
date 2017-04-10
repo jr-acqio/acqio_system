@@ -507,23 +507,20 @@
 
                         <td valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
                           <?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
-                            <p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;{{-- $primeiro_nome[0] --}}, tudo bem?</p>
+                            <p data-mce-style="text-align: left;" dir="ltr">Olá{{-- $primeiro_nome[0] --}}, tudo bem?</p>
 
 <!-- <p data-mce-style="text-align: left;" dir="ltr"><br>
 Parabéns pelas vendas!</p> -->
 
-<p data-mce-style="text-align: left;" dir="ltr"><br>
+<p data-mce-style="text-align: left;" dir="ltr">
+	<b>
+		O valor de Taxa de Instalação, referente às&nbsp;{{ $data->totalProdutos }} POS instaladas no mês de {{ mes_extenso($data->mes_ref) }}&nbsp;é de de&nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.
+	</b>
+</p>
 
-O valor de Taxa de Instalação, referente às&nbsp;{{ $data->totalProdutos }} POS instaladas no mês de {{ mes_extenso($data->mes_ref) }}&nbsp;é de de&nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.</p>
-&nbsp;
-
-<p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail notafiscal@esfera5.com.br.<br>
-<br>
-As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
-<br>
-As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
-<br>
-A Nota fiscal deverá conter as seguintes informações:<br>
+<p data-mce-style="text-align: left;" dir="ltr">Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5, conforme dados abaixo:<br>
+<!-- <br> -->
+<!-- A Nota fiscal deverá conter as seguintes informações:<br> -->
 <br>
 Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
 Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
@@ -534,8 +531,29 @@ NIRE: 26300022508<br>
 Inscrição Municipal: 4989392<br>
 Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
 <br>
+
+<p>
+	<b>Lembrando que a partir desse mês, as Notas Fiscais de Comissões e Recorrências deverão ser enviadas pelo Portal do Franqueado (credenciamento).</b>
+</p>
+<p>
+		O envio será através da aba Enviar Nf’s, no menu Financeiro.
+</p>
+
+
+
+<!-- <img src="{{ asset( storage_path().'/app/envio_nfs.gif') }}" alt=""> -->
+<img src="http://acqio.co/img/envio_nfs.gif" alt="">
+<p>
+	<b><u>Ressaltamos que as notas fiscais enviadas por outros meios não serão consideradas.</u></b>
+	<ul>
+		<li>As notas fiscais emitidas e enviadas até o dia 10, corretamente, serão pagas no dia 15, ou próximo dia útil, caso seja no final de semana ou feriado;</li>
+		<li>O valor e conteúdo da NF devem ser enviados conforme relatório enviado;</li>
+		<li>Quaisquer dúvidas sobre os valores, devem ser contestadas através da abertura de chamado (ticket), em paralelo ao envio da NF, para que não haja atraso nos pagamentos.</li>
+	</ul>
+</p>
+
 <br>
-Estamos enviando, em anexo, o relatório onde constam todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
+Estamos enviando, em anexo, o relatório onde constam todo o detalhamento dos clientes e valores que usamos para chegar a esse valor.<br>
 <br>
 Atenciosamente,</p>
 

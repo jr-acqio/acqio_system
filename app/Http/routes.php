@@ -1,5 +1,11 @@
 <?php
 use Vinkla\Pusher\Facades\Pusher;
+
+Route::get('/pdf',function(){
+  $pdf = PDF::loadView('pdf-static');
+  return $pdf->stream();
+});
+
 Route::get('/enviar-email','MailController@sendMail');
 
 Route::get('/teste',function(){

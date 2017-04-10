@@ -38,9 +38,9 @@ class SendEmailsComissions extends Job implements ShouldQueue
             $fda = Fda::where('id',$this->dados->id)->first();
             // dd($franqueado);
             // $message->to('joselito.junior@esfera5.com.br');
-            
+
             $message->to($fda->email);
-            
+
             $message->bcc('stefano.andrei@esfera5.com.br');
             $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');
@@ -57,7 +57,7 @@ class SendEmailsComissions extends Job implements ShouldQueue
             $franqueado = Franqueado::where('id',$this->dados->id)->first();
             // $message->to('joselito.junior@esfera5.com.br');
             $message->to($franqueado->email);
-            
+
             $message->bcc('stefano.andrei@esfera5.com.br');
             $message->bcc('leandro.xavier@esfera5.com.br');
             $message->bcc('joselito.junior@esfera5.com.br');

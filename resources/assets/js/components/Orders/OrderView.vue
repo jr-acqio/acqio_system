@@ -86,7 +86,7 @@
 											<span v-for="produto in item.produtos">{{ produto.descricao }} </span>
 										</td>
 										<!-- <td>$5.98</td> -->
-										<td>R$ 
+										<td>R$
 											<span v-if="order.franqueado == null">
 												{{ sum(item.produtos,'tx_install').formatMoney(2,',','.') }}
 											</span>
@@ -98,20 +98,20 @@
 								</tbody>
 							</table>
 						</div><!-- /table-responsive -->
-						
 
-						<div class="row">							
+
+						<div class="row">
 							<div class="col-lg-6">
 								<div v-if="totalRoyaltie > 0">
 									<a v-if="listDebitos == false" @click="listDebitos = true" class="btn btn-default">Exibir Débitos
 										<i class="fa fa-plus"></i>
 									</a>
 									<a v-else="" @click="listDebitos = false" class="btn btn-default">
-										Esconder Débitos 
+										Esconder Débitos
 										<i class="fa fa-minus"></i>
-									</a>	
+									</a>
 								</div>
-								
+
 								<br><br>
 								<!-- Table Descontos -->
 								<table class="table table-hover" v-if="listDebitos == true">
@@ -161,9 +161,9 @@
 
 									<button v-else="" class="btn btn-default" @click.prevent="neutralizeOrder(order)"><i class="fa fa-reply"></i> Pendenciar Pagamento</button>
 								</div>
-							</div>	
+							</div>
 						</div>
-						
+
 
 						<div class="well m-t"><strong>Situação: </strong>
 							<span v-if="order.status == 1" style="color:green"><strong>Pago <i class="fa fa-check"></i></strong></span>
@@ -193,7 +193,7 @@
 		},
 		mounted(){
 			this.order = JSON.parse(this.order_prop)
-			
+
 
 			this.totalRoyaltie = this.sum(this.order.royalties,'valor_original')
 
@@ -225,7 +225,7 @@
 			},
 			baseName(str)
 			{
-				var base = new String(str).substring(_.lastIndexOf(str,'/') + 1); 
+				var base = new String(str).substring(_.lastIndexOf(str,'/') + 1);
 				return base;
 			},
 			approvedOrder(order){

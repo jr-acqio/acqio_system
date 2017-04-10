@@ -57,6 +57,9 @@ class Handler extends ExceptionHandler
         if($e instanceof \ErrorException){
             return $e->getMessage();
         }
+        if($e instanceof \Illuminate\Database\QueryException){
+          return $e->getMessage();
+        }
       return parent::render($request, $e);
     }
 }

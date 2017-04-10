@@ -69,7 +69,7 @@ class RoyaltiesController extends Controller
           $rowCounter++;
           $f = Franqueado::where('franqueadoid',$row->id_franqueado)->first();
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_vencimento);
-
+          // dd($data);
           if($f == null){
             $arrayMessages['royalties_nao_cadastrado'][] = array(
               'linhaExcel'=>$rowCounter,
@@ -84,14 +84,20 @@ class RoyaltiesController extends Controller
             ->where('descontado','!=','s')
             ->where('cheques_devolvidos',number_format((float)$cheques_devolvidos, 2, '.', ''))->first() == null
           ){
-            $r = new Royalties;
-            $r->data_vencimento = $data;
-            $r->cliente = $row->cliente_fornecedor;
-            $r->franquia_loc = $row->franquia_loc;
-            $r->valor_original = $valor_original;
-            $r->cheques_devolvidos = $cheques_devolvidos;
-            $r->franqueadoid = $f->id;
-            $r->save();
+            try {
+              $r = new Royalties;
+              $r->data_vencimento = $data;
+              $r->cliente = $row->cliente_fornecedor;
+              $r->franquia_loc = $row->franquia_loc;
+              $r->valor_original = $valor_original;
+              $r->cheques_devolvidos = $cheques_devolvidos;
+              $r->franqueadoid = $f->id;
+              $r->save();
+            } catch (\Exception $e) {
+                dd("Erro: ". $e->getMessage());
+            }
+
+
           }
         });
       });

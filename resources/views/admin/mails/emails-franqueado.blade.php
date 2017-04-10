@@ -516,10 +516,8 @@
 
 							<td style="text-align: justify;" valign="top" class="mcnTextContent" style="padding-top:0; padding-right:18px; padding-bottom:9px; padding-left:18px;">
 								<?php $primeiro_nome = explode(" ",$data->nome_razao); ?>
-								<p data-mce-style="text-align: left;" dir="ltr">Olá&nbsp;<b>{{-- $primeiro_nome[0] --}}</b>, tudo bem?</p>
-								<br>
-								<p dir="ltr">
-
+								<p data-mce-style="text-align: left;" dir="ltr">Olá<b>{{-- $primeiro_nome[0] --}}</b>, tudo bem?</p>
+                <p dir="ltr">
 									<b>O valor de suas comissões, referente às&nbsp;{{ $data->totalProdutos }}
 										POS vendidas no mês de {{ mes_extenso($data->mes_ref) }}&nbsp;é &nbsp;R$ {{ number_format($data->valorTotal, 2, ',', '.') }}.
 									</b>
@@ -534,25 +532,25 @@
 												totalizando um valor de R$ {{ number_format(abs($data->valorFinal),2,',','.') }} em aberto.
 											</b>
 											<p>
-												Estamos disponibilizando canais exclusivos para negociação de valores de royaties em aberto. É possível entrar em contato através do WhatsApp do setor financeiro para Royalties: (17) 99161 1578, do telefone (17) 3512-5555 ou através dos e-mails da Suelen Ribeiro (financeiro2@acqiofranchising.com.br) e Flávio Lino (financeiro3@acqiofranchising.com.br).
+												Estamos disponibilizando canais exclusivos para negociação de valores de royaties em aberto. É possível entrar em contato através do WhatsApp do setor financeiro para Royalties: (17) 99161 1578, do telefone (17) 3512-5555 ou através do e-mail do Flávio Lino (financeiro3@acqiofranchising.com.br).
 											</p>
 											<p>
-												Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta entrar em contato, ok?	
-											</p>								
+												Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor.
+											</p>
 										@else
 										<!-- Caindo aqui ele tem Royalties e o saldo continua positivo -->
 											<b>totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.</b>
 
 											<p data-mce-style="text-align: left;" dir="ltr">
-												Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail <b>notafiscal@esfera5.com.br.</b>
+												Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5, conforme dados abaixo:
 											<br>
-											<br>
+											<!-- <br>
 											As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
 											<br>
 											As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
-											<br>
-											A Nota fiscal deverá conter as seguintes informações:<br>
-											<br>
+											<br> -->
+											<!-- A Nota fiscal deverá conter as seguintes informações:<br>
+											<br> -->
 											Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
 											Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
 											Endereço: Rua Domingos José Martins, 75 Sala 304, Bairro do Recife – Recife/PE<br>
@@ -568,17 +566,15 @@
 									</p>
 									@else
 									<!-- Caindo aqui ele NÃO TEM ROYALTIES, SALDO POSITIVO -->
-										<b>Totalizando um valor de R$ {{ number_format($data->valorFinal,2,',','.') }} à receber.</b>
-
 										<p data-mce-style="text-align: left;" dir="ltr">
-											Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5 conforme dados abaixo e enviado para o e-mail <b>notafiscal@esfera5.com.br.</b>
+											Para o recebimento do valor, deve ser emitida uma nota fiscal contra&nbsp;a Esfera 5, conforme dados abaixo:
 											<br>
-											<br>
+											<!-- <br>
 											As Notas Fiscais de Serviços devem ser enviadas através de e-mails. Evite enviá-las através do site da Prefeitura, pois estes podem ser falhos e não enviar a NFS-e ao e-mail de destino que foi cadastrado.<br>
 											<br>
 											As Notas fiscais devem ser emitidas e enviadas até o dia 15. Notas recebidas após este prazo, serão pagas conforme fluxo de pagamentos.<br>
 											<br>
-											A Nota fiscal deverá conter as seguintes informações:<br>
+											A Nota fiscal deverá conter as seguintes informações:<br> -->
 											<br>
 											Razão Social: ESFERA 5 TECNOLOGIA E PAGAMENTOS S.A.<br>
 											Nome Fantasia: ESFERA 5 TECNOLOGIA<br>
@@ -589,8 +585,29 @@
 											Inscrição Municipal: 4989392<br>
 											Descrição para emissão das notas: Serviços de prospecção e credenciamento de clientes para a Contratante, com a finalidade de habilitá-los ao Sistema Acqio Pagamentos.<br>
 											<br>
+
+                      <p>
+                        <b>Lembrando que a partir desse mês, as Notas Fiscais de Comissões e Recorrências deverão ser enviadas pelo Portal do Franqueado (credenciamento).</b>
+                      </p>
+                      <p>
+                      		O envio será através da aba Enviar Nf’s, no menu Financeiro.
+                      </p>
+
+
+
+                      <!-- <img src="{{ asset( storage_path().'/app/envio_nfs.gif') }}" alt=""> -->
+                      <img src="http://acqio.co/img/envio_nfs.gif" alt="">
+                      <p>
+                      	<b><u>Ressaltamos que as notas fiscais enviadas por outros meios não serão consideradas.</u></b>
+                      	<ul>
+                      		<li>As notas fiscais emitidas e enviadas até o dia 10, corretamente, serão pagas no dia 15, ou próximo dia útil, caso seja no final de semana ou feriado;</li>
+                      		<li>O valor e conteúdo da NF devem ser enviados conforme relatório enviado;</li>
+                      		<li>Quaisquer dúvidas sobre os valores, devem ser contestadas através da abertura de chamado (ticket), em paralelo ao envio da NF, para que não haja atraso nos pagamentos.</li>
+                      	</ul>
+                      </p>
+
 											<br>
-											Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor. Caso tenha alguma dúvida basta responder esse e-mail, ok?<br>
+											Estamos enviando, em anexo, o relatório onde consta todo o detalhamento dos clientes e valores que usamos para chegar a esse valor.<br>
 									@endif
 
 

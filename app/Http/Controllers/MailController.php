@@ -34,6 +34,7 @@ class MailController extends Controller
       WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'" and op.mes_ref = "'.$month.'"
       GROUP BY franqueados.id');
       // dd($comissoes);
+
       // return view('admin.mails.emails-franqueado')->with(['data'=>$comissoes[0]]);
       $count = 0;
       foreach ($comissoes as $key => $value) {
@@ -59,11 +60,11 @@ class MailController extends Controller
       GROUP BY fdas.id');
       // return view('admin.mails.emails-fda')->with(['data'=>$comissoes[0]]);
       foreach ($comissoes as $key => $value) {
-          dispatch(
-            new \App\Jobs\SendEmailsComissions(1,$value)
-          );
-          
-          $count++;
+          // dispatch(
+          //   new \App\Jobs\SendEmailsComissions(1,$value)
+          // );
+
+          // $count++;
       }
       return redirect('/admin/dashboard')->with(['msg'=>'Estamos enviando os '.$count.' e-mails de comissão, avisaremos ao término','class'=>'info']);
     }
