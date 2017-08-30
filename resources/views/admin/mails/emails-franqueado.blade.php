@@ -587,7 +587,7 @@
 											<br>
 
                       <p>
-                        <b>Lembrando que a partir desse mês, as Notas Fiscais de Comissões e Recorrências deverão ser enviadas pelo Portal do Franqueado (credenciamento).</b>
+                        <b>Lembrando que agora as Notas Fiscais de Comissões e Recorrências deverão ser enviadas pelo Portal do Franqueado (credenciamento).</b>
                       </p>
                       <p>
                       		O envio será através da aba Enviar Nf’s, no menu Financeiro.

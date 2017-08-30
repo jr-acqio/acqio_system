@@ -60,11 +60,11 @@ class MailController extends Controller
       GROUP BY fdas.id');
       // return view('admin.mails.emails-fda')->with(['data'=>$comissoes[0]]);
       foreach ($comissoes as $key => $value) {
-          // dispatch(
-          //   new \App\Jobs\SendEmailsComissions(1,$value)
-          // );
+           dispatch(
+             new \App\Jobs\SendEmailsComissions(1,$value)
+           );
 
-          // $count++;
+           $count++;
       }
       return redirect('/admin/dashboard')->with(['msg'=>'Estamos enviando os '.$count.' e-mails de comissão, avisaremos ao término','class'=>'info']);
     }

@@ -71,13 +71,13 @@ class ComissoesController extends Controller
       $counter = 0;
       Excel::load($sheet, function ($reader) use(&$arrayMessages,&$counter) {
 
-        $reader->each(function($row) use(&$arrayMessages,&$counter){
+          $reader->each(function($row) use(&$arrayMessages,&$counter){
           $counter++;
           $frag_data_aprovacao = explode(" ",$row->datahora_de_finalizacao);
           $data_aprovacao = $frag_data_aprovacao[0];//." ".$frag_data_aprovacao[2].":00";
 
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_cadastro);
-
+//            dd($data);
           // Dividindo os dispositivos em array
           $dispositivos = array_map('trim', explode(',', $row->modelo_pos));
           /*
@@ -105,7 +105,7 @@ class ComissoesController extends Controller
             );
           }
           $dataehora = array_map('trim', explode('-', $row->datahora_de_finalizacao));
-          // dd($dataehora,$row->datahora_de_finalizacao);
+//           dd($dataehora,$row->datahora_de_finalizacao);
           if(count($dataehora) == 1){
             $d = $dataehora[0].' '.'00:00:00';
           }elseif(count($dataehora) == 2){
@@ -114,7 +114,7 @@ class ComissoesController extends Controller
             $d = $dataehora[0].' '.$dataehora[1].':00';
           }
           $data_aprov = Carbon::create($d[6].$d[7].$d[8].$d[9], $d[3].$d[4], $d[0].$d[1], $d[11].$d[12], $d[14].$d[15], $d[17].$d[18], 'America/Fortaleza');
-          // dd($data_aprov,$data_aprov->format('Y-m-d H:i:s'),$counter);
+//           dd($data_aprov,$data_aprov->format('Y-m-d H:i:s'),$counter);
           // dd($data_aprov,Comissoes::where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))->first());
           $comissao = Comissoes::join('fdas as fd','fd.id','=','comissoes.fdaid')
           ->leftjoin('franqueados as fr','fr.id','=','comissoes.franqueadoid')
@@ -132,6 +132,7 @@ class ComissoesController extends Controller
           })
           ->select('comissoes.*','fr.franqueadoid','fd.fdaid')
           ->first();
+
           if($comissao != null && $comissao->franqueadoid == null && Franqueado::where('franqueadoid',$row->franqueado)->first() != null){
             $comissaoUpdate = Comissoes::where('id',$comissao->id)->first();
             $comissaoUpdate->franqueadoid = Franqueado::where('franqueadoid',$row->franqueado)->first()->id;
@@ -147,6 +148,7 @@ class ComissoesController extends Controller
             if(Fda::where('fdaid',$row->fda)->first() != null
             && count($dispositivos) > 0 && $dispositivos[0] != '-'
             ){
+
               $c = new Comissoes();
               $c->data_cadastro = $data;
               $c->data_aprovacao = $data_aprov;
@@ -170,7 +172,7 @@ class ComissoesController extends Controller
                 $cp->tx_venda = Produto::where('tags','like','%'.$v.'%')->first()->tx_venda;
                 $cp->save();
               }
-            } 
+            }
           }
         });
       });

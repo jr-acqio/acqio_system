@@ -33,7 +33,7 @@ class GeradorPdfComissoes extends Job implements ShouldQueue
         $this->type = $type;
         $this->month = mes_extenso(\Carbon\Carbon::now()->subMonth()->format('m'));
         $this->periodo = $params;
-        // dd($this);
+//         dd($this);
     }
 
     /**

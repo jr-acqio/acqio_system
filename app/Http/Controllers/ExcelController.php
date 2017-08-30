@@ -21,6 +21,7 @@ class ExcelController extends Controller
 {
     public function salvarTransacao($row,$data,$codigo,$vt,$vtl,$vf,$resumoUpload){
       DB::beginTransaction();
+//      dd($row);
       try {
         $resumoUpload['novas'] += 1;
         $p = new Pagamento();
@@ -134,12 +135,13 @@ class ExcelController extends Controller
       Excel::load($sheet, function ($reader) use (&$resumoUpload) {
         // Loop through all rows
         $reader->each(function($row) use (&$resumoUpload) {
-          $data = implode("-",array_reverse(explode("/",$row->data)));
-          $numero_boleto = str_pad($row->nosso_numero, 11, '0', STR_PAD_LEFT);
-          // dd($numero_boleto);
+            $valor = str_replace(',','.',str_replace('.','', $row->valor));
+          $data = implode("-",array_reverse(explode("/",$row->data_pagamento)));
+          $numero = substr($row->numero, 1, 10);
+//          $numero_boleto = str_pad($row->nosso_numero, 11, '0', STR_PAD_LEFT);
           $resumoUpload['contador'] += 1;
-          if(PagamentoBoleto::where('numero','like','%'.$numero_boleto.'%')->first() == null){
-            if(strlen($numero_boleto) == 11){ $resumoUpload['novasBradesco'] += 1; }
+          if(PagamentoBoleto::where('numero','like','%'.$numero.'%')->first() == null){
+            if(strlen($numero) == 11){ $resumoUpload['novasBradesco'] += 1; }
             else{ $resumoUpload['novasBBrasil'] += 1; }
             DB::beginTransaction();
             try {
@@ -147,9 +149,9 @@ class ExcelController extends Controller
               $p->save();
               PagamentoBoleto::create([
                 'pagamento_id' => $p->id,
-                'numero'  =>  $numero_boleto,
+                'numero'  =>  $numero,
                 'valor'   =>  $row->valor,
-                'situacao'=>  $row->situacao,
+                'situacao'=>  'Liquidado',
                 'data'    =>  $data
               ]);
               DB::commit();
