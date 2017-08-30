@@ -260,7 +260,7 @@
 
 <!-- Sweet alert -->
 <script src="{{ asset('admin/js/plugins/sweetalert/sweetalert.min.js') }}"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <!-- DatePicker -->
 <script src="{{ asset('admin/js/plugins/datapicker/bootstrap-datepicker.js') }}" charset="utf-8"></script>
