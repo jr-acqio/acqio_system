@@ -137,7 +137,7 @@ class ExcelController extends Controller
         $reader->each(function($row) use (&$resumoUpload) {
             $valor = str_replace(',','.',str_replace('.','', $row->valor));
           $data = implode("-",array_reverse(explode("/",$row->data_pagamento)));
-          $numero = substr($row->numero, 1, 10);
+          $numero = substr($row->numero, 0, 11);
 //          $numero_boleto = str_pad($row->nosso_numero, 11, '0', STR_PAD_LEFT);
           $resumoUpload['contador'] += 1;
           if(PagamentoBoleto::where('numero','like','%'.$numero.'%')->first() == null){
