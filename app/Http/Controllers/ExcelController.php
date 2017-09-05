@@ -150,7 +150,7 @@ class ExcelController extends Controller
               PagamentoBoleto::create([
                 'pagamento_id' => $p->id,
                 'numero'  =>  $numero,
-                'valor'   =>  $row->valor,
+                'valor'   =>  $valor,
                 'situacao'=>  'Liquidado',
                 'data'    =>  $data
               ]);
