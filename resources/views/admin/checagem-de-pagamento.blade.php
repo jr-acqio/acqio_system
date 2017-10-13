@@ -183,7 +183,7 @@
                   <label for="">VENDA DE:</label>
                   <select class="form-control"  name="tipo_venda" required>
                     <option value="">SELECIONE</option>
-                    <option value="CL">CLIENTE</option>
+                    <option value="CL" selected>CLIENTE</option>
                     <option value="FR">FRANQUIA</option>
                     <option value="FD">FDA</option>
                   </select>
