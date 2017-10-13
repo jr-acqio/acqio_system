@@ -35,8 +35,8 @@
           <div class="alert alert-info">
             <b>Resumo do Upload</b>
               <li>Total de boletos no arquivo: <b>{{ session('resumoUpload')['contador'] }}</b></li>
-              <li>Boletos pagos encontrados (BRADESCO): <b>{{ session('resumoUpload')['novasBradesco'] }}</b></li>
-              <li>Boletos pagos encontrados (BBrasil): <b>{{ session('resumoUpload')['novasBBrasil'] }}</b></li>
+              {{--<li>Boletos pagos encontrados (BRADESCO): <b>{{ session('resumoUpload')['novasBradesco'] }}</b></li>--}}
+              {{--<li>Boletos pagos encontrados (BBrasil): <b>{{ session('resumoUpload')['novasBBrasil'] }}</b></li>--}}
           </div>
         @endif
         <!-- <div class="progress">

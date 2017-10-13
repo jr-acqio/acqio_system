@@ -62,9 +62,9 @@ class ComissoesController extends Controller
         'arquivo.required' => "Campo :attribute é obrigatório"
       ];
       $validator = Validator::make($request->all(),$rules,$messages);
-      if($validator->fails() || $_FILES['arquivo']['type'] != "application/vnd.ms-excel"){
-        return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
-      }
+//      if($validator->fails() || $_FILES['arquivo']['type'] != "application/vnd.ms-excel"){
+//        return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
+//      }
       // dd('oi');
       $arrayMessages = array();
       // dd($messages);
@@ -72,14 +72,17 @@ class ComissoesController extends Controller
       Excel::load($sheet, function ($reader) use(&$arrayMessages,&$counter) {
 
           $reader->each(function($row) use(&$arrayMessages,&$counter){
+//              dd($row);
           $counter++;
           $frag_data_aprovacao = explode(" ",$row->datahora_de_finalizacao);
           $data_aprovacao = $frag_data_aprovacao[0];//." ".$frag_data_aprovacao[2].":00";
 
           $data = DateTime::createFromFormat('d/m/Y', $row->data_de_cadastro);
-//            dd($data);
+//          $data= $row->data_de_cadastro;
+//            dd($row->data_de_cadastro);
           // Dividindo os dispositivos em array
           $dispositivos = array_map('trim', explode(',', $row->modelo_pos));
+
           /*
           Varrendo o array de dispositivos para verificar se há dispositivos ou não, ou se existem dispositivos
           na planilha que não há tags nos produtos do banco de dados.
@@ -89,13 +92,13 @@ class ComissoesController extends Controller
           if(Fda::where('fdaid',$row->fda)->first() == null){
             $arrayMessages[] = array(
               'linha'=>$counter+1,
-              'motivo'=>"Fda não encontrado no sistema",
+              'motivo'=>"Fda ". $row->fda ." não encontrado no sistema",
             );
           }
           if(Franqueado::where('franqueadoid',$row->franqueado)->first() == null && $row->franqueado != ""){
             $arrayMessages[] = array(
               'linha'=>$counter+1,
-              'motivo'=>"Franqueado não encontrado no sistema",
+              'motivo'=>"Franqueado". $row->franqueado . " não encontrado no sistema",
             );
           }
           if($dispositivos[0] == '-'){
@@ -106,6 +109,7 @@ class ComissoesController extends Controller
           }
           $dataehora = array_map('trim', explode('-', $row->datahora_de_finalizacao));
 //           dd($dataehora,$row->datahora_de_finalizacao);
+//              dd($dataehora);
           if(count($dataehora) == 1){
             $d = $dataehora[0].' '.'00:00:00';
           }elseif(count($dataehora) == 2){
@@ -113,7 +117,13 @@ class ComissoesController extends Controller
           }else{
             $d = $dataehora[0].' '.$dataehora[1].':00';
           }
+//          $d = $dataehora[0].' '.$dataehora[1];
+//          dd($d);
+//              dd($data->format('Y-m-d'));
           $data_aprov = Carbon::create($d[6].$d[7].$d[8].$d[9], $d[3].$d[4], $d[0].$d[1], $d[11].$d[12], $d[14].$d[15], $d[17].$d[18], 'America/Fortaleza');
+//          $data_aprov = Carbon::createFromFormat("Y-m-d H:g:s", $d, 'America/Fortaleza');
+//          dd($data->format('Y-m-d'));
+
 //           dd($data_aprov,$data_aprov->format('Y-m-d H:i:s'),$counter);
           // dd($data_aprov,Comissoes::where('data_aprovacao',$data_aprov->format('Y-m-d H:i:s'))->first());
           $comissao = Comissoes::join('fdas as fd','fd.id','=','comissoes.fdaid')
@@ -133,12 +143,12 @@ class ComissoesController extends Controller
           ->select('comissoes.*','fr.franqueadoid','fd.fdaid')
           ->first();
 
-          if($comissao != null && $comissao->franqueadoid == null && Franqueado::where('franqueadoid',$row->franqueado)->first() != null){
-            $comissaoUpdate = Comissoes::where('id',$comissao->id)->first();
-            $comissaoUpdate->franqueadoid = Franqueado::where('franqueadoid',$row->franqueado)->first()->id;
-            $comissaoUpdate->save();
-          }
-          else if ($comissao == null) {
+//          if($comissao != null && $comissao->franqueadoid == null && Franqueado::where('franqueadoid',$row->franqueado)->first() != null){
+//            $comissaoUpdate = Comissoes::where('id',$comissao->id)->first();
+//            $comissaoUpdate->franqueadoid = Franqueado::where('franqueadoid',$row->franqueado)->first()->id;
+//            $comissaoUpdate->save();
+//          }
+//          else if ($comissao == null) {
             if($row->franqueado == "" && Fda::where('fdaid',$row->fda)->first() != null){
               $arrayMessages[] = array(
                 'linha'=>$counter+1,
@@ -165,15 +175,19 @@ class ComissoesController extends Controller
 
               // $dispositivos = array_map('trim', explode(',', $row->modelo_pos));
               foreach ($dispositivos as $k => $v) {
-                $cp = new ComissaoProduto();
-                $cp->comissaoid = $c->id;
-                $cp->produtoid = Produto::where('tags','like','%'.$v.'%')->first()->id;
-                $cp->tx_instalacao = Produto::where('tags','like','%'.$v.'%')->first()->tx_install;
-                $cp->tx_venda = Produto::where('tags','like','%'.$v.'%')->first()->tx_venda;
-                $cp->save();
+                  try{
+                    $cp = new ComissaoProduto();
+                    $cp->comissaoid = $c->id;
+                    $cp->produtoid = Produto::where('tags','like','%'.$v.'%')->first()->id;
+                    $cp->tx_instalacao = Produto::where('tags','like','%'.$v.'%')->first()->tx_install;
+                    $cp->tx_venda = Produto::where('tags','like','%'.$v.'%')->first()->tx_venda;
+                    $cp->save();
+                  }catch (\Exception $e){
+                      dd($e->getMessage(), $counter);
+                  }
               }
             }
-          }
+//          }
         });
       });
       return redirect::back()->with(['msg'=>'Dados importados com sucesso!','class'=>'success','erros'=>$arrayMessages]);
@@ -251,7 +265,7 @@ class ComissoesController extends Controller
           ->where('fdas.fdaid',$request->cliente)
           ->whereDate('c.data_aprovacao','<=',$final)
           ->whereDate('c.data_aprovacao','>=',$inicio)
-          ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('COUNT(*) as totalProdutos'))
+          ->select('fdas.fdaid','fdas.nome_razao','c.*','fr.*','cp.*','p.descricao',DB::raw('SUM(cp.tx_instalacao) as totalInstalacao'),DB::raw('SUM(cp.tx_venda) as totalVenda'),DB::raw('COUNT(*) as totalProdutos'))
           ->groupBy('c.id')
           // ->groupBy('cp.produtoid')
           ->orderBy('fr.franqueadoid')

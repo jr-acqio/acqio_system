@@ -113,20 +113,6 @@
   function getCheckBoleto(obj){
     console.log(obj.value);
     // alert((obj.value.length));
-    if(obj.value.length < 11){
-      $("#messages").hide();
-      $("#messages").addClass('alert-danger');
-      $('#messages').html("<b>Número de Boleto inválido para pesquisa.<br>Boleto Bradesco é necessário no minimino 11 dígitos para identificação.<br>Padrão: 00000000000-0</b>");
-      $("#messages").show(1000);
-      return false;
-    }
-    else if(obj.value.length > 11 && obj.value.length < 17){
-      $("#messages").hide();
-      $("#messages").addClass('alert-danger');
-      $('#messages').html("<b>Número de Boleto inválido para pesquisa.<br>Boleto Banco do Brasil é necessário no minimino 17 dígitos para identificação.<br>Padrão: 27316160000000000</b>");
-      $("#messages").show(1000);
-      return false;
-    }
     $.ajax({
       type: "GET",
       url: '/api/ajax/boleto/'+obj.value,

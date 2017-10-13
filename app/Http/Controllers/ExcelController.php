@@ -135,14 +135,13 @@ class ExcelController extends Controller
       Excel::load($sheet, function ($reader) use (&$resumoUpload) {
         // Loop through all rows
         $reader->each(function($row) use (&$resumoUpload) {
-            $valor = str_replace(',','.',str_replace('.','', $row->valor));
-          $data = implode("-",array_reverse(explode("/",$row->data_pagamento)));
-          $numero = substr($row->numero, 0, 11);
-//          $numero_boleto = str_pad($row->nosso_numero, 11, '0', STR_PAD_LEFT);
-          $resumoUpload['contador'] += 1;
-          if(PagamentoBoleto::where('numero','like','%'.$numero.'%')->first() == null){
-            if(strlen($numero) == 11){ $resumoUpload['novasBradesco'] += 1; }
-            else{ $resumoUpload['novasBBrasil'] += 1; }
+//            dd($row);
+            $valor = $row->quantia_paga;
+            $data = $row->data_de_pagamento;
+            $numero = $row->nosso_numero;
+//            dd($numero);
+            $resumoUpload['contador'] += 1;
+          if(PagamentoBoleto::where('numero','=',$numero)->first() == null){
             DB::beginTransaction();
             try {
               $p = new Pagamento();
@@ -157,11 +156,9 @@ class ExcelController extends Controller
               DB::commit();
             } catch (Exception $e) {
               DB::rollBack();
-              $resumoUpload['novasBradesco']--;
               var_dump($e->errorInfo);
             }catch(ValidationException $e){
               DB::rollBack();
-              $resumoUpload['novasBradesco']--;
               var_dump($e->errorInfo);
             }catch ( \Illuminate\Database\QueryException $e) {
               DB::rollBack();

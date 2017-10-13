@@ -147,7 +147,7 @@ class ChecagemController extends Controller
       // dd($request->all());
       foreach ($request->cod_boleto as $key => $id) {
         if($request->cod_boleto[$key] != ""){
-          $pagamento = PagamentoBoleto::where('numero','like','%'.$request->cod_boleto[$key].'%')->value('pagamento_id');
+          $pagamento = PagamentoBoleto::where('numero','=',$request->cod_boleto[$key])->value('pagamento_id');
           // Pagamento::where('id',$pagamento)->update(['pedido_id'=>$p->id]);
           PedidosPagamentos::create(['pagamento_id'=>$pagamento,'pedido_id'=>$p->id]);
         }

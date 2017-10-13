@@ -13,12 +13,12 @@ use Response;
 class ApiAjaxController extends Controller
 {
     public function getCheckBoleto($num){
-      $existe = PagamentoBoleto::where('numero','like','%'.$num.'%')->first();
+      $existe = PagamentoBoleto::where('numero','=',$num)->first();
       if($existe == null || $existe->situacao == "Estornado"){
         return response()->json(0);//Codigo nao existe
       }else{
         $disponivel = PagamentoBoleto::join('pedidos_pagamentos as pp','pp.pagamento_id','=','pagamentos_boleto.pagamento_id')
-        ->where('numero','like','%'.$num.'%')
+        ->where('numero','=',$num)
         ->where('p.status','=','1')
         ->join('pedidos as p','pp.pedido_id','=','p.id')
         ->join('clientes','p.cliente_id','=','clientes.id')

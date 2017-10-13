@@ -40,6 +40,7 @@
         <table class="table invoice-table">
             <?php $sum = 0; ?>
             @if(isset($comissoes_fda))
+            <?php $sum = 0; ?>
             <thead>
               <tr>
                 <th>Data Cadastro</th>
@@ -56,16 +57,28 @@
               <tr>
                 <td>{{ date('d/m/Y', strtotime($c->data_cadastro)) }}</td>
                 <td>{{ date('d/m/Y',strtotime($c->data_aprovacao)) }}</td>
-                <td>{{ strtoupper($c->franqueadoid) }}</td>
+                <td>
+                  {{ strtoupper($c->franqueadoid) }}
+                </td>
                 <td>{{ strtoupper($c->nome_cliente) }}</td>
                 <td>
                   {{ \App\Models\Comissoes::find($c->comissaoid)->produtos->implode('descricao',', ') }}
                 </td>
                 <td class="text-center">{{ $c->totalProdutos }}</td>
-                <td>R$ {{ number_format($c->totalInstalacao,2) }}</td>
-              </tr>
+                <td>
+                  @if($c->franqueadoid == null)
+                    R$ {{ number_format($c->totalInstalacao + $c->tx_venda,2) }}
+                  @else
+                    R$ {{ number_format($c->totalInstalacao,2) }}
+                  @endif
 
-              <?php $sum += $c->totalInstalacao; ?>
+                </td>
+              </tr>
+                @if($c->franqueadoid == null)
+                  <?php $sum += $c->totalInstalacao + $c->tx_venda ?>
+                @else
+                  <?php $sum += $c->totalInstalacao ?>
+                @endif
               @endforeach
             @else
               <?php $sum = 0; ?>
@@ -140,7 +153,7 @@
             @else
               <tr>
                 <td><strong>Valor final:</strong></td>
-                <td>R$ {{ number_format($fda->valorTotal,2,',', '.') }}</td>
+                <td>R$ {{ number_format($sum,2,',', '.') }}</td>
               </tr>
             @endif
           </tbody>

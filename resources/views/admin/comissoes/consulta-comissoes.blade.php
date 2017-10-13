@@ -130,16 +130,28 @@
           <tr>
             <td>{{ date('d/m/Y', strtotime($c->data_cadastro)) }}</td>
             <td>{{ date('d/m/Y',strtotime($c->data_aprovacao)) }}</td>
-            <td>@if($c->franqueadoid == null) Franquia Piloto @else {{ strtoupper($c->franqueadoid) }} @endif</td>
+            <td>@if($c->franqueadoid == null) Primeira Compra @else {{ strtoupper($c->franqueadoid) }} @endif</td>
             <td>{{ strtoupper($c->nome_cliente) }}</td>
             <td>
               {{ \App\Models\Comissoes::find($c->comissaoid)->produtos->implode('descricao',', ') }}
             </td>
             <td class="text-center">{{ $c->totalProdutos }}</td>
-            <td>R$ {{ number_format($c->totalInstalacao,2) }}</td>
+            <td>
+              @if($c->franqueadoid == null)
+                R$ {{ number_format($c->totalInstalacao + $c->totalVenda,2) }}
+              @else
+                R$ {{ number_format($c->totalInstalacao,2) }}
+              @endif
+            </td>
           </tr>
 
-          <?php $sum += $c->totalInstalacao; ?>
+          <?php
+                  if ($c->franqueadoid == null){
+                      $sum += $c->totalInstalacao + $c->totalVenda;
+                  }else{
+                      $sum += $c->totalInstalacao;
+                  }
+          ?>
           @endforeach
         </tbody>
       </table>

@@ -188,7 +188,18 @@
                                 }}
                               </td>
                               <td>{{ $c->totalProdutos }}</td>
-                              <td>R$ {{ number_format($c->valor,2,',', '.') }}</td>
+                              <td>
+                                <?php $valor_primeiracompra = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
+                                ->join('comissoes_produto as cp', 'cp.comissaoid', '=', 'c.id')
+                                ->groupBy('c.id')
+                                ->whereDate('c.data_aprovacao','<=',$datafinal)
+                                ->whereDate('c.data_aprovacao','>=',$datainicial)
+                                ->where('c.fdaid',$c->id)
+                                ->whereNull('c.franqueadoid')
+                                ->select(\DB::raw('SUM(cp.tx_venda) as valor'))
+                                ->first() ?>
+                                R$ {{ number_format($c->valor + $valor_primeiracompra['valor'],2,',', '.') }}
+                              </td>
                               <td>
                                 <a href="/admin/comissoes/filtrar?tipo=fda&daterange={{$inputs['daterange']}}&cliente={{$c->fdaid}}" class="btn btn-xs btn-default"><b>Detalhes</b></a>
                               </td>

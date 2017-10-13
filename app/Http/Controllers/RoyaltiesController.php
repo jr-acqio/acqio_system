@@ -59,9 +59,9 @@ class RoyaltiesController extends Controller
         'arquivo.required' => "Campo :attribute é obrigatório"
       ];
       $validator = Validator::make($request->all(),$rules,$messages);
-      if($validator->fails() || $_FILES['arquivo']['type'] != "application/vnd.ms-excel"){
-        return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
-      }
+//      if($validator->fails() || $_FILES['arquivo']['type'] != "application/vnd.ms-excel"){
+//        return redirect::back()->witherrors($validator)->with(['msg'=>"Arquivo não permitido!",'class'=>'danger']);
+//      }
       $rowCounter=0;
       Excel::load($sheet, function ($reader) use($messages,&$arrayMessages,&$rowCounter) {
         $reader->each(function($row) use($messages,&$arrayMessages,&$rowCounter){

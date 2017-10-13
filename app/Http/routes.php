@@ -14,7 +14,8 @@ Route::get('/teste',function(){
 
   $params = array('data_inicial' => \Carbon\Carbon::now()->subMonth()->format('Y-m-').'01',
                   'data_final' => \Carbon\Carbon::now()->subMonth()->format('Y-m-').date("t", mktime(0,0,0,\Carbon\Carbon::now()->subMonth()->format('m'),'01',\Carbon\Carbon::now()->format('Y'))));
-
+//    $params = array('data_inicial' => '2016-01-01', 'data_final' => '2017-10-02');
+//    dd($params);
 
   if(\Carbon\Carbon::now()->subMonth()->format('m') == 12){
     $folder_year = $directory.'/'.\Carbon\Carbon::now()->subYear()->format('Y');
@@ -32,16 +33,18 @@ Route::get('/teste',function(){
   if(!in_array($folder_month,Storage::directories($folder_year))){
     Storage::makeDirectory($folder_month);
   }
+
   $comissoes = DB::select('SELECT fdas.id, fdas.fdaid, fdas.nome_razao, COUNT(*) as totalVendas,
   SUM(total_produtos) as totalProdutos, SUM(vttotal.valor_total) as valorTotal FROM comissoes
   JOIN fdas ON comissoes.fdaid = fdas.id
   JOIN (SELECT comissoes_produto.comissaoid as vvid, SUM(comissoes_produto.tx_instalacao) as valor_total FROM comissoes_produto
   GROUP BY vvid) as vttotal ON vttotal.vvid = comissoes.id
   JOIN (SELECT comissoes_produto.comissaoid as vid, COUNT(comissoes_produto.produtoid) as total_produtos FROM comissoes_produto
-  GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id
+  GROUP BY vid ) as pttotal ON pttotal.vid = comissoes.id  
   WHERE date(comissoes.data_aprovacao) >= "'.$params['data_inicial'].'" and date(comissoes.data_aprovacao) <= "'.$params['data_final'].'"
   GROUP BY fdas.id'
   );
+//  dd($comissoes);
   foreach ($comissoes as $key => $value) {
     $comissoes_fda = \App\Models\Fda::join('comissoes as c','c.fdaid','=','fdas.id')
     ->leftjoin('franqueados as fr','fr.id','=','c.franqueadoid')
@@ -54,10 +57,12 @@ Route::get('/teste',function(){
     ->groupBy('c.id')
     ->orderBy('fr.franqueadoid')
     ->get();
+//    dd($comissoes_fda);
 
     dispatch(
       new \App\Jobs\GeradorPdfComissoes($folder_month,$params,$comissoes_fda,$value,$type = 1)
     );
+//    dd('oi');
 
   }
   // Comissões Franqueado

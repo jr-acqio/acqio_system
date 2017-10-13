@@ -58,7 +58,7 @@ class FranqueadoController extends Controller
       $sheet = Input::file('arquivo');
       Excel::load($sheet, function ($reader) {
         $reader->each(function($row){
-          // dd($row);
+//           dd($row);
           $updateIdFranqueado = Franqueado::where('email',$row->e_mail)->where('franqueadoid','!=',$row->franqueado)->first();
           if($updateIdFranqueado != null){
             // dd($updateIdFranqueado,$row);
@@ -73,9 +73,9 @@ class FranqueadoController extends Controller
             $updateIdFranqueado->save();
           }
           else{
-            DB::beginTransaction();
-            try {
-              Franqueado::create([
+              DB::beginTransaction();
+              try {
+                Franqueado::create([
                 'fdaid'  => \App\Models\Fda::where('fdaid',$row->fda)->first()->id,
                 'franqueadoid' =>  $row->franqueado,
                 'nome_razao' =>  $row->nomerazao_social,
